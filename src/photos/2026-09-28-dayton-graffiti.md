@@ -5,9 +5,12 @@ location: Dayton Ohio
 topics: []
 images:
   - image: /assets/uploads/IMG_1973.webp
-    alt: Graffiti
+    alt: ALONE
     caption: ''
   - image: /assets/uploads/IMG_1981.webp
-    alt: Graffiti
+    alt: TMBER
+    caption: ''
+  - image: /assets/uploads/IMG_1954.webp
+    alt: ETCH
     caption: ''
 ---
