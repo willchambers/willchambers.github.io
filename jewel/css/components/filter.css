@@ -11,6 +11,12 @@
 
 .filter { --cluster-gap: var(--space-2); }
 
+/* Touch screens: the tags grow to 32px with 44px tap areas (tag.css), so
+   wrapped rows get a 12px gap and the tap areas meet without overlapping. */
+@media (pointer: coarse) {
+  .filter { --cluster-gap: var(--space-3) var(--space-2); }
+}
+
 /* Filtered-out items. Author styles like `display: grid` would otherwise
    beat the browser's own [hidden] rule. */
 [data-tags][hidden] { display: none; }
