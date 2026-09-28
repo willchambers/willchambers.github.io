@@ -14,14 +14,16 @@ Jewel.register('filter', (group) => {
 
   const apply = (tag) => {
     if (!buttons().some((b) => b.dataset.filter === tag)) tag = '*';
+    const items = target.querySelectorAll('[data-tags]');
     let shown = 0;
-    target.querySelectorAll('[data-tags]').forEach((item) => {
+    items.forEach((item) => {
       const match = tag === '*' || item.dataset.tags.split(/\s+/).includes(tag);
       item.hidden = !match;
       if (match) shown += 1;
     });
     buttons().forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === tag)));
-    if (status) status.textContent = `Showing ${shown} ${noun}`;
+    // "Showing 1 of 3 projects" reads right for any count.
+    if (status) status.textContent = `Showing ${shown} of ${items.length} ${noun}`;
   };
 
   const tagFromHash = () => location.hash.match(/^#tag=([\w-]+)$/)?.[1];

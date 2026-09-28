@@ -1,6 +1,10 @@
 /* Lightbox — full-screen photo viewer on a native <dialog>. The markup is
    built by js/components/lightbox.js; put data-component="lightbox" on any
-   container of [data-lightbox-item] links (see gallery.css).
+   container of [data-lightbox-item] links:
+   <div data-component="lightbox">
+     <a href="full.webp" data-lightbox-item data-caption="Title — Place"
+        data-description="Optional second line."><img src="small.webp" alt="…"></a>
+   </div>
    The dialog itself is the glass surface, so it uses the resolved panel
    tokens (::backdrop can't reliably read custom properties). */
 
@@ -34,6 +38,10 @@
 
 .lightbox__figure {
   display: grid;
+  /* One definite cell, so the photo's max-height: 100% has something to
+     resolve against. Without it a tall photo grows past the viewer and
+     covers the caption. */
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
   place-items: center;
   min-height: 0;
 }

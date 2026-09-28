@@ -10,9 +10,9 @@ These live in `jewel-candidates/` and follow Jewel's component template: resolve
 |---|---|---|
 | `nav-toggle` | Jewel's header hides `.nav__links` below 40rem and offers nothing in their place, so phones had no navigation. | Candidate |
 | `gallery` | A photo wall. Masonry by default (CSS columns keep each photo's shape); `--grid` crops to one ratio. | Candidate |
-| `lightbox` | Full-screen viewer on a native `<dialog>`, with arrow keys, swipe, Esc, and focus returned to the photo. Works on any container of links. Photostream added an optional `data-description` line and skips photos inside hidden parents. | Candidate, to be promoted (Photostream uses it too) |
+| `lightbox` | Full-screen viewer on a native `<dialog>`, with arrow keys, swipe, Esc, and focus returned to the photo. Works on any container of links. Photostream added an optional `data-description` line and skips photos inside hidden parents; promoting it fixed tall photos covering the caption. | **Promoted** (Jewel 693799e) |
 | `card` + `card-grid` | Project tiles. Reuses `.figure__media`, so ratios match figures. | Candidate |
-| `filter` + `.tag--button` | `.tag` was static only. This adds a pressed state for filter buttons, a live count for screen readers, and `#tag=` links. Photostream made it follow `#tag=` links clicked after load and pick up buttons rendered later. | Candidate, to be promoted (Photostream uses it too) |
+| `filter` + `.tag--button` | `.tag` was static only. This adds a pressed state for filter buttons, a live count for screen readers, and `#tag=` links. Photostream made it follow `#tag=` links clicked after load and pick up buttons rendered later. `.tag--button` now lives in Jewel's `tag.css`. | **Promoted** (Jewel 693799e) |
 | `prose` | Markdown output has no classes. It styles lists, code, tables, inline images and bare `<blockquote>`. | Candidate |
 | `pager` | Older / newer links at the end of posts and projects. | Candidate |
 | `skip-link` | Keyboard users had no way past the header. | Candidate |
@@ -27,7 +27,7 @@ These live in `jewel-candidates/` and follow Jewel's component template: resolve
 | **Index-list first column is fixed at 3rem** | Fine for `01`, but too narrow for dates. The site puts dates in the last column instead. A `--index-lead` custom property would fix it. |
 | **`.quote` and `<blockquote>` duplicate styles** | `prose` copies the quote rules so bare Markdown quotes match. Better: make `.quote` a `:where(.quote, .prose blockquote)` rule in Jewel. |
 | **Figure caption needs two spans** | A caption-only figure (no "Fig. n" label) works but isn't documented. |
-| **Forms** | No inputs, textarea or field styles, so a contact form isn't possible yet. |
+| **Forms** | **Done in Jewel** (e9b0b6f): fields, inputs, choices, tag input, drop zone, floating button, sheet and a photo-post form, in the hairline-box style. Photostream is the first user. |
 | **Empty states** | Pages print a plain caption when a collection is empty. A small pattern would help. |
 | **Breadcrumb / back link** | Post and project pages use the header label as an ad-hoc breadcrumb (`Work · Identity`). |
 | **Date format** | No convention. The site uses "September 27, 2026" for posts and "Sep 2026" in lists. |

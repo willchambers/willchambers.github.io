@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Jewel Design System</title>
   <meta name="description" content="A minimal, editorial design system for a personal portfolio.">
 
@@ -14,6 +14,13 @@
 
   <script src="js/jewel.js" defer></script>
   <script src="js/components/video.js" defer></script>
+  <script src="js/components/lightbox.js" defer></script>
+  <script src="js/components/filter.js" defer></script>
+  <script src="js/components/form.js" defer></script>  <!-- load before other form components -->
+  <script src="js/components/tag-input.js" defer></script>
+  <script src="js/components/dropzone.js" defer></script>
+  <script src="js/components/post-form.js" defer></script>
+  <script src="js/components/sheet.js" defer></script>
 
   <style>
     /* Specimen-page only — not part of the system. */
@@ -33,10 +40,11 @@
     .art--c { background:
       radial-gradient(circle at 70% 30%, #EA580C, transparent 45%),
       radial-gradient(circle at 20% 80%, #C026D3, transparent 50%), #111114; }
+    .post-log { margin: 0; padding: var(--space-4); max-height: 18rem; overflow: auto; font-size: var(--text-sm); line-height: 1.5; color: var(--text-muted); border: var(--hairline) solid var(--panel-border); white-space: pre-wrap; }
     .video__placeholder { position: absolute; inset: 0; display: grid; place-items: center; }
   </style>
 </head>
-<body>
+<body class="has-fab">
   <div class="jewel-bg" aria-hidden="true"></div>
   <div class="jewel-cap" aria-hidden="true"></div>
   <div class="page">
@@ -50,6 +58,7 @@
             <a href="#color">Colour</a>
             <a href="#components">Components</a>
             <a href="#media">Media</a>
+            <a href="#forms">Forms</a>
           </span>
         </nav>
       </div>
@@ -149,11 +158,17 @@
           </div>
 
           <div class="stack">
-            <p class="label">Project index</p>
-            <ol class="index">
-              <li><a class="index__row" href="#"><span class="label">01</span><span class="index__title">Northlight Quarterly</span><span class="label">Editorial · 2026</span></a></li>
-              <li><a class="index__row" href="#"><span class="label">02</span><span class="index__title">Field Notes Identity</span><span class="label">Brand · 2025</span></a></li>
-              <li><a class="index__row" href="#"><span class="label">03</span><span class="index__title">Tidal, a type specimen</span><span class="label">Type · 2025</span></a></li>
+            <p class="label">Project index · filter</p>
+            <div class="filter cluster" data-component="filter" data-filter-target="#index-demo" data-filter-noun="projects" role="group" aria-label="Filter by tag">
+              <button class="tag tag--button" type="button" data-filter="*" aria-pressed="true">All</button>
+              <button class="tag tag--button" type="button" data-filter="editorial" aria-pressed="false">Editorial</button>
+              <button class="tag tag--button" type="button" data-filter="type" aria-pressed="false">Type</button>
+              <span class="filter__status visually-hidden" aria-live="polite"></span>
+            </div>
+            <ol class="index" id="index-demo">
+              <li data-tags="editorial"><a class="index__row" href="#"><span class="label">01</span><span class="index__title">Northlight Quarterly</span><span class="label">Editorial · 2026</span></a></li>
+              <li data-tags="brand"><a class="index__row" href="#"><span class="label">02</span><span class="index__title">Field Notes Identity</span><span class="label">Brand · 2025</span></a></li>
+              <li data-tags="type editorial"><a class="index__row" href="#"><span class="label">03</span><span class="index__title">Tidal, a type specimen</span><span class="label">Type · 2025</span></a></li>
             </ol>
           </div>
 
@@ -197,6 +212,149 @@
           </div>
           <figcaption class="figure__caption"><span><strong>Tidal</strong> — motion reel, 0:42.</span><span class="label">Fig. 3</span></figcaption>
         </figure>
+
+        <!-- Lightbox: any container of [data-lightbox-item] links. Tap a thumbnail; arrows, swipe and Esc work. -->
+        <div class="span-12 stack">
+          <p class="label">Lightbox</p>
+          <div data-component="lightbox" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-3); align-items: start">
+            <a class="figure__media" href="media/art-a.svg" data-lightbox-item data-caption="Northlight Quarterly — cover" data-description="An optional second line from data-description."><img src="media/art-a.svg" alt="Violet and teal gradient artwork" loading="lazy"></a>
+            <a class="figure__media" href="media/art-b.svg" data-lightbox-item data-caption="Field Notes — mark study" style="--ratio: 4 / 5"><img src="media/art-b.svg" alt="A red circle on a pale ground" loading="lazy"></a>
+            <a class="figure__media" href="media/art-c.svg" data-lightbox-item data-caption="Tidal — still"><img src="media/art-c.svg" alt="Orange and magenta gradient artwork" loading="lazy"></a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Forms -->
+      <section id="forms" class="panel panel--pad grid">
+        <header class="section-head"><p class="label">05 — Forms</p></header>
+        <div class="span-9 start-4 stack" style="--stack-gap: var(--space-7)">
+
+          <form class="form" data-component="form" novalidate data-success="Saved. (Demo only, nothing was sent.)" aria-label="Form component demo">
+            <fieldset class="form__group">
+              <legend class="form__legend label">Text</legend>
+              <div class="form__row form__row--2">
+                <div class="field">
+                  <label class="field__label" for="demo-name">Name<span class="field__req" aria-hidden="true">*</span></label>
+                  <input class="input" id="demo-name" name="name" type="text" required autocomplete="name" placeholder="Your name">
+                </div>
+                <div class="field">
+                  <label class="field__label" for="demo-email">Email<span class="field__req" aria-hidden="true">*</span></label>
+                  <input class="input" id="demo-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+                </div>
+              </div>
+              <div class="field">
+                <label class="field__label" for="demo-subject">Subject</label>
+                <input class="input" id="demo-subject" name="subject" type="text" maxlength="60" data-counter aria-describedby="demo-subject-hint demo-subject-count">
+                <div class="field__meta">
+                  <p class="field__hint" id="demo-subject-hint">A few words.</p>
+                  <p class="field__counter" id="demo-subject-count"></p>
+                </div>
+              </div>
+              <div class="field">
+                <label class="field__label" for="demo-message">Message <span class="field__optional">(optional)</span></label>
+                <textarea class="input" id="demo-message" name="message" rows="3" placeholder="It grows as you type"></textarea>
+              </div>
+              <div class="field">
+                <label class="field__label" for="demo-topic">Topic</label>
+                <div class="select">
+                  <select class="input" id="demo-topic" name="topic">
+                    <option>Commission</option><option>Collaboration</option><option>Just saying hello</option>
+                  </select>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="form__group">
+              <legend class="form__legend label">States</legend>
+              <!-- form="specimen-states" detaches these examples so submitting doesn't re-validate them. -->
+              <div class="form__row form__row--2">
+                <div class="field">
+                  <label class="field__label" for="demo-filled">Filled</label>
+                  <input class="input" id="demo-filled" form="specimen-states" type="text" value="Harbour, first light">
+                </div>
+                <div class="field">
+                  <label class="field__label" for="demo-error">Error</label>
+                  <input class="input" id="demo-error" form="specimen-states" type="text" aria-invalid="true" aria-describedby="demo-error-msg" placeholder="Name the photo">
+                  <p class="field__error" id="demo-error-msg">Add a title before posting.</p>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="demo-disabled">Disabled</label>
+                  <input class="input" id="demo-disabled" form="specimen-states" type="text" value="Locked while uploading" disabled>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="demo-suggested">Suggested <span class="field__badge">Suggested</span></label>
+                  <input class="input" id="demo-suggested" form="specimen-states" type="text" value="Graffiti mural on a brick wall at dusk" data-suggested>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="form__group">
+              <legend class="form__legend label">Choices</legend>
+              <div class="field__options field__options--inline" role="group" aria-label="Checkboxes">
+                <label class="choice"><input type="checkbox" name="updates" checked> Send me updates</label>
+                <label class="choice"><input type="checkbox" name="copy"> Email me a copy</label>
+                <label class="choice"><input type="checkbox" disabled> Disabled</label>
+              </div>
+              <div class="field__options field__options--inline" role="radiogroup" aria-label="Budget">
+                <label class="choice"><input type="radio" name="budget" value="small" checked> Small</label>
+                <label class="choice"><input type="radio" name="budget" value="medium"> Medium</label>
+                <label class="choice"><input type="radio" name="budget" value="large"> Large</label>
+              </div>
+              <label class="choice"><input type="checkbox" role="switch" name="public" checked> Publish to site</label>
+            </fieldset>
+
+            <fieldset class="form__group">
+              <legend class="form__legend label">Tags and photo</legend>
+              <div class="field">
+                <label class="field__label" for="demo-tags">Tags</label>
+                <div class="tag-input" data-component="tag-input" data-max="5" data-suggestions='["Dayton","Street","Graffiti","Night"]'>
+                  <ul class="tag-input__list" aria-label="Tags"></ul>
+                  <input class="tag-input__text" id="demo-tags" type="text" placeholder="Type and press Enter" aria-describedby="demo-tags-hint">
+                  <input type="hidden" name="tags">
+                </div>
+                <p class="field__hint" id="demo-tags-hint">Up to 5. Enter or comma adds; Backspace removes.</p>
+              </div>
+              <div class="field">
+                <label class="field__label" for="demo-photo">Photo</label>
+                <div class="dropzone knockout" data-component="dropzone" data-max-size="20">
+                  <input class="dropzone__input" id="demo-photo" name="photo" type="file" accept="image/*">
+                  <label class="dropzone__empty" for="demo-photo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><rect x="3" y="5" width="18" height="14"/><path d="m3 16 5-5 4 4 3-3 6 6"/><circle cx="16" cy="9" r="1.5"/></svg>
+                    <span class="dropzone__title">Drop a photo, or <u>browse</u></span>
+                    <span class="dropzone__hint">JPG, PNG, HEIC or WebP · up to 20 MB</span>
+                  </label>
+                  <figure class="dropzone__preview" hidden><img alt=""><figcaption class="dropzone__meta"></figcaption></figure>
+                  <div class="dropzone__actions" hidden>
+                    <button class="btn btn--ghost" type="button" data-dropzone-replace>Replace</button>
+                    <button class="btn btn--text" type="button" data-dropzone-remove>Remove</button>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <p class="form__error" role="alert" hidden></p>
+            <p class="form__status" role="status" hidden></p>
+            <div class="form__actions">
+              <button class="btn btn--text" type="reset">Clear</button>
+              <button class="btn btn--ghost" type="button" aria-busy="true" disabled>Loading</button>
+              <button class="btn" type="submit" data-busy-label="Sending…">Send</button>
+            </div>
+          </form>
+
+          <div class="stack" style="--stack-gap: var(--space-4)">
+            <p class="label">Posting a photo</p>
+            <p>The <span data-text="accent">+</span> button in the bottom-right corner opens the post form in a bottom sheet (a tearsheet). The same form also comes as a centred modal. Try closing with unsaved changes, or set the demo upload to fail to see the busy and error states.</p>
+            <div class="cluster">
+              <button class="btn btn--ghost" type="button" data-open-variant="bottom">Open as tearsheet</button>
+              <button class="btn btn--ghost" type="button" data-open-variant="center">Open as modal</button>
+              <label class="choice"><input type="checkbox" role="switch" id="demo-fail"> Make the demo upload fail</label>
+            </div>
+            <div class="field">
+              <p class="field__label" id="post-log-label">Event log · jewel:post</p>
+              <pre class="post-log" id="post-log" aria-labelledby="post-log-label" tabindex="0">Nothing posted yet.</pre>
+            </div>
+          </div>
+        </div>
       </section>
 
       <footer class="panel panel--pad site-footer">
@@ -205,5 +363,118 @@
       </footer>
     </main>
   </div>
+
+  <!-- Floating action button: opens the post sheet -->
+  <button class="fab" type="button" aria-label="New post" data-sheet-open="post-sheet">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+  </button>
+
+  <!-- Post sheet: .sheet--bottom (tearsheet) or .sheet--center (modal) -->
+  <dialog class="sheet sheet--bottom" id="post-sheet" data-component="sheet" aria-labelledby="post-sheet-title">
+    <div class="sheet__panel panel panel--content">
+      <header class="sheet__head">
+        <h2 class="sheet__title label" id="post-sheet-title">New post</h2>
+        <button class="btn btn--ghost btn--icon" type="button" data-sheet-close aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </header>
+      <div class="sheet__body">
+        <form class="form" id="post-form" data-component="form post-form" novalidate data-success="Posted." aria-labelledby="post-sheet-title">
+          <div class="field">
+            <label class="field__label" for="post-photo">Photo<span class="field__req" aria-hidden="true">*</span></label>
+            <div class="dropzone knockout" data-component="dropzone" data-max-size="20">
+              <input class="dropzone__input" id="post-photo" name="photo" type="file" accept="image/*" required>
+              <label class="dropzone__empty" for="post-photo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><rect x="3" y="5" width="18" height="14"/><path d="m3 16 5-5 4 4 3-3 6 6"/><circle cx="16" cy="9" r="1.5"/></svg>
+                <span class="dropzone__title">Drop a photo, or <u>browse</u></span>
+                <span class="dropzone__hint">One photo · up to 20 MB</span>
+              </label>
+              <figure class="dropzone__preview" hidden><img alt=""><figcaption class="dropzone__meta"></figcaption></figure>
+              <div class="dropzone__actions" hidden>
+                <button class="btn btn--ghost" type="button" data-dropzone-replace>Replace</button>
+                <button class="btn btn--text" type="button" data-dropzone-remove>Remove</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="post-title">Title<span class="field__req" aria-hidden="true">*</span></label>
+            <input class="input" id="post-title" name="title" type="text" required maxlength="80" data-counter aria-describedby="post-title-count" placeholder="Name the photo">
+            <div class="field__meta"><p class="field__counter" id="post-title-count"></p></div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="post-description">Description <span class="field__optional">(optional)</span></label>
+            <textarea class="input" id="post-description" name="description" rows="3" maxlength="500" data-counter aria-describedby="post-description-count" placeholder="Where, when, what it means"></textarea>
+            <div class="field__meta"><p class="field__counter" id="post-description-count"></p></div>
+          </div>
+
+          <div class="form__row form__row--2">
+            <div class="field">
+              <label class="field__label" for="post-location">Location <span class="field__optional">(optional)</span></label>
+              <input class="input" id="post-location" name="location" type="text" autocomplete="off" placeholder="Dayton, Ohio">
+            </div>
+            <div class="field">
+              <label class="field__label" for="post-tags">Tags <span class="field__optional">(up to 10)</span></label>
+              <div class="tag-input" data-component="tag-input" data-max="10" data-suggestions='["Dayton","Graffiti","Pond","Towers"]'>
+                <ul class="tag-input__list" aria-label="Tags"></ul>
+                <input class="tag-input__text" id="post-tags" type="text" placeholder="Add a tag">
+                <input type="hidden" name="tags">
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="post-alt">Alt text <span class="field__optional">(optional)</span> <span class="field__badge" hidden>Suggested</span></label>
+            <textarea class="input" id="post-alt" name="alt" rows="2" aria-describedby="post-alt-hint" placeholder="Describe the photo for people who can't see it"></textarea>
+            <p class="field__hint" id="post-alt-hint">Never blocks posting. A suggestion may appear here after you pick a photo; edit or clear it.</p>
+          </div>
+
+          <label class="choice"><input type="checkbox" role="switch" name="publish" checked> Publish to site</label>
+
+          <p class="form__error" role="alert" hidden></p>
+          <p class="form__status" role="status" hidden></p>
+          <div class="form__actions">
+            <button class="btn btn--text" type="button" data-sheet-close>Cancel</button>
+            <button class="btn" type="submit" data-busy-label="Posting…">Post</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Specimen-only wiring: variant buttons, a fake upload, a fake alt-text
+       suggestion, and the event log. An app would do this part itself. -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const sheet = document.getElementById('post-sheet');
+      const form = document.getElementById('post-form');
+      const log = document.getElementById('post-log');
+
+      document.querySelectorAll('[data-open-variant]').forEach((b) => b.addEventListener('click', () => {
+        sheet.classList.toggle('sheet--bottom', b.dataset.openVariant === 'bottom');
+        sheet.classList.toggle('sheet--center', b.dataset.openVariant === 'center');
+        sheet.jewelSheet.open(b);
+      }));
+      // The FAB always opens the tearsheet.
+      document.querySelector('.fab').addEventListener('click', () => {
+        sheet.classList.add('sheet--bottom'); sheet.classList.remove('sheet--center');
+      }, { capture: true });
+
+      // Pretend an assistant drafts alt text shortly after a photo is picked.
+      form.addEventListener('jewel:filechange', (e) => {
+        if (e.detail.source !== 'user' || !e.detail.file) return;
+        setTimeout(() => Jewel.field.suggest(form.elements.alt, `Photo: ${e.detail.file.name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ')}`), 900);
+      });
+
+      // Pretend to upload: busy for 1.5s, then succeed or fail.
+      form.addEventListener('jewel:post', (e) => {
+        const { file, formData, form: _f, waitUntil, ...rest } = e.detail;
+        log.textContent = JSON.stringify({ ...rest, file: file ? { name: file.name, type: file.type, size: file.size } : null }, null, 2);
+        waitUntil(new Promise((resolve, reject) => setTimeout(() =>
+          document.getElementById('demo-fail').checked ? reject(new Error('Upload failed (demo). Your draft is still here.')) : resolve(), 1500)));
+      });
+    });
+  </script>
 </body>
 </html>

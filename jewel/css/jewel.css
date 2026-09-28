@@ -17,16 +17,25 @@
 
 /* ---- Components (alphabetical; order doesn't matter within the layer) --- */
 @import url("components/button.css") layer(components);
+@import url("components/choice.css") layer(components);
+@import url("components/dropzone.css") layer(components);
+@import url("components/fab.css") layer(components);
+@import url("components/field.css") layer(components);
+@import url("components/filter.css") layer(components);
 @import url("components/figure.css") layer(components);
 @import url("components/footer.css") layer(components);
 @import url("components/header.css") layer(components);
+@import url("components/input.css") layer(components);
 @import url("components/index-list.css") layer(components);
 @import url("components/knockout.css") layer(components);
+@import url("components/lightbox.css") layer(components);
 @import url("components/meta-list.css") layer(components);
 @import url("components/panel.css") layer(components);
 @import url("components/quote.css") layer(components);
 @import url("components/section-head.css") layer(components);
+@import url("components/sheet.css") layer(components);
 @import url("components/tag.css") layer(components);
+@import url("components/tag-input.css") layer(components);
 @import url("components/video.css") layer(components);
 
 @import url("utilities.css") layer(utilities);

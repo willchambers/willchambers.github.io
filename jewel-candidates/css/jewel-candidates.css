@@ -8,9 +8,7 @@
    ========================================================================== */
 
 @import url("components/card.css") layer(components);
-@import url("components/filter.css") layer(components);
 @import url("components/gallery.css") layer(components);
-@import url("components/lightbox.css") layer(components);
 @import url("components/nav-toggle.css") layer(components);
 @import url("components/pager.css") layer(components);
 @import url("components/prose.css") layer(components);

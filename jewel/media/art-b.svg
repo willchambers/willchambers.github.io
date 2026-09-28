@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
+  <!-- Specimen artwork standing in for a photo (the specimen's art b). -->
+  <defs>
+    <linearGradient id="b1" x1="0" y1="0" x2="0.35" y2="1"><stop offset="0.55" stop-color="#F4F4F5"/><stop offset="0.55" stop-color="#E4E4E7"/></linearGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#b1)"/>
+  <circle cx="328" cy="332" r="152" fill="#DC2626"/>
+</svg>

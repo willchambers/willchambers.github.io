@@ -1,6 +1,8 @@
-/* Tag — small outlined pill for categories; --solid for emphasis.
+/* Tag — small outlined pill for categories; --solid for emphasis;
+   --button for a tag you can press (the filter's buttons).
    <span class="tag">Editorial</span>
-   <span class="tag tag--solid">Featured</span> */
+   <span class="tag tag--solid">Featured</span>
+   <button class="tag tag--button" type="button" aria-pressed="false">Travel</button> */
 
 .tag {
   display: inline-flex;
@@ -15,6 +17,21 @@
   border-radius: var(--radius-pill);
 }
 .tag--solid {
+  color: var(--text-inverse);
+  background: var(--text-default);
+  border-color: transparent;
+}
+
+/* Pressable tag. aria-pressed="true" fills it, like --solid. */
+button.tag { background: transparent; cursor: pointer; }
+.tag--button {
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard);
+}
+.tag--button:hover { color: var(--text-default); border-color: currentColor; }
+.tag--button[aria-pressed="true"] {
   color: var(--text-inverse);
   background: var(--text-default);
   border-color: transparent;

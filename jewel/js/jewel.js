@@ -40,16 +40,21 @@
 
   /* ---- Component registry ---------------------------------------------- */
   const registry = new Map();
-  const mounted = new WeakSet();
+  const mounted = new WeakMap(); // element → Set of component names already run
   let ready = false;
 
+  // data-component may list several names ("form post-form"); they run in
+  // the order written, each once per element.
   function mount(scope = document) {
     scope.querySelectorAll('[data-component]').forEach((el) => {
-      if (mounted.has(el)) return;
-      const init = registry.get(el.dataset.component);
-      if (!init) return;
-      mounted.add(el);
-      try { init(el); } catch (err) { console.error(`[jewel] ${el.dataset.component}:`, err); }
+      const done = mounted.get(el) || new Set();
+      mounted.set(el, done);
+      el.dataset.component.split(/\s+/).filter(Boolean).forEach((name) => {
+        const init = registry.get(name);
+        if (!init || done.has(name)) return;
+        done.add(name);
+        try { init(el); } catch (err) { console.error(`[jewel] ${name}:`, err); }
+      });
     });
   }
 
