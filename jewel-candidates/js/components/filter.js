@@ -1,26 +1,30 @@
 /* Filter — tag buttons that hide non-matching items in a target container.
    Markup: see css/components/filter.css. data-filter="*" shows everything.
-   Opening the page with #tag=<slug> starts on that tag. */
+   Opening the page with #tag=<slug>, or following a #tag=<slug> link later,
+   applies that tag. Buttons and items are looked up on every change, so
+   markup rendered after the page loaded works too. */
 
 Jewel.register('filter', (group) => {
   const target = document.querySelector(group.dataset.filterTarget);
   if (!target) return;
 
-  const buttons = [...group.querySelectorAll('[data-filter]')];
   const status = group.querySelector('.filter__status');
   const noun = group.dataset.filterNoun || 'items';
+  const buttons = () => [...group.querySelectorAll('[data-filter]')];
 
   const apply = (tag) => {
-    if (!buttons.some((b) => b.dataset.filter === tag)) tag = '*';
+    if (!buttons().some((b) => b.dataset.filter === tag)) tag = '*';
     let shown = 0;
     target.querySelectorAll('[data-tags]').forEach((item) => {
       const match = tag === '*' || item.dataset.tags.split(/\s+/).includes(tag);
       item.hidden = !match;
       if (match) shown += 1;
     });
-    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === tag)));
+    buttons().forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === tag)));
     if (status) status.textContent = `Showing ${shown} ${noun}`;
   };
+
+  const tagFromHash = () => location.hash.match(/^#tag=([\w-]+)$/)?.[1];
 
   group.addEventListener('click', (e) => {
     const button = e.target.closest('[data-filter]');
@@ -30,6 +34,10 @@ Jewel.register('filter', (group) => {
     history.replaceState(null, '', location.pathname + location.search + hash);
   });
 
-  const fromHash = location.hash.match(/^#tag=([\w-]+)$/);
-  if (fromHash) apply(fromHash[1]);
+  // #tag= links elsewhere on the page (e.g. a tag on a post).
+  window.addEventListener('hashchange', () => {
+    if (group.isConnected) apply(tagFromHash() || '*');
+  });
+
+  if (tagFromHash()) apply(tagFromHash());
 });
