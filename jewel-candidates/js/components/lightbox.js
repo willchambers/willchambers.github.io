@@ -1,8 +1,10 @@
 /* Lightbox — opens [data-lightbox-item] links in a full-screen viewer.
    Put data-component="lightbox" on the container. Each item is a link to the
-   full image (so it still works without JS), with an optional data-caption.
-   Items hidden by a filter are skipped. Arrow keys and swipes move between
-   photos; Esc closes and focus returns to the photo that opened it. */
+   full image (so it still works without JS), with an optional data-caption
+   and an optional data-description (a second, quieter line).
+   Items hidden by a filter (or inside a hidden parent) are skipped. Arrow keys
+   and swipes move between photos; Esc closes and focus returns to the photo
+   that opened it. */
 
 (() => {
   const icon = (d) =>
@@ -83,6 +85,12 @@
     img.src = item.href;
     img.alt = item.querySelector('img')?.alt || '';
     caption.textContent = item.dataset.caption || '';
+    if (item.dataset.description) {
+      const more = document.createElement('span');
+      more.className = 'lightbox__description';
+      more.textContent = item.dataset.description;
+      caption.append(more);
+    }
     count.textContent = `${index + 1} / ${items.length}`;
     const single = items.length < 2;
     prevBtn.hidden = single;
@@ -98,7 +106,7 @@
       if (!item || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       e.preventDefault();
       build();
-      items = [...container.querySelectorAll('[data-lightbox-item]')].filter((el) => !el.hidden);
+      items = [...container.querySelectorAll('[data-lightbox-item]')].filter((el) => !el.closest('[hidden]'));
       opener = item;
       show(items.indexOf(item));
       dialog.showModal();

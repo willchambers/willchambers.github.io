@@ -49,6 +49,15 @@
   text-align: center;
   margin-inline: auto;
 }
+/* Optional second line from data-description. The first line (the caption)
+   steps up to the default colour so the two read as title and text. */
+.lightbox__caption:has(.lightbox__description) { color: var(--text-default); }
+.lightbox__description {
+  display: block;
+  max-width: var(--measure);
+  margin: var(--space-1) auto 0;
+  color: var(--text-muted);
+}
 
 /* No page scroll behind the open viewer. */
 html:has(.lightbox[open]) { overflow: hidden; }

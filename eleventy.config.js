@@ -55,6 +55,7 @@ export default function (eleventyConfig) {
       (set.data.images || []).map((photo) => ({
         ...photo,
         title: set.data.title,
+        description: set.data.description,
         location: set.data.location,
         date: set.date,
         topics: set.data.topics || [],
