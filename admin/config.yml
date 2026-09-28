@@ -123,6 +123,7 @@ collections:
           - { label: Headline, name: headline, widget: text, hint: "The big text. Line breaks are kept." }
           - { label: Intro, name: intro, widget: text }
           - { label: Work page intro, name: work_intro, widget: text }
+          - { label: Photos page headline, name: photos_heading, widget: string }
           - { label: Photos page intro, name: photos_intro, widget: text }
           - { label: Journal page intro, name: journal_intro, widget: text }
           - label: Links

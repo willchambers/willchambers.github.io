@@ -8,7 +8,7 @@ permalink: /photos/
 
 <section class="panel panel--pad grid">
   <p class="label span-12">Photos · {{ photos.size }}</p>
-  <h1 class="span-9">Photos</h1>
+  <h1 class="span-9">{{ profile.photos_heading | default: "Photos" }}</h1>
   <p class="lede span-7">{{ profile.photos_intro }}</p>
   <div class="span-12">{% include "partials/filter.liquid", topics: topics, target: "#photo-wall", noun: "photos" %}</div>
 </section>
