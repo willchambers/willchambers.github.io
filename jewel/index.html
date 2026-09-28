@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jewel Design System</title>
+  <meta name="description" content="A minimal, editorial design system for a personal portfolio.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap">
+
+  <link rel="stylesheet" href="css/jewel.css">
+
+  <script src="js/jewel.js" defer></script>
+  <script src="js/components/video.js" defer></script>
+
+  <style>
+    /* Specimen-page only — not part of the system. */
+    .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr)); gap: var(--space-4); }
+    .swatch { display: grid; gap: var(--space-2); font-size: var(--text-xs); }
+    .swatch__chip { aspect-ratio: 1; border-radius: var(--radius-2); border: var(--hairline) solid var(--panel-border); }
+
+    /* CSS "artwork" standing in for real images. */
+    .art { position: absolute; inset: 0; }
+    .art--a { background:
+      radial-gradient(ellipse 60% 80% at 30% 40%, #6D28D9, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 80% 70%, #0F9488, transparent 70%), #18181B; }
+    .art--b { background:
+      linear-gradient(160deg, #F4F4F5 0 55%, #E4E4E7 55% 100%); }
+    .art--b::after { content: ""; position: absolute; left: 22%; top: 18%; width: 38%; aspect-ratio: 1;
+      border-radius: 50%; background: #DC2626; }
+    .art--c { background:
+      radial-gradient(circle at 70% 30%, #EA580C, transparent 45%),
+      radial-gradient(circle at 20% 80%, #C026D3, transparent 50%), #111114; }
+    .video__placeholder { position: absolute; inset: 0; display: grid; place-items: center; }
+  </style>
+</head>
+<body>
+  <div class="jewel-bg" aria-hidden="true"></div>
+  <div class="jewel-cap" aria-hidden="true"></div>
+  <div class="page">
+    <!-- Header -->
+    <header class="site-header">
+      <div class="panel site-header__inner">
+        <a class="wordmark link-quiet" href="#">Jewel</a>
+        <nav class="nav" aria-label="Primary">
+          <span class="nav__links">
+            <a href="#type" aria-current="page">Type</a>
+            <a href="#color">Colour</a>
+            <a href="#components">Components</a>
+            <a href="#media">Media</a>
+          </span>
+        </nav>
+      </div>
+    </header>
+
+    <main class="panel-stack">
+      <!-- Hero -->
+      <section class="panel panel--pad grid">
+        <p class="label span-12">Design system · v1.0 · 2026</p>
+        <h1 class="display span-12">Quiet type,<br>one loud sky.</h1>
+        <p class="lede span-6">A small, token-driven system for an editorial portfolio. Restraint in the components; the gradient behind them does the talking.</p>
+        <div class="span-6 cluster" style="align-self:end; justify-content:flex-end">
+          <a class="btn" href="#components">View components</a>
+          <a class="btn btn--text" href="#color">Colour tokens</a>
+        </div>
+      </section>
+
+      <!-- Type -->
+      <section id="type" class="panel panel--pad grid">
+        <div class="span-3"><p class="label">01 — Typography</p></div>
+        <div class="span-9 stack" style="--stack-gap: var(--space-6)">
+          <div class="stack" style="--stack-gap: var(--space-2)">
+            <p class="label">Display · 700 · −0.045em</p>
+            <p class="display" style="font-size: var(--text-3xl)">Aa Inter</p>
+          </div>
+          <hr>
+          <div class="stack" style="--stack-gap: var(--space-2)">
+            <p class="label">H2 · 600 · −0.025em</p>
+            <h2>Hierarchy from size, weight and space</h2>
+          </div>
+          <div class="stack" style="--stack-gap: var(--space-2)">
+            <p class="label">H3</p>
+            <h3>One family, many voices</h3>
+          </div>
+          <div class="stack" style="--stack-gap: var(--space-2)">
+            <p class="label">Body · 400 · 1.6</p>
+            <p>Body copy is set at 16px with a 1.6 line height and a measure capped at 64 characters. Links carry a <a href="#">hairline underline that tightens</a> on hover, and nothing else moves. Captions and metadata step down in size and colour, not in family.</p>
+          </div>
+          <blockquote class="quote">
+            <p>Whitespace is the most expensive material on the page, so spend it deliberately.</p>
+            <footer class="label">Studio note</footer>
+          </blockquote>
+        </div>
+      </section>
+
+      <!-- Colour -->
+      <section id="color" class="panel panel--pad grid">
+        <div class="span-3"><p class="label">02 — Colour</p></div>
+        <div class="span-9 stack" style="--stack-gap: var(--space-6)">
+          <div class="swatches">
+            <div class="swatch"><div class="swatch__chip" style="background:#6D28D9"></div><span>Purple<br><span data-text="muted">#6D28D9</span></span></div>
+            <div class="swatch"><div class="swatch__chip" style="background:#C026D3"></div><span>Magenta<br><span data-text="muted">#C026D3</span></span></div>
+            <div class="swatch"><div class="swatch__chip" style="background:#0F9488"></div><span>Teal<br><span data-text="muted">#0F9488</span></span></div>
+            <div class="swatch"><div class="swatch__chip" style="background:#DC2626"></div><span>Red<br><span data-text="muted">#DC2626</span></span></div>
+            <div class="swatch"><div class="swatch__chip" style="background:#EA580C"></div><span>Orange<br><span data-text="muted">#EA580C</span></span></div>
+          </div>
+
+          <p class="label">Text variants · data-text</p>
+          <div class="grid" style="row-gap: var(--grid-gutter)">
+            <!-- The same text variants on a glass card and on an opaque one. -->
+            <div class="span-6 panel panel--pad stack">
+              <p class="label">Glass panel (default)</p>
+              <p data-text="default">Default — the reading colour.</p>
+              <p data-text="muted">Muted — captions and metadata.</p>
+              <p data-text="accent">Accent — links and emphasis.</p>
+              <p><span class="tag tag--solid">Inverse</span> on a default fill</p>
+            </div>
+            <div class="span-6 panel panel--pad stack" data-panel="solid">
+              <p class="label">data-panel="solid"</p>
+              <p data-text="default">Default — the reading colour.</p>
+              <p data-text="muted">Muted — captions and metadata.</p>
+              <p data-text="accent">Accent — links and emphasis.</p>
+              <p><span class="tag tag--solid">Inverse</span> on a default fill</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Components -->
+      <section id="components" class="panel panel--pad grid">
+        <div class="span-3"><p class="label">03 — Components</p></div>
+        <div class="span-9 stack" style="--stack-gap: var(--space-7)">
+          <div class="stack">
+            <p class="label">Buttons</p>
+            <div class="cluster">
+              <button class="btn" type="button">Primary</button>
+              <button class="btn btn--ghost" type="button">Ghost</button>
+              <button class="btn btn--text" type="button">Text link</button>
+            </div>
+          </div>
+
+          <div class="stack">
+            <p class="label">Tags</p>
+            <div class="cluster" style="--cluster-gap: var(--space-2)">
+              <span class="tag">Identity</span><span class="tag">Editorial</span><span class="tag">Motion</span><span class="tag tag--solid">Featured</span>
+            </div>
+          </div>
+
+          <div class="stack">
+            <p class="label">Project index</p>
+            <ol class="index">
+              <li><a class="index__row" href="#"><span class="label">01</span><span class="index__title">Northlight Quarterly</span><span class="label">Editorial · 2026</span></a></li>
+              <li><a class="index__row" href="#"><span class="label">02</span><span class="index__title">Field Notes Identity</span><span class="label">Brand · 2025</span></a></li>
+              <li><a class="index__row" href="#"><span class="label">03</span><span class="index__title">Tidal, a type specimen</span><span class="label">Type · 2025</span></a></li>
+            </ol>
+          </div>
+
+          <div class="stack">
+            <p class="label">Meta list</p>
+            <dl class="meta">
+              <dt class="label">Role</dt><dd>Art direction, design</dd>
+              <dt class="label">Client</dt><dd>Northlight Press</dd>
+              <dt class="label">Year</dt><dd>2026</dd>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <!-- Media -->
+      <section id="media" class="panel panel--pad grid">
+        <div class="span-3"><p class="label">04 — Media</p></div>
+        <div class="span-9">
+          <figure class="figure figure--wide bleed">
+            <div class="figure__media"><div class="art art--a"></div></div>
+            <figcaption class="figure__caption"><span><strong>Northlight Quarterly</strong> — cover system, issue 12.</span><span class="label">Fig. 1</span></figcaption>
+          </figure>
+        </div>
+
+        <figure class="figure figure--tall span-5">
+          <div class="figure__media"><div class="art art--b"></div></div>
+          <figcaption class="figure__caption"><span><strong>Field Notes</strong> — mark study.</span><span class="label">Fig. 2</span></figcaption>
+        </figure>
+
+        <figure class="figure video span-7" data-component="video" style="align-self:end">
+          <div class="figure__media" style="--ratio: 16 / 10">
+            <div class="art art--c"></div>
+            <!-- Replace with your own clip. It plays muted while in view and never autoplays with reduced motion. -->
+            <video loop muted playsinline preload="metadata">
+              <source src="media/reel.mp4" type="video/mp4">
+            </video>
+            <button class="btn btn--icon video__control" type="button" data-video-toggle aria-label="Play video">
+              <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3v14H7zM14 5h3v14h-3z"/></svg>
+            </button>
+          </div>
+          <figcaption class="figure__caption"><span><strong>Tidal</strong> — motion reel, 0:42.</span><span class="label">Fig. 3</span></figcaption>
+        </figure>
+      </section>
+
+      <footer class="panel panel--pad site-footer">
+        <span class="caption">© 2026 — Built with the Jewel design system.</span>
+        <a class="caption" href="#">Back to top</a>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

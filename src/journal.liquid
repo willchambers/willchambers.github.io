@@ -1,0 +1,24 @@
+---
+layout: layouts/base.liquid
+title: Journal
+permalink: /journal/
+---
+{%- assign posts = collections.posts | newest %}
+
+<section class="panel panel--pad grid">
+  <p class="label span-12">Journal · {{ posts.size }} post{% if posts.size != 1 %}s{% endif %}</p>
+  <h1 class="span-9">Journal</h1>
+  <p class="lede span-7">{{ profile.journal_intro }}</p>
+</section>
+
+<section class="panel panel--pad">
+  {%- if posts.size > 0 %}
+  <ol class="index">
+    {%- for post in posts %}
+    <li><a class="index__row" href="{{ post.url }}"><span class="label">{{ forloop.rindex | pad2 }}</span><span class="index__title">{{ post.data.title }}</span><span class="label">{{ post.date | shortDate }}</span></a></li>
+    {%- endfor %}
+  </ol>
+  {%- else %}
+  <p class="caption">No posts yet. Write one from <a href="/admin/">the admin page</a>.</p>
+  {%- endif %}
+</section>

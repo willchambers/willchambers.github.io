@@ -1,0 +1,15 @@
+# Site-wide settings. Edit by hand; the CMS edits profile.yml instead.
+title: Will Chambers
+author: Will Chambers
+description: Portfolio, photographs and a journal.
+url: https://willchambers.github.io
+
+nav:
+  - title: Work
+    url: /work/
+  - title: Photos
+    url: /photos/
+  - title: Journal
+    url: /journal/
+  - title: About
+    url: /about/

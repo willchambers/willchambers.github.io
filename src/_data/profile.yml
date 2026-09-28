@@ -1,0 +1,12 @@
+# Home page and section copy. Editable in the CMS under Site › Home page & profile.
+tagline: Portfolio · Photographs · Journal
+headline: |-
+  Placeholder headline,
+  edit me in /admin.
+intro: A sentence or two about who you are and what you make. Replace this from the admin page, under Site › Home page & profile.
+work_intro: Selected projects. Filter by topic, or open one for the full story.
+photos_intro: Photographs, newest first. Click one to view it large; use the arrow keys to move between them.
+journal_intro: Notes, process and things I've been thinking about.
+links:
+  - label: GitHub
+    url: https://github.com/willchambers

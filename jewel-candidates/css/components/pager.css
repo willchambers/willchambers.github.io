@@ -1,0 +1,28 @@
+/* Pager — previous / next links at the end of a post or project.
+   <nav class="pager" aria-label="More posts">
+     <a class="pager__link" href="…" rel="prev"><span class="label">Previous</span><span class="pager__title">…</span></a>
+     <a class="pager__link pager__link--next" href="…" rel="next"><span class="label">Next</span><span class="pager__title">…</span></a>
+   </nav>
+   Either link can be left out; the next link stays on the right. */
+
+.pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--grid-gutter);
+}
+
+.pager__link {
+  display: grid;
+  gap: var(--space-1);
+  align-content: start;
+  text-decoration: none;
+}
+.pager__link--next { grid-column: 2; text-align: right; }
+
+.pager__title {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-heading);
+  transition: color var(--duration-base) var(--ease-standard);
+}
+.pager__link:hover .pager__title { color: var(--text-accent); }

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {%- if title and page.url != "/" %}{% assign pageTitle = title | append: " · " | append: site.title %}{% else %}{% assign pageTitle = site.title %}{% endif %}
+  {%- assign pageDescription = summary | default: intro | default: site.description %}
+  <title>{{ pageTitle }}</title>
+  <meta name="description" content="{{ pageDescription | escape }}">
+  <link rel="canonical" href="{{ site.url }}{{ page.url }}">
+  <meta property="og:site_name" content="{{ site.title }}">
+  <meta property="og:title" content="{{ title | default: site.title | escape }}">
+  <meta property="og:description" content="{{ pageDescription | escape }}">
+  <meta property="og:url" content="{{ site.url }}{{ page.url }}">
+  <meta property="og:type" content="{% if layout contains 'post' %}article{% else %}website{% endif %}">
+  {%- if image %}
+  <meta property="og:image" content="{{ site.url }}{{ image }}">
+  <meta name="twitter:card" content="summary_large_image">
+  {%- endif %}
+
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="alternate" type="application/atom+xml" href="/feed.xml" title="{{ site.title }} — Journal">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap">
+
+  <link rel="stylesheet" href="/jewel/css/jewel.css">
+  <link rel="stylesheet" href="/jewel-candidates/css/jewel-candidates.css">
+  <link rel="stylesheet" href="/assets/css/site.css">
+
+  <script src="/jewel/js/jewel.js" defer></script>
+  <script src="/jewel/js/components/video.js" defer></script>
+  <script src="/jewel-candidates/js/components/nav-toggle.js" defer></script>
+  <script src="/jewel-candidates/js/components/lightbox.js" defer></script>
+  <script src="/jewel-candidates/js/components/filter.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="jewel-bg" aria-hidden="true"></div>
+  <div class="jewel-cap" aria-hidden="true"></div>
+  <div class="page">
+    {% include "partials/header.liquid" %}
+    <main id="main" class="panel-stack">
+      {{ content }}
+      {% include "partials/footer.liquid" %}
+    </main>
+  </div>
+</body>
+</html>

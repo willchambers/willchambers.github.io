@@ -1,0 +1,49 @@
+---
+layout: layouts/base.liquid
+---
+{%- assign featured = collections.projects | featuredOrLatest: 4 %}
+{%- assign recentPhotos = collections.photoStream | slice: 0, 9 %}
+{%- assign recentPosts = collections.posts | newest: 4 %}
+
+<section class="panel panel--pad grid">
+  <p class="label span-12">{{ profile.tagline }}</p>
+  <h1 class="display span-12">{{ profile.headline | escape | newline_to_br }}</h1>
+  <p class="lede span-6">{{ profile.intro }}</p>
+  <div class="span-6 cluster hero__actions">
+    <a class="btn" href="/work/">View work</a>
+    <a class="btn btn--text" href="/journal/">Read the journal</a>
+  </div>
+</section>
+
+{%- if featured.size > 0 %}
+<section class="panel panel--pad grid">
+  <div class="span-3 stack"><p class="label">Selected work</p><a class="caption" href="/work/">All projects</a></div>
+  <div class="span-9 card-grid">
+    {%- for item in featured %}
+    {% include "partials/card.liquid", item: item %}
+    {%- endfor %}
+  </div>
+</section>
+{%- endif %}
+
+{%- if recentPhotos.size > 0 %}
+<section class="panel panel--pad grid">
+  <div class="span-3 stack"><p class="label">Recent photos</p><a class="caption" href="/photos/">All photos</a></div>
+  <div class="span-9 gallery" data-component="lightbox">
+    {%- for photo in recentPhotos %}
+    {% include "partials/gallery-item.liquid", photo: photo %}
+    {%- endfor %}
+  </div>
+</section>
+{%- endif %}
+
+{%- if recentPosts.size > 0 %}
+<section class="panel panel--pad grid">
+  <div class="span-3 stack"><p class="label">Journal</p><a class="caption" href="/journal/">All posts</a></div>
+  <ol class="index span-9">
+    {%- for post in recentPosts %}
+    <li><a class="index__row" href="{{ post.url }}"><span class="label">{{ collections.posts.size | minus: forloop.index0 | pad2 }}</span><span class="index__title">{{ post.data.title }}</span><span class="label">{{ post.date | shortDate }}</span></a></li>
+    {%- endfor %}
+  </ol>
+</section>
+{%- endif %}

@@ -1,0 +1,26 @@
+---
+layout: layouts/base.liquid
+title: Photos
+permalink: /photos/
+---
+{%- assign photos = collections.photoStream %}
+{%- assign topics = collections.photoStream | topicsOf %}
+
+<section class="panel panel--pad grid">
+  <p class="label span-12">Photos · {{ photos.size }}</p>
+  <h1 class="span-9">Photos</h1>
+  <p class="lede span-7">{{ profile.photos_intro }}</p>
+  <div class="span-12">{% include "partials/filter.liquid", topics: topics, target: "#photo-wall", noun: "photos" %}</div>
+</section>
+
+<section class="panel panel--pad">
+  {%- if photos.size > 0 %}
+  <div class="gallery" id="photo-wall" data-component="lightbox">
+    {%- for photo in photos %}
+    {% include "partials/gallery-item.liquid", photo: photo %}
+    {%- endfor %}
+  </div>
+  {%- else %}
+  <p class="caption">No photos yet. Upload some from <a href="/admin/">the admin page</a>.</p>
+  {%- endif %}
+</section>

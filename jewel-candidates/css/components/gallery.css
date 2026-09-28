@@ -1,0 +1,42 @@
+/* Gallery — a photo wall. Masonry by default: CSS columns keep each photo's
+   own shape. .gallery--grid crops everything to one ratio instead.
+   Opens in the lightbox when the container has data-component="lightbox".
+   <div class="gallery" data-component="lightbox">
+     <a class="gallery__item" href="full.webp" data-lightbox-item data-caption="…">
+       <img src="…" alt="…" loading="lazy" decoding="async">
+     </a>
+   </div>
+   Tune with --gallery-min (column width) and --gallery-gap. */
+
+.gallery {
+  --gallery-min: 15rem;
+  --gallery-gap: var(--space-3);
+
+  columns: var(--gallery-min);
+  column-gap: var(--gallery-gap);
+}
+
+.gallery__item {
+  position: relative;
+  display: block;
+  margin-bottom: var(--gallery-gap);
+  overflow: hidden;
+  break-inside: avoid;
+  background: var(--media-bg);
+  border-radius: var(--radius-1);
+  text-decoration: none;
+}
+.gallery__item img {
+  width: 100%;
+  transition: transform var(--duration-slow) var(--ease-standard);
+}
+.gallery__item:hover img { transform: scale(1.02); }
+
+.gallery--grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--gallery-min), 100%), 1fr));
+  gap: var(--gallery-gap);
+  columns: auto;
+}
+.gallery--grid .gallery__item { margin: 0; aspect-ratio: var(--ratio, 1); }
+.gallery--grid .gallery__item img { height: 100%; object-fit: cover; }

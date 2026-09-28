@@ -1,0 +1,15 @@
+{%- comment %} A project card. Expects `item` (a collection item). {% endcomment -%}
+<a class="card" href="{{ item.url }}" data-tags="{{ item.data.topics | topicSlugs }}">
+  <div class="figure__media" style="--ratio: 4 / 3">
+    {%- if item.data.image %}
+    <img src="{{ item.data.image }}" alt="" sizes="(min-width: 48rem) 24rem, 100vw">
+    {%- endif %}
+  </div>
+  <div class="card__body">
+    <h3 class="card__title">{{ item.data.title }}</h3>
+    {%- if item.data.summary %}
+    <p class="caption">{{ item.data.summary }}</p>
+    {%- endif %}
+    <p class="label">{% if item.data.category %}{{ item.data.category }} · {% endif %}{{ item.date | year }}</p>
+  </div>
+</a>

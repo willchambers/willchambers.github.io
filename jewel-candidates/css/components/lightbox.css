@@ -1,0 +1,54 @@
+/* Lightbox — full-screen photo viewer on a native <dialog>. The markup is
+   built by js/components/lightbox.js; put data-component="lightbox" on any
+   container of [data-lightbox-item] links (see gallery.css).
+   The dialog itself is the glass surface, so it uses the resolved panel
+   tokens (::backdrop can't reliably read custom properties). */
+
+.lightbox {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: var(--space-4);
+  border: 0;
+  color: var(--text-default);
+  background: var(--panel-bg);
+  -webkit-backdrop-filter: var(--panel-backdrop);
+  backdrop-filter: var(--panel-backdrop);
+}
+.lightbox[open] {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: var(--space-3);
+}
+.lightbox::backdrop { background: transparent; }
+
+.lightbox__bar,
+.lightbox__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.lightbox__figure {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+}
+.lightbox__img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: var(--radius-1);
+}
+
+.lightbox__caption {
+  flex: 1;
+  text-align: center;
+  margin-inline: auto;
+}
+
+/* No page scroll behind the open viewer. */
+html:has(.lightbox[open]) { overflow: hidden; }

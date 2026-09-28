@@ -1,0 +1,71 @@
+/* Prose — styles for long-form content you don't control the markup of
+   (Markdown output from Jekyll or the CMS).
+   <div class="prose">{{ content }}</div>
+   Jewel's own rules still apply inside; this adds rhythm and the elements
+   Markdown produces that the system hadn't styled (lists, code, tables,
+   inline images, plain <blockquote>). */
+
+.prose {
+  --prose-gap: var(--space-5);
+}
+.prose > * + * { margin-top: var(--prose-gap); }
+.prose > :is(h2, h3, h4) { margin-top: var(--space-7); }
+.prose > :is(h2, h3, h4) + * { margin-top: var(--space-3); }
+.prose > :first-child { margin-top: 0; }
+
+.prose :is(ul, ol) {
+  max-width: var(--measure);
+  padding-left: 1.25em;
+}
+.prose li + li { margin-top: var(--space-2); }
+.prose li::marker { color: var(--text-muted); }
+
+/* Kramdown wraps a lone image in <p>; let it run past the text measure. */
+.prose p:has(> img:only-child) { max-width: none; }
+.prose img {
+  width: 100%;
+  background: var(--media-bg);
+  border-radius: var(--radius-1);
+}
+
+/* Same look as .quote, for Markdown's bare <blockquote>. */
+.prose blockquote:not(.quote) {
+  margin-inline: 0;
+  padding-left: var(--space-5);
+  border-left: var(--hairline) solid var(--text-accent);
+  font-size: var(--text-xl);
+  line-height: 1.35;
+  letter-spacing: var(--tracking-heading);
+}
+
+.prose :is(code, kbd, pre) {
+  font-family: var(--font-mono, ui-monospace, "SF Mono", Menlo, Consolas, monospace);
+  font-size: 0.9em;
+}
+.prose :not(pre) > code {
+  padding: 0.1em 0.35em;
+  background: var(--media-bg);
+  border-radius: var(--radius-1);
+}
+.prose pre {
+  overflow-x: auto;
+  padding: var(--space-4);
+  line-height: 1.5;
+  background: var(--media-bg);
+  border: var(--hairline) solid var(--panel-border);
+  border-radius: var(--radius-2);
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+.prose :is(th, td) {
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  text-align: left;
+  border-bottom: var(--hairline) solid var(--panel-border);
+}
+.prose th { color: var(--text-muted); font-weight: var(--weight-medium); }
+
+.prose hr { margin-block: var(--space-7); }

@@ -1,0 +1,74 @@
+/* Button — primary (filled), ghost (outlined), text (underlined), icon.
+   <a class="btn" href="…">Label</a>
+   <button class="btn btn--ghost" type="button">Label</button>
+   <button class="btn btn--ghost btn--icon" type="button" aria-label="…"><svg…></button>
+
+   Each variant only sets --btn-bg / --btn-fg / --btn-border, so a new
+   variant is three lines. */
+
+.btn {
+  --btn-bg: var(--text-default);
+  --btn-fg: var(--text-inverse);
+  --btn-border: var(--text-default);
+  --btn-bg-hover: var(--text-accent);
+  --btn-fg-hover: var(--text-inverse);
+  --btn-border-hover: var(--text-accent);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.5rem;
+  padding: 0 var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  line-height: 1;
+  text-decoration: none;
+  color: var(--btn-fg);
+  background: var(--btn-bg);
+  border: var(--hairline) solid var(--btn-border);
+  border-radius: var(--radius-2);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard),
+    text-underline-offset var(--duration-base) var(--ease-standard);
+}
+.btn:hover {
+  color: var(--btn-fg-hover);
+  background: var(--btn-bg-hover);
+  border-color: var(--btn-border-hover);
+}
+
+.btn--ghost {
+  --btn-bg: transparent;
+  --btn-fg: var(--text-default);
+  --btn-border: var(--panel-border);
+  --btn-bg-hover: transparent;
+  --btn-fg-hover: var(--text-accent);
+  --btn-border-hover: currentColor;
+}
+
+.btn--text {
+  --btn-bg: transparent;
+  --btn-fg: var(--text-default);
+  --btn-border: transparent;
+  --btn-bg-hover: transparent;
+  --btn-fg-hover: var(--text-accent);
+  --btn-border-hover: transparent;
+  padding-inline: 0;
+  text-decoration: underline;
+  text-decoration-thickness: var(--hairline);
+  text-underline-offset: 0.3em;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+}
+.btn--text:hover { text-underline-offset: 0.18em; }
+
+.btn--icon { padding: 0; width: 2.5rem; justify-content: center; }
+.btn svg { width: 1rem; height: 1rem; flex: none; }
+
+/* Two-state button: show .toggle__on when pressed, .toggle__off otherwise. */
+.toggle .toggle__on,
+.toggle .toggle__off { display: none; }
+.toggle[aria-pressed="true"] .toggle__on,
+.toggle[aria-pressed="false"] .toggle__off { display: inline; }

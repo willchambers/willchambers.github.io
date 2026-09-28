@@ -1,0 +1,26 @@
+---
+layout: layouts/base.liquid
+title: Work
+permalink: /work/
+---
+{%- assign projects = collections.projects | newest %}
+{%- assign topics = collections.projects | topicsOf %}
+
+<section class="panel panel--pad grid">
+  <p class="label span-12">Work · {{ projects.size }} project{% if projects.size != 1 %}s{% endif %}</p>
+  <h1 class="span-9">Work</h1>
+  <p class="lede span-7">{{ profile.work_intro }}</p>
+  <div class="span-12">{% include "partials/filter.liquid", topics: topics, target: "#projects", noun: "projects" %}</div>
+</section>
+
+<section class="panel panel--pad">
+  {%- if projects.size > 0 %}
+  <div class="card-grid" id="projects">
+    {%- for item in projects %}
+    {% include "partials/card.liquid", item: item %}
+    {%- endfor %}
+  </div>
+  {%- else %}
+  <p class="caption">No projects yet. Add one from <a href="/admin/">the admin page</a>.</p>
+  {%- endif %}
+</section>

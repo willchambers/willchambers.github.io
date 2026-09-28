@@ -1,0 +1,9 @@
+<footer class="panel panel--pad site-footer">
+  <span class="caption">© {{ "now" | date: "%Y" }} {{ site.author }} · Built with the <a href="/jewel/">Jewel design system</a></span>
+  <span class="cluster caption">
+    {%- for link in profile.links %}
+    <a href="{{ link.url }}">{{ link.label }}</a>
+    {%- endfor %}
+    <a href="/feed.xml">RSS</a>
+  </span>
+</footer>

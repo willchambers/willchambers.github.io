@@ -1,0 +1,12 @@
+# OS / editor clutter
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Local-only Claude settings
+.claude/settings.local.json
+
+# Large media — keep demo clips out of the repo
+media/*.mp4

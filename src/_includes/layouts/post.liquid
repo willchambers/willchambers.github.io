@@ -1,0 +1,33 @@
+---
+layout: layouts/base.liquid
+---
+<section class="panel panel--pad grid">
+  <p class="label span-12"><a class="link-quiet" href="/journal/">Journal</a> · <time datetime="{{ page.date | isoDate }}">{{ page.date | readableDate }}</time> · {{ content | readingTime }} min read</p>
+  <h1 class="span-9">{{ title }}</h1>
+  {%- if summary %}
+  <p class="lede span-9">{{ summary }}</p>
+  {%- endif %}
+</section>
+
+{%- if image %}
+<section class="panel panel--pad">
+  <figure class="figure figure--wide bleed">
+    <div class="figure__media"><img src="{{ image }}" alt="{{ image_alt | escape }}" sizes="(min-width: 80rem) 80rem, 100vw" loading="eager" fetchpriority="high"></div>
+  </figure>
+</section>
+{%- endif %}
+
+<article class="panel panel--pad grid">
+  <div class="span-3">
+    {%- if topics.size > 0 %}
+    <div class="cluster" style="--cluster-gap: var(--space-2)">
+      {%- for topic in topics %}<span class="tag">{{ topic }}</span>{% endfor %}
+    </div>
+    {%- endif %}
+  </div>
+  <div class="span-9 prose">
+    {{ content }}
+  </div>
+</article>
+
+{% include "partials/pager.liquid", list: collections.posts, noun: "posts" %}

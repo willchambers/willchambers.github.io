@@ -1,0 +1,38 @@
+/* Nav toggle — a menu button for small screens. The system's header hides
+   .nav__links below 40rem and offers nothing in their place.
+   Behaviour: js/components/nav-toggle.js.
+   <header class="site-header" data-component="nav-toggle">
+     <div class="panel site-header__inner">
+       <a class="wordmark" href="/">Name</a>
+       <button class="btn btn--ghost btn--icon nav__toggle" type="button"
+               aria-expanded="false" aria-controls="primary-nav" data-nav-toggle>
+         <svg class="nav__icon-open">…</svg><svg class="nav__icon-close">…</svg>
+       </button>
+       <nav class="nav" id="primary-nav" aria-label="Primary">…</nav>
+     </div>
+   </header> */
+
+.nav__toggle { display: none; }
+.nav__icon-close,
+.site-header[data-state="open"] .nav__icon-open { display: none; }
+.site-header[data-state="open"] .nav__icon-close { display: block; }
+
+@media (max-width: 40rem) {
+  .site-header__inner { flex-wrap: wrap; }
+  .nav__toggle { display: inline-flex; }
+
+  .site-header .nav { display: none; flex-basis: 100%; }
+  .site-header[data-state="open"] .nav {
+    display: block;
+    padding-top: var(--space-3);
+    border-top: var(--hairline) solid var(--panel-border);
+  }
+  .site-header[data-state="open"] .nav__links {
+    display: grid;
+    gap: var(--space-1);
+  }
+  .site-header[data-state="open"] .nav__links a {
+    padding-block: var(--space-2);
+    font-size: var(--text-lg);
+  }
+}

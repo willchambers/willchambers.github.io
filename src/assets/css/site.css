@@ -1,0 +1,7 @@
+/* Site-only styles. Unlayered, so they sit above every Jewel layer.
+   Anything here that turns out to be reusable should become a candidate
+   component in jewel-candidates/ instead (see GAPS.md). */
+
+/* Hero buttons sit at the bottom right of their half of the grid. */
+.hero__actions { align-self: end; justify-content: flex-end; }
+@media (max-width: 48rem) { .hero__actions { justify-content: flex-start; } }

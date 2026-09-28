@@ -1,0 +1,16 @@
+/* Skip link — first thing in <body>, hidden until focused by keyboard.
+   <a class="skip-link" href="#main">Skip to content</a> */
+
+.skip-link {
+  position: fixed;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: 20;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--text-inverse);
+  background: var(--text-default);
+  border-radius: var(--radius-2);
+  transform: translateY(-200%);
+}
+.skip-link:focus-visible { transform: none; }

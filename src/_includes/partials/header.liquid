@@ -1,0 +1,16 @@
+<header class="site-header" data-component="nav-toggle">
+  <div class="panel site-header__inner">
+    <a class="wordmark link-quiet" href="/">{{ site.title }}</a>
+    <button class="btn btn--ghost btn--icon nav__toggle" type="button" aria-expanded="false" aria-controls="primary-nav" data-nav-toggle>
+      <svg class="nav__icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 9h16M4 15h16"/></svg>
+      <svg class="nav__icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <nav class="nav" id="primary-nav" aria-label="Primary">
+      <span class="nav__links">
+        {%- for item in site.nav %}
+        <a href="{{ item.url }}"{% if page.url contains item.url %} aria-current="page"{% endif %}>{{ item.title }}</a>
+        {%- endfor %}
+      </span>
+    </nav>
+  </div>
+</header>

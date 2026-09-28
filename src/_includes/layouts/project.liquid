@@ -1,0 +1,66 @@
+---
+layout: layouts/base.liquid
+---
+<section class="panel panel--pad grid">
+  <p class="label span-12"><a class="link-quiet" href="/work/">Work</a>{% if category %} · {{ category }}{% endif %}</p>
+  <h1 class="span-9">{{ title }}</h1>
+  {%- if summary %}
+  <p class="lede span-7">{{ summary }}</p>
+  {%- endif %}
+  <dl class="meta span-5 start-8">
+    {%- if role %}<dt class="label">Role</dt><dd>{{ role }}</dd>{% endif %}
+    {%- if client %}<dt class="label">Client</dt><dd>{{ client }}</dd>{% endif %}
+    <dt class="label">Year</dt><dd>{{ page.date | year }}</dd>
+    {%- if topics.size > 0 %}<dt class="label">Topics</dt><dd>{{ topics | join: ", " }}</dd>{% endif %}
+    {%- if link %}<dt class="label">Link</dt><dd><a href="{{ link }}">{{ link | replace: "https://", "" | replace: "http://", "" }}</a></dd>{% endif %}
+  </dl>
+</section>
+
+{%- if image %}
+<section class="panel panel--pad">
+  <figure class="figure figure--wide bleed">
+    <div class="figure__media"><img src="{{ image }}" alt="{{ image_alt | escape }}" sizes="(min-width: 80rem) 80rem, 100vw" loading="eager" fetchpriority="high"></div>
+  </figure>
+</section>
+{%- endif %}
+
+{%- assign body = content | strip %}
+{%- if body != "" %}
+<article class="panel panel--pad grid">
+  <div class="span-3"><p class="label">Overview</p></div>
+  <div class="span-9 prose">
+    {{ content }}
+  </div>
+</article>
+{%- endif %}
+
+{%- if video %}
+<section class="panel panel--pad grid">
+  <div class="span-3"><p class="label">Film</p></div>
+  <figure class="figure video span-9" data-component="video">
+    <div class="figure__media" style="--ratio: 16 / 9">
+      <video loop muted playsinline preload="metadata"><source src="{{ video }}"></video>
+      <button class="btn btn--icon video__control" type="button" data-video-toggle aria-label="Play video">
+        <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3v14H7zM14 5h3v14h-3z"/></svg>
+      </button>
+    </div>
+    {%- if video_caption %}
+    <figcaption class="figure__caption"><span>{{ video_caption }}</span></figcaption>
+    {%- endif %}
+  </figure>
+</section>
+{%- endif %}
+
+{%- if gallery.size > 0 %}
+<section class="panel panel--pad grid">
+  <div class="span-3 stack"><p class="label">Gallery</p><p class="caption">{{ gallery.size }} image{% if gallery.size != 1 %}s{% endif %}</p></div>
+  <div class="span-9 gallery" data-component="lightbox">
+    {%- for photo in gallery %}
+    {% include "partials/gallery-item.liquid", photo: photo %}
+    {%- endfor %}
+  </div>
+</section>
+{%- endif %}
+
+{% include "partials/pager.liquid", list: collections.projects, noun: "projects" %}

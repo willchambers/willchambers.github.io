@@ -1,0 +1,21 @@
+/* Tag — small outlined pill for categories; --solid for emphasis.
+   <span class="tag">Editorial</span>
+   <span class="tag tag--solid">Featured</span> */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  height: 1.5rem;
+  padding: 0 var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  border: var(--hairline) solid var(--panel-border);
+  border-radius: var(--radius-pill);
+}
+.tag--solid {
+  color: var(--text-inverse);
+  background: var(--text-default);
+  border-color: transparent;
+}

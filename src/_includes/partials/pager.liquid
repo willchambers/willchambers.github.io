@@ -1,0 +1,13 @@
+{%- comment %} Older / newer links. Expects `list` (an oldest-first collection) and `noun`. {% endcomment -%}
+{%- assign older = list | getPreviousCollectionItem: page %}
+{%- assign newer = list | getNextCollectionItem: page %}
+{%- if older or newer %}
+<nav class="panel panel--pad pager" aria-label="More {{ noun }}">
+  {%- if older %}
+  <a class="pager__link" href="{{ older.url }}" rel="prev"><span class="label">Older</span><span class="pager__title">{{ older.data.title }}</span></a>
+  {%- endif %}
+  {%- if newer %}
+  <a class="pager__link pager__link--next" href="{{ newer.url }}" rel="next"><span class="label">Newer</span><span class="pager__title">{{ newer.data.title }}</span></a>
+  {%- endif %}
+</nav>
+{%- endif %}

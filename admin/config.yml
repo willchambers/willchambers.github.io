@@ -1,0 +1,144 @@
+# Sveltia CMS — https://sveltiacms.app/en/docs
+# Sign in at /admin with "Sign In with Token": a fine-grained GitHub token for
+# this repo only, with Contents: Read and write. See README.md.
+
+backend:
+  name: github
+  repo: willchambers/willchambers.github.io
+  branch: main
+  commit_messages:
+    create: "Add {{collection}} “{{slug}}”"
+    update: "Update {{collection}} “{{slug}}”"
+    delete: "Delete {{collection}} “{{slug}}”"
+    uploadMedia: "Upload “{{path}}”"
+    deleteMedia: "Delete “{{path}}”"
+
+site_url: https://willchambers.github.io
+display_url: https://willchambers.github.io
+
+media_folder: src/assets/uploads
+public_folder: /assets/uploads
+
+# Photos are converted to WebP and capped at 2400px on the long side before
+# they're committed, so phone photos don't bloat the repo. The build then
+# makes smaller copies for grids.
+media_libraries:
+  all:
+    transformations:
+      raster_image:
+        format: webp
+        quality: 85
+        width: 2400
+        height: 2400
+    max_file_size: 26214400
+
+slug:
+  encoding: ascii
+  clean_accents: true
+
+collections:
+  - name: photos
+    label: Photos
+    label_singular: Photo set
+    description: One or more photos with a shared title, date and topics. They all appear on /photos and the newest on the home page.
+    folder: src/photos
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime }
+      - { label: Location, name: location, widget: string, required: false }
+      - { label: Topics, name: topics, widget: list, required: false, hint: "Comma-separated. Used for the filter buttons on /photos." }
+      - label: Photos
+        name: images
+        widget: list
+        min: 1
+        summary: "{{fields.caption}}"
+        fields:
+          - { label: Photo, name: image, widget: image }
+          - { label: Alt text, name: alt, widget: string, hint: "Describe the photo for people who can't see it." }
+          - { label: Caption, name: caption, widget: string, required: false }
+
+  - name: projects
+    label: Projects
+    label_singular: Project
+    description: Case studies for /work. Mark one as featured to show it on the home page.
+    folder: src/projects
+    create: true
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime, hint: "The year shown on the project comes from this." }
+      - { label: Category, name: category, widget: string, required: false, hint: "e.g. Identity, Editorial, Photography" }
+      - { label: Summary, name: summary, widget: text, required: false }
+      - { label: Role, name: role, widget: string, required: false }
+      - { label: Client, name: client, widget: string, required: false }
+      - { label: Featured on home page, name: featured, widget: boolean, default: false, required: false }
+      - { label: Cover image, name: image, widget: image, required: false }
+      - { label: Cover alt text, name: image_alt, widget: string, required: false }
+      - { label: Topics, name: topics, widget: list, required: false }
+      - { label: Link, name: link, widget: string, required: false, hint: "A live site or repo, starting with https://" }
+      - label: Gallery
+        name: gallery
+        widget: list
+        required: false
+        summary: "{{fields.caption}}"
+        fields:
+          - { label: Image, name: image, widget: image }
+          - { label: Alt text, name: alt, widget: string }
+          - { label: Caption, name: caption, widget: string, required: false }
+      - { label: Video, name: video, widget: file, required: false, hint: "A short MP4 (keep it small). Plays muted in view." }
+      - { label: Video caption, name: video_caption, widget: string, required: false }
+      - { label: Story, name: body, widget: markdown, required: false }
+
+  - name: posts
+    label: Journal
+    label_singular: Post
+    folder: src/posts
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime }
+      - { label: Summary, name: summary, widget: text, required: false, hint: "Shown under the title and in link previews." }
+      - { label: Cover image, name: image, widget: image, required: false }
+      - { label: Cover alt text, name: image_alt, widget: string, required: false }
+      - { label: Topics, name: topics, widget: list, required: false }
+      - { label: Body, name: body, widget: markdown }
+
+  - name: site
+    label: Site
+    files:
+      - name: profile
+        label: Home page & profile
+        file: src/_data/profile.yml
+        fields:
+          - { label: Tagline, name: tagline, widget: string, hint: "Small label above the headline." }
+          - { label: Headline, name: headline, widget: text, hint: "The big text. Line breaks are kept." }
+          - { label: Intro, name: intro, widget: text }
+          - { label: Work page intro, name: work_intro, widget: text }
+          - { label: Photos page intro, name: photos_intro, widget: text }
+          - { label: Journal page intro, name: journal_intro, widget: text }
+          - label: Links
+            name: links
+            widget: list
+            summary: "{{fields.label}}"
+            fields:
+              - { label: Label, name: label, widget: string }
+              - { label: URL, name: url, widget: string, hint: "https://… or mailto:you@example.com" }
+      - name: about
+        label: About page
+        file: src/about.md
+        fields:
+          - { label: Layout, name: layout, widget: hidden, default: layouts/page.liquid }
+          - { label: Permalink, name: permalink, widget: hidden, default: /about/ }
+          - { label: Show links, name: show_links, widget: hidden, default: true }
+          - { label: Title, name: title, widget: string }
+          - { label: Intro, name: intro, widget: text, required: false }
+          - { label: Body, name: body, widget: markdown }

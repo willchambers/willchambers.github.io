@@ -1,0 +1,4 @@
+{
+  "layout": "layouts/project.liquid",
+  "permalink": "/work/{{ page.fileSlug }}/"
+}

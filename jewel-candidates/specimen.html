@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jewel Candidates</title>
+  <meta name="description" content="Components the portfolio site added on top of the Jewel design system.">
+  <meta name="robots" content="noindex">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap">
+
+  <link rel="stylesheet" href="../jewel/css/jewel.css">
+  <link rel="stylesheet" href="css/jewel-candidates.css">
+
+  <script src="../jewel/js/jewel.js" defer></script>
+  <script src="js/components/nav-toggle.js" defer></script>
+  <script src="js/components/lightbox.js" defer></script>
+  <script src="js/components/filter.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="jewel-bg" aria-hidden="true"></div>
+  <div class="jewel-cap" aria-hidden="true"></div>
+  <div class="page">
+    <header class="site-header" data-component="nav-toggle">
+      <div class="panel site-header__inner">
+        <a class="wordmark link-quiet" href="#">Jewel candidates</a>
+        <button class="btn btn--ghost btn--icon nav__toggle" type="button" aria-expanded="false" aria-controls="primary-nav" data-nav-toggle>
+          <svg class="nav__icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 9h16M4 15h16"/></svg>
+          <svg class="nav__icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <nav class="nav" id="primary-nav" aria-label="Primary">
+          <span class="nav__links">
+            <a href="#cards" aria-current="page">Cards</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#prose">Prose</a>
+            <a href="#pager">Pager</a>
+          </span>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="panel-stack">
+      <section class="panel panel--pad grid">
+        <p class="label span-12">Portfolio additions Â· candidates for Jewel v1.1</p>
+        <h1 class="span-9">Components the portfolio needed</h1>
+        <p class="lede span-7">Each one follows the system's template, so it can move into <code>jewel-design-system</code> as is. GAPS.md tracks what's done and what's still missing. Narrow the window to see the menu toggle.</p>
+      </section>
+
+      <section id="cards" class="panel panel--pad grid">
+        <div class="span-3 stack"><p class="label">Card Â· filter</p><p class="caption">.card-grid, .card, .filter, .tag--button</p></div>
+        <div class="span-9 stack" style="--stack-gap: var(--space-5)">
+          <div class="filter cluster" data-component="filter" data-filter-target="#card-demo" data-filter-noun="projects" role="group" aria-label="Filter by tag">
+            <button class="tag tag--button" type="button" data-filter="*" aria-pressed="true">All</button>
+            <button class="tag tag--button" type="button" data-filter="brand" aria-pressed="false">Brand</button>
+            <button class="tag tag--button" type="button" data-filter="photo" aria-pressed="false">Photo</button>
+            <span class="filter__status visually-hidden" aria-live="polite"></span>
+          </div>
+          <div class="card-grid" id="card-demo">
+            <a class="card" href="#" data-tags="brand">
+              <div class="figure__media" style="--ratio: 4 / 3"><img src="/assets/uploads/sample-01.jpg" alt=""></div>
+              <div class="card__body"><h3 class="card__title">Northlight Quarterly</h3><p class="caption">Cover system for an independent magazine.</p><p class="label">Brand Â· 2026</p></div>
+            </a>
+            <a class="card" href="#" data-tags="photo">
+              <div class="figure__media" style="--ratio: 4 / 3"><img src="/assets/uploads/sample-03.jpg" alt=""></div>
+              <div class="card__body"><h3 class="card__title">Coastline, at dusk</h3><p class="caption">A photo series.</p><p class="label">Photo Â· 2025</p></div>
+            </a>
+            <a class="card" href="#" data-tags="brand photo">
+              <div class="figure__media" style="--ratio: 4 / 3"><img src="/assets/uploads/sample-04.jpg" alt=""></div>
+              <div class="card__body"><h3 class="card__title">Field Notes</h3><p class="caption">Identity and campaign photography.</p><p class="label">Brand Â· 2025</p></div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section id="gallery" class="panel panel--pad grid">
+        <div class="span-3 stack"><p class="label">Gallery Â· lightbox</p><p class="caption">.gallery (masonry) and .gallery--grid. Click a photo; arrow keys move, Esc closes.</p></div>
+        <div class="span-9 stack" style="--stack-gap: var(--space-6)">
+          <div class="gallery" data-component="lightbox">
+            <a class="gallery__item" href="/assets/uploads/sample-01.jpg" data-lightbox-item data-caption="First light â€” Point Reyes"><img src="/assets/uploads/sample-01.jpg" alt="Sample gradient, landscape" loading="lazy"></a>
+            <a class="gallery__item" href="/assets/uploads/sample-02.jpg" data-lightbox-item data-caption="Tall one"><img src="/assets/uploads/sample-02.jpg" alt="Sample gradient, portrait" loading="lazy"></a>
+            <a class="gallery__item" href="/assets/uploads/sample-03.jpg" data-lightbox-item data-caption="Wide one"><img src="/assets/uploads/sample-03.jpg" alt="Sample gradient, 16 by 9" loading="lazy"></a>
+            <a class="gallery__item" href="/assets/uploads/sample-04.jpg" data-lightbox-item><img src="/assets/uploads/sample-04.jpg" alt="Sample gradient, square" loading="lazy"></a>
+            <a class="gallery__item" href="/assets/uploads/sample-05.jpg" data-lightbox-item data-caption="Portrait, 4:5"><img src="/assets/uploads/sample-05.jpg" alt="Sample gradient, 4 by 5" loading="lazy"></a>
+            <a class="gallery__item" href="/assets/uploads/sample-06.jpg" data-lightbox-item data-caption="Panorama"><img src="/assets/uploads/sample-06.jpg" alt="Sample gradient, panorama" loading="lazy"></a>
+          </div>
+          <div class="gallery gallery--grid" data-component="lightbox" style="--gallery-min: 10rem">
+            <a class="gallery__item" href="/assets/uploads/sample-02.jpg" data-lightbox-item><img src="/assets/uploads/sample-02.jpg" alt="Sample gradient, portrait" loading="lazy"></a>
+            <a class="gallery__item" href="/assets/uploads/sample-05.jpg" data-lightbox-item><img src="/assets/uploads/sample-05.jpg" alt="Sample gradient, 4 by 5" loading="lazy"></a>
+            <a class="gallery__item" href="/assets/uploads/sample-06.jpg" data-lightbox-item><img src="/assets/uploads/sample-06.jpg" alt="Sample gradient, panorama" loading="lazy"></a>
+            <a class="gallery__item" href="/assets/uploads/sample-01.jpg" data-lightbox-item><img src="/assets/uploads/sample-01.jpg" alt="Sample gradient, landscape" loading="lazy"></a>
+          </div>
+        </div>
+      </section>
+
+      <section id="prose" class="panel panel--pad grid">
+        <div class="span-3 stack"><p class="label">Prose</p><p class="caption">.prose around Markdown output</p></div>
+        <div class="span-9 prose">
+          <p>Markdown produces plain elements with no classes. <code>.prose</code> gives them rhythm without changing Jewel's type: paragraphs keep the 64ch measure, and <a href="#">links behave as usual</a>.</p>
+          <h2>A section heading</h2>
+          <p>Lists, code and tables are the elements the system hadn't styled.</p>
+          <ul>
+            <li>Unordered lists with a muted marker</li>
+            <li>Inline <code>code</code> on the media surface</li>
+            <li>Images that run past the measure</li>
+          </ul>
+          <p><img src="/assets/uploads/sample-06.jpg" alt="Sample panorama inside a post"></p>
+          <blockquote><p>A bare Markdown blockquote picks up the .quote look.</p></blockquote>
+          <pre><code>npm? No. This site has no build step on your machine.</code></pre>
+          <table>
+            <thead><tr><th>Token</th><th>Used for</th></tr></thead>
+            <tbody><tr><td>--media-bg</td><td>code, pre, image placeholder</td></tr><tr><td>--panel-border</td><td>table rules</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <nav id="pager" class="panel panel--pad pager" aria-label="More posts">
+        <a class="pager__link" href="#" rel="prev"><span class="label">Previous</span><span class="pager__title">Hello, Jewel</span></a>
+        <a class="pager__link pager__link--next" href="#" rel="next"><span class="label">Next</span><span class="pager__title">Notes on glass and contrast</span></a>
+      </nav>
+
+      <footer class="panel panel--pad site-footer">
+        <span class="caption">Jewel candidates Â· specimen</span>
+        <a class="caption" href="../jewel/index.html">Jewel specimen</a>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

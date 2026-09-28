@@ -1,0 +1,46 @@
+/* Card — a linked project tile: media, title, summary, meta. Reuses
+   .figure__media for the image so ratios work the same as figures.
+   <div class="card-grid">
+     <a class="card" href="…">
+       <div class="figure__media" style="--ratio: 4 / 3"><img src="…" alt=""></div>
+       <div class="card__body">
+         <h3 class="card__title">Project</h3>
+         <p class="caption">One-line summary.</p>
+         <p class="label">Type · 2026</p>
+       </div>
+     </a>
+   </div>
+   The image is decorative (alt="") because the title names the link. */
+
+.card-grid {
+  --card-min: 16rem;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--card-min), 100%), 1fr));
+  gap: var(--grid-gutter);
+}
+
+.card {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+  color: var(--text-default);
+  text-decoration: none;
+}
+.card .figure__media > img {
+  transition: transform var(--duration-slow) var(--ease-standard);
+}
+.card:hover .figure__media > img { transform: scale(1.02); }
+
+.card__body {
+  display: grid;
+  gap: var(--space-1);
+  padding-top: var(--space-3);
+  border-top: var(--hairline) solid var(--panel-border);
+}
+.card__title {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+  transition: color var(--duration-base) var(--ease-standard);
+}
+.card:hover .card__title { color: var(--text-accent); }
