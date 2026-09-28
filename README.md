@@ -66,6 +66,6 @@ Jewel lives in its own repo. After changing it:
 npm run sync-jewel
 ```
 
-That copies the latest `css/` and `js/` into `jewel/`. The parked light theme is left out. Then commit.
+That copies Jewel's last **commit** into `jewel/` (uncommitted work in the Jewel folder is left out, and it warns if the commit isn't pushed yet). `npm run sync-jewel -- -Ref <commit>` copies a particular one. The parked light theme is left out. Then commit.
 
 When a component in `jewel-candidates/` is ready, move it into Jewel (see GAPS.md), sync, and delete the candidate.
