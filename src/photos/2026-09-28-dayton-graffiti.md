@@ -7,4 +7,7 @@ images:
   - image: /assets/uploads/IMG_1973.webp
     alt: Graffiti
     caption: ''
+  - image: /assets/uploads/IMG_1981.webp
+    alt: Graffiti
+    caption: ''
 ---
