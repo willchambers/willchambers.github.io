@@ -19,6 +19,7 @@ export default function (eleventyConfig) {
   // Every <img> in the built pages gets resized copies and a srcset. One format
   // keeps the output a plain <img> (no <picture>), so Jewel's
   // `.figure__media > img` selectors still match.
+  // src/photos-json.11ty.js asks for the same sizes, so keep the two in step.
   eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
     formats: ["webp"],
     widths: [480, 960, 1600, 2400],
