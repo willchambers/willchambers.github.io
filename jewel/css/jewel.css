@@ -25,6 +25,7 @@
 @import url("components/meta-list.css") layer(components);
 @import url("components/panel.css") layer(components);
 @import url("components/quote.css") layer(components);
+@import url("components/section-head.css") layer(components);
 @import url("components/tag.css") layer(components);
 @import url("components/video.css") layer(components);
 

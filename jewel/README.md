@@ -14,7 +14,7 @@ css/
   components/
     _template.css       starting point for a new component
     button.css  figure.css  footer.css  header.css  index-list.css
-    knockout.css  meta-list.css  panel.css  quote.css  tag.css  video.css
+    knockout.css  meta-list.css  panel.css  quote.css  section-head.css  tag.css  video.css
 js/
   jewel.js              core: Jewel.theme + component registry
   components/
@@ -57,6 +57,7 @@ The page is a floating glass header over a column of content panels, with the gr
 | Header | `.site-header` > `.panel.site-header__inner` | Square corners. Sticky; `.jewel-cap` hides content in the gap above it. |
 | Panel column | `.panel-stack` | A grid of panels with a `--panel-stack-gap` (16px) gap. |
 | Content panel | any `.panel` directly inside `.panel-stack`, or `.panel--content` anywhere | Square top left, 2px top right with the knockout lines, 10px bottom left and right. |
+| Section head | `.section-head` as the first child of a content panel | The numbered label (`01 — Typography`) with a 1px rule under it that runs the full width of the panel, edge to edge. Content below sits in `span-9 start-4`. |
 | Other panels | `.panel` | Square on all sides (cards, nested panels). |
 
 **Knockout lines.** Two parallel 45° hairlines are cut through the top-right corner of every content panel, and the background shows through them. They are real holes, made with a CSS mask, so they cut the fill, the border and the blur. Add them to any other element with `.knockout`. Remove them from a content panel with `.no-knockout`.
@@ -67,9 +68,9 @@ The page is a floating glass header over a column of content panels, with the gr
 --panel-radius: 0;              /* every panel */
 --panel-radius-top-right: 2px;  /* content panels: knockout corner */
 --panel-radius-bottom: 10px;    /* content panels: bottom corners */
---knockout-offset: 10px;        /* corner → first line */
+--knockout-offset: 6px;         /* corner → first line */
 --knockout-width: 1px;          /* line thickness */
---knockout-gap: 3px;            /* space between the lines */
+--knockout-gap: 2px;            /* space between the lines */
 --sticky-offset: 1rem;          /* gap above the sticky header */
 ```
 

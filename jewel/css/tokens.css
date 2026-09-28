@@ -105,9 +105,9 @@
   --panel-radius-bottom: 10px;      /* bottom-left and bottom-right */
 
   /* ---- Knockout lines (content panels' top-right corner) -------------- */
-  --knockout-offset: 10px;          /* corner → first line */
+  --knockout-offset: 6px;           /* corner → first line */
   --knockout-width: 1px;            /* line thickness */
-  --knockout-gap: 3px;              /* space between the lines */
+  --knockout-gap: 2px;              /* space between the lines */
 
   /* ---- Borders --------------------------------------------------------- */
   --hairline: 1px;
