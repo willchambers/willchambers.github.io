@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000">
+  <!-- Specimen artwork standing in for a photo (the specimen's art a). -->
+  <defs>
+    <radialGradient id="a1" cx="30%" cy="40%" r="60%"><stop offset="0" stop-color="#6D28D9"/><stop offset="0.7" stop-color="#6D28D9" stop-opacity="0"/></radialGradient>
+    <radialGradient id="a2" cx="80%" cy="70%" r="50%"><stop offset="0" stop-color="#0F9488"/><stop offset="0.7" stop-color="#0F9488" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="#18181B"/>
+  <rect width="1600" height="1000" fill="url(#a1)"/>
+  <rect width="1600" height="1000" fill="url(#a2)"/>
+</svg>

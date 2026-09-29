@@ -14,6 +14,8 @@ export default function (eleventyConfig) {
     "admin": "admin",
     "jewel": "jewel",
     "jewel-candidates": "jewel-candidates",
+    // The Photostream app, released here from github.com/willchambers/photostream.
+    "photostream": "photostream",
   });
 
   // Every <img> in the built pages gets resized copies and a srcset. One format

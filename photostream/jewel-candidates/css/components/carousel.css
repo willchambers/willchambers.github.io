@@ -1,0 +1,45 @@
+/* ==========================================================================
+   Component: Carousel (candidate, found by Photostream)
+   Several photos in the space of one. Swipe sideways; a count shows where
+   you are. CSS scroll snap does the moving; js/components/carousel.js only
+   keeps the count up to date.
+
+   Markup
+     <div class="carousel" data-component="carousel" role="group"
+          aria-roledescription="carousel" aria-label="3 photos">
+       <div class="carousel__track">
+         <a class="carousel__slide figure__media" style="--ratio: 4 / 3" href="…"><img …></a>
+         …
+       </div>
+       <span class="badge carousel__count" data-place="top-right" aria-hidden="true">1 / 3</span>
+     </div>
+
+   Give every slide the same --ratio (the first photo's), so the height
+   doesn't jump while swiping. Slides reuse .figure__media for the ratio,
+   the media background and object-fit. The count is a Jewel .badge; the
+   carousel is positioned so it can sit on the corner.
+   ========================================================================== */
+
+.carousel {
+  --carousel-radius: var(--radius-1);
+
+  position: relative;
+}
+
+.carousel__track {
+  display: flex;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  border-radius: var(--carousel-radius);
+}
+.carousel__track::-webkit-scrollbar { display: none; }
+
+.carousel__slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+/* The track rounds the corners; slides inside it stay square. */
+.carousel__track > .carousel__slide { border-radius: 0; }

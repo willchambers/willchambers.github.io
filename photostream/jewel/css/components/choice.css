@@ -1,0 +1,70 @@
+/* Choice — checkbox, radio and switch. Real inputs, restyled; the whole
+   row is the label, so the touch target is at least 44px tall.
+   <label class="choice"><input type="checkbox"> Allow downloads</label>
+   <label class="choice"><input type="radio" name="size"> Large</label>
+   <label class="choice"><input type="checkbox" role="switch"> Public</label>   → switch */
+
+.choice {
+  --choice-size: 1.125rem;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 2.75rem;
+  font-size: var(--text-sm);
+  color: var(--text-default);
+  cursor: pointer;
+}
+.choice:has(input:disabled) { color: var(--text-muted); cursor: not-allowed; }
+
+.choice input {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: none;
+  width: var(--choice-size);
+  height: var(--choice-size);
+  margin: 0;
+  background: var(--field-fill);
+  border: var(--hairline) solid var(--field-border);
+  border-radius: 0;
+  cursor: inherit;
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
+.choice:hover input:not(:disabled) { border-color: var(--field-border-hover); }
+.choice input:focus-visible { outline: 2px solid var(--field-focus); outline-offset: 3px; }
+.choice input:disabled { border-style: dashed; background: transparent; }
+.choice input[aria-invalid="true"] { border-color: var(--field-error); }
+
+/* Checked: accent fill with an inset gap, so it reads as a mark, not a blob. */
+.choice input:checked {
+  background: var(--field-focus);
+  border-color: var(--field-focus);
+  box-shadow: inset 0 0 0 3px var(--surface-solid);
+}
+
+/* Radio */
+.choice input[type="radio"] { border-radius: 50%; }
+
+/* Switch: a hairline track with a square thumb that slides. */
+.choice input[role="switch"] {
+  --switch-w: 2.25rem;
+  width: var(--switch-w);
+  border-radius: 0;
+  position: relative;
+  box-shadow: none;
+  background:
+    linear-gradient(var(--text-muted), var(--text-muted)) 3px 50% / calc(var(--choice-size) - 8px) calc(var(--choice-size) - 8px) no-repeat,
+    var(--field-fill);
+  transition:
+    background-position var(--duration-base) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard);
+}
+.choice input[role="switch"]:checked {
+  border-color: var(--field-focus);
+  background:
+    linear-gradient(var(--field-focus), var(--field-focus)) calc(100% - 3px) 50% / calc(var(--choice-size) - 8px) calc(var(--choice-size) - 8px) no-repeat,
+    var(--field-fill);
+  box-shadow: none;
+}

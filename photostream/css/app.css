@@ -1,0 +1,77 @@
+/* Photostream: app-only styles. Unlayered, so they sit above every Jewel layer.
+   Anything here that turns out to be reusable should become a candidate
+   component in jewel-candidates/ instead (see GAPS.md). */
+
+/* One column, phone first. On a laptop it stays a feed, not a wall. */
+.page { --page-max: 44rem; }
+
+/* ---- Home screen ------------------------------------------------------------
+   The status bar is see-through (black-translucent), so the page runs under
+   it. Jewel keeps the sticky header, its gradient strip, the page's sides
+   and the photo viewer clear of the insets; the app only has to clear the
+   home indicator at the end of the feed. */
+#main { margin-bottom: calc(var(--space-8) + env(safe-area-inset-bottom, 0px)); }
+/* Taps show Jewel's own states, not iOS's grey flash. */
+html { -webkit-tap-highlight-color: transparent; }
+
+/* ---- Top panel: count, notices, tag filter ------------------------------- */
+/* minmax(0, 1fr): the tag row scrolls instead of widening the page. */
+.stream { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+.stream__notices:empty { display: none; }
+
+/* The tag filter is one row that scrolls sideways, edge to edge, so a long
+   list of tags never pushes the feed down. */
+.stream__filter {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin: -0.375rem calc(-1 * var(--panel-padding));
+  /* On touch screens Jewel draws tags 32px tall with a 44px tap area. The
+     block padding gives that room; a scrolling row would clip it otherwise. */
+  padding: 0.375rem var(--panel-padding);
+}
+.stream__filter::-webkit-scrollbar { display: none; }
+.stream__filter .tag { flex: none; }
+
+/* ---- Feed ----------------------------------------------------------------- */
+/* The feed is a nested panel-stack, so each post gets the content-panel
+   shape; the outer stack already spaces it. */
+.feed { margin-block: 0; }
+
+.post {
+  display: grid;
+  gap: var(--space-3);
+  /* Off-screen posts skip layout and paint until they're scrolled near.
+     Only the height is estimated; the width always comes from the column. */
+  content-visibility: auto;
+  contain-intrinsic-block-size: auto 40rem;
+}
+
+.post__lede { margin-top: calc(-1 * var(--space-1)); }
+/* Positioned for the status badge (top left; a carousel's count is top right). */
+.post__figure { position: relative; margin-top: var(--space-3); }
+
+/* Photos keep their own shape (down to 4:5, set inline as --ratio). */
+.post__photo { display: block; }
+.post__photo[data-state="error"]::after {
+  content: "Couldn't load this photo.";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/* A post's tags are links that filter the feed. Wrapped rows get the 12px
+   row gap Jewel asks for, so touch tap areas meet without overlapping. */
+.post__tags { gap: var(--space-3) var(--space-2); margin-top: var(--space-1); }
+
+/* ---- Settings sheet ------------------------------------------------------- */
+.settings { display: grid; gap: var(--space-7); align-content: start; }
+.settings__section { display: grid; gap: var(--space-3); }
+.settings__section .form { margin-top: var(--space-2); }
+
+/* Notices in the top panel: a caption, sometimes with a button under it. */
+.stream__notices { display: grid; gap: var(--space-4); }
+.stream__notice { display: grid; gap: var(--space-3); justify-items: start; }
