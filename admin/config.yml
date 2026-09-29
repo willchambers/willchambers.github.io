@@ -40,7 +40,7 @@ collections:
   - name: photos
     label: Photos
     label_singular: Photo set
-    description: One or more photos with a shared title, date and topics. They all appear on /photos and the newest on the home page.
+    description: One or more photos with a shared title, date and topics. They all appear on /photos and the newest on the home page. Photostream posts land here too.
     folder: src/photos
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
@@ -48,6 +48,7 @@ collections:
     sortable_fields: [date, title]
     fields:
       - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: text, required: false, hint: "A sentence or two about the photos. Shown in the photo viewer and in Photostream." }
       - { label: Date, name: date, widget: datetime }
       - { label: Location, name: location, widget: string, required: false }
       - { label: Topics, name: topics, widget: list, required: false, hint: "Comma-separated. Used for the filter buttons on /photos." }

@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["start"],
       "port": 8080
+    },
+    {
+      "name": "photostream",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["../photostream/dev/server.mjs"],
+      "port": 8790
     }
   ]
 }

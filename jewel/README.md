@@ -15,13 +15,20 @@ css/
     _template.css       starting point for a new component
     button.css  figure.css  footer.css  header.css  index-list.css
     knockout.css  meta-list.css  panel.css  quote.css  section-head.css  tag.css  video.css
+    field.css  input.css  choice.css  tag-input.css  dropzone.css      forms
+    fab.css  sheet.css                                                 posting flow
+    lightbox.css  filter.css                                           photos and filtering
 js/
   jewel.js              core: Jewel.theme + component registry
   components/
     _template.js        starting point for component behaviour
     theme-toggle.js     (unused while the system is dark-only)
     video.js
+    form.js             validation, counters, busy state, Jewel.field helpers (load first)
+    tag-input.js  dropzone.js  sheet.js  post-form.js
+    lightbox.js  filter.js
 index.html              specimen page / usage reference
+media/                  small SVG artworks for the specimen's lightbox
 ```
 
 ## Setup
@@ -75,6 +82,59 @@ The page is a floating glass header over a column of content panels, with the gr
 ```
 
 To change the shape for one panel only, set a token inline, for example `style="--knockout-offset: 16px"`.
+
+## Forms
+
+Style: **hairline box**, option B of the three explored. Each field is a 1px box with square corners in `--field-border` and a faint `--field-fill`. On focus the box turns accent and doubles to 2px; errors do the same in `--field-error`. Labels are small uppercase text above the field. Load `js/components/form.js` before the other form scripts.
+
+| Component | Markup | Notes |
+|---|---|---|
+| Form | `form.form[data-component="form"][novalidate]` | Layout: `.form__group` (fieldset with a hairline above), `.form__legend`, `.form__row--2` (two columns from 48rem), `.form__actions`. Messages: `.form__error` (role alert) and `.form__status` (role status). |
+| Field | `.field` > `.field__label` + control + `.field__meta` (`.field__hint`, `.field__counter`) + `.field__error` | `.field__req` marks required. `.field__optional` for "(optional)". `.field__badge` shows "Suggested". |
+| Input | `input.input`, `textarea.input`, `.select > select.input` | The textarea grows with its content. The select is native, restyled with a hairline chevron. |
+| Choice | `label.choice > input[type=checkbox\|radio]` | Add `role="switch"` to a checkbox for a switch. The whole row is the label, at least 44px tall. |
+| Tag input | `.tag-input[data-component="tag-input"]` | Enter or comma adds; Backspace removes; duplicates are rejected. `data-max`, `data-required`, `data-suggestions` (JSON). Submits a JSON array in its hidden input. |
+| Drop zone | `.dropzone.knockout[data-component="dropzone"]` | One image. Drag-and-drop or the native picker (no `capture`, so phones offer the library and the camera). Preview with name, size and dimensions; Replace and Remove. `data-max-size` in MB. |
+| Floating button | `button.fab[data-sheet-open="<id>"]` | Fixed bottom-right, clear of iPhone safe areas (needs `viewport-fit=cover`). `.fab--extended` + `.fab__label` for text. Put `.has-fab` on `<body>` so it never covers the last content. |
+| Sheet | `dialog.sheet.sheet--bottom` or `.sheet--center`, `[data-component="sheet"]` | Bottom tearsheet (full height on phones) or centred modal, same insides. Focus stays inside; Esc and backdrop clicks close; an unsaved draft asks first; focus returns to the opener; the page can't scroll behind it; it shrinks above the on-screen keyboard. |
+| Post form | `form[data-component="form post-form"]` | Photo, title, description, location, alt, tags, publish. Dispatches `jewel:post`. |
+
+`data-component` can list several names; they run in order. Buttons grow to 44px tall on touch screens.
+
+**Events**
+
+| Event | On | Detail |
+|---|---|---|
+| `jewel:submit` | form | `{ form, formData, waitUntil(promise) }`. Fires on a valid submit. |
+| `jewel:post` | post form | `{ file, title, description, location, alt, tags: string[], publish, formData, form, waitUntil(promise) }` |
+| `jewel:tagschange` | tag input | `{ tags }` |
+| `jewel:filechange` | drop zone | `{ file, source: 'user' \| 'api' \| 'clear' }` |
+| `jewel:sheetopen` / `jewel:sheetclose` | dialog | none |
+
+Call `waitUntil(promise)` to keep the form busy while you work. The submit button shows `data-busy-label` with a spinner. If the promise resolves, the form shows its `data-success` message and resets. If it rejects, the error's message is shown and the draft stays.
+
+**JS API**
+
+```js
+form.jewelForm.setBusy(true)                  // also .setError(name, msg), .setFormError(msg),
+                                              // .setStatus(msg), .clearErrors(), .isDirty(), .reset(), .validate()
+Jewel.field.suggest(textarea, 'A mural…')     // fills only if the person hasn't typed; marked "Suggested" until edited
+dropzone.jewelDropzone.setFile(blob, 'photo.webp')  // show and submit a processed file; also .getFile(), .clear()
+tagInput.jewelTags.setSuggestions(['Pond', 'Dayton'])  // also .get(), .set([...]), .add(t), .remove(t)
+dialog.jewelSheet.open(opener)                // also .close({ force }), .requestClose()
+```
+
+## Photos and filtering
+
+Both came from the portfolio site and are also used by Photostream, its photo app.
+
+| Component | Markup | Notes |
+|---|---|---|
+| Lightbox | `[data-component="lightbox"]` around `a[data-lightbox-item]` links | A full-screen viewer on a native `<dialog>`. Each link points at the full image, so it still works without JS. `data-caption` is the first line; `data-description` adds a quieter second line. Arrow keys and swipes move between photos, Esc closes, and focus goes back to the photo that opened it. Photos that are hidden, or inside a hidden parent (e.g. filtered out), are skipped. |
+| Filter | `.filter.cluster[data-component="filter"]` with `button.tag.tag--button[data-filter]` | `data-filter-target` is a selector for the container; items inside it carry `data-tags="slug other-slug"`. `data-filter="*"` shows everything. A live region (`.filter__status`) announces the count, worded with `data-filter-noun`. Opening the page at `#tag=<slug>`, or following a `#tag=<slug>` link later, applies that tag. Buttons are looked up on every change, so a filter rendered by script works too. |
+| Tag button | `button.tag.tag--button[aria-pressed]` | A pressable tag; pressed fills like `.tag--solid`. |
+| Touch-size tag | `.tag--touch`, or automatic for `a.tag` and `button.tag` on touch screens | A 32px pill with an invisible 44px tap area, and at least 44px wide. Wrapped rows need a 12px row gap (`--cluster-gap: var(--space-3) var(--space-2)`) so the tap areas don't overlap; the filter does this itself. Plain `span.tag` labels stay 24px. Tune one instance with `--tag-height`, `--tag-pad` or `--tag-hit`. |
+| Tag link | `a.tag` | No underline; the pill is the affordance. Hover brightens the text and edge. `aria-current="page"` fills it, for the tag page you're on. A `#tag=<slug>` link also drives a filter on the same page. |
 
 ## Attributes
 
@@ -175,6 +235,18 @@ Glass surfaces with the specified values failed:
 0.78 was the minimum that passes AA. It was raised to 0.86 so that small and light text (labels, captions) keeps a comfortable margin above 4.5:1.
 
 These values are exposed as `--glass-fill`, `--glass-text-muted` and `--glass-text-accent`. They are the defaults. Under `data-panel="solid"`, the specified solid values apply instead.
+
+**Form fields** (added with the form components). Checked the same way, on dark glass over every Jewel colour, near-white and near-black, and on solid panels:
+
+| Token | Value | Worst case | Needs |
+|---|---|---|---|
+| `--field-border` | white 40% | 3.25:1 | 3:1 (input edge) |
+| `--field-border-hover` | white 60% | 5.35:1 | 3:1 |
+| `--field-focus` | = `--text-accent` | 7.05:1 | 3:1 edge, 4.5:1 text |
+| `--field-error` | `#FCA5A5` | 6.86:1 | 4.5:1 (it is also text) |
+| `--field-placeholder` | = `--text-muted` | 6.32:1 | 4.5:1 |
+
+The 10% panel hairline (`--panel-border`) measures only 1.27:1. That is fine for decorative rules, but too faint to show where a field is, so fields never use it for their edges. Disabled fields keep muted text (6.32:1) with a dashed edge, so they stay readable.
 
 The background's `--bg-base` (#7A2E9E) sits inside the Jewel luminance range. Lowering `--bg-intensity` therefore never produces a backdrop worse than the cases tested above.
 

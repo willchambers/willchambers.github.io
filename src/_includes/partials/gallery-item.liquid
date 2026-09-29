@@ -1,6 +1,7 @@
 {%- comment %} One photo in a .gallery. Expects `photo` with image, alt, caption,
-and optionally title, location, topics (photoStream entries have all of them). {% endcomment -%}
+and optionally title, description, location, topics (photoStream entries have
+all of them). {% endcomment -%}
 {%- capture cap %}{{ photo.caption | default: photo.title }}{% if photo.location %} — {{ photo.location }}{% endif %}{% endcapture -%}
-<a class="gallery__item" href="{{ photo.image }}" data-lightbox-item data-caption="{{ cap | strip | escape }}" data-tags="{{ photo.topics | topicSlugs }}">
+<a class="gallery__item" href="{{ photo.image }}" data-lightbox-item data-caption="{{ cap | strip | escape }}"{% if photo.description %} data-description="{{ photo.description | strip | escape }}"{% endif %} data-tags="{{ photo.topics | topicSlugs }}">
   <img src="{{ photo.image }}" alt="{{ photo.alt | escape }}" sizes="(min-width: 48rem) 20rem, 100vw">
 </a>

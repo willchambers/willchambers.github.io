@@ -1,28 +1,20 @@
 /* Filter — a row of tag buttons that shows only matching items.
-   Behaviour: js/components/filter.js.
+   Behaviour: js/components/filter.js. The buttons are .tag--button (tag.css).
    <div class="filter cluster" data-component="filter" data-filter-target="#wall"
         data-filter-noun="photos" role="group" aria-label="Filter by tag">
      <button class="tag tag--button" type="button" data-filter="*" aria-pressed="true">All</button>
      <button class="tag tag--button" type="button" data-filter="travel" aria-pressed="false">Travel</button>
      <span class="filter__status visually-hidden" aria-live="polite"></span>
    </div>
-   Items inside the target carry data-tags="travel night" (slugified, space-separated). */
+   Items inside the target carry data-tags="travel night" (slugified, space-separated).
+   A link to #tag=<slug> anywhere on the page applies that tag. */
 
 .filter { --cluster-gap: var(--space-2); }
 
-/* Interactive tag: the system's .tag only had a static style. */
-button.tag { background: transparent; cursor: pointer; }
-.tag--button {
-  transition:
-    color var(--duration-fast) var(--ease-standard),
-    border-color var(--duration-fast) var(--ease-standard),
-    background-color var(--duration-fast) var(--ease-standard);
-}
-.tag--button:hover { color: var(--text-default); border-color: currentColor; }
-.tag--button[aria-pressed="true"] {
-  color: var(--text-inverse);
-  background: var(--text-default);
-  border-color: transparent;
+/* Touch screens: the tags grow to 32px with 44px tap areas (tag.css), so
+   wrapped rows get a 12px gap and the tap areas meet without overlapping. */
+@media (pointer: coarse) {
+  .filter { --cluster-gap: var(--space-3) var(--space-2); }
 }
 
 /* Filtered-out items. Author styles like `display: grid` would otherwise

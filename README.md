@@ -9,6 +9,7 @@ src/                    content and templates (Eleventy input)
   posts/                journal posts (Markdown)
   projects/             case studies (Markdown)
   photos/               photo sets (front matter only)
+  photos-json.11ty.js   /photos.json, the feed Photostream reads
   _data/site.yml        title, URL, nav (edit by hand)
   _data/profile.yml     home page copy and links (edit in /admin)
   _includes/            layouts and partials (Liquid)
@@ -26,10 +27,18 @@ Every push to `main` (including CMS saves) runs the workflow. It builds the site
 
 1. Go to **https://willchambers.github.io/admin/**
 2. Choose **Sign In with Token** and paste a GitHub token (see below).
-3. **Photos › New Photo set**: add a title, date, topics and one or more photos, each with alt text. Then **Save**.
+3. **Photos › New Photo set**: add a title, a description, date, topics and one or more photos, each with alt text. Then **Save**.
 4. After about a minute, the photos are on `/photos` and the newest ones are on the home page.
 
 Uploads are converted to WebP at 2400px or smaller in your browser before they're committed. HEIC photos from an iPhone work too.
+
+The description shows in the photo viewer on `/photos`. It's optional here so older sets still save, but Photostream always asks for one.
+
+### From Photostream
+
+[Photostream](https://github.com/willchambers/photostream) (private) is the iPhone app for posting photos. It keeps every post in its own private library. When a post is published, it opens a pull request here that adds the photo set to `src/photos/` and the photo to `src/assets/uploads/`, then merges it. The result is exactly what `/admin` would have made, so you can edit those sets here too.
+
+The app reads **`/photos.json`**, built by `src/photos-json.11ty.js`. It lists every photo set, newest first, with the same resized WebP copies the pages use.
 
 ### The token
 
@@ -57,6 +66,6 @@ Jewel lives in its own repo. After changing it:
 npm run sync-jewel
 ```
 
-That copies the latest `css/` and `js/` into `jewel/`. The parked light theme is left out. Then commit.
+That copies Jewel's last **commit** into `jewel/` (uncommitted work in the Jewel folder is left out, and it warns if the commit isn't pushed yet). `npm run sync-jewel -- -Ref <commit>` copies a particular one. The parked light theme is left out. Then commit.
 
 When a component in `jewel-candidates/` is ready, move it into Jewel (see GAPS.md), sync, and delete the candidate.
