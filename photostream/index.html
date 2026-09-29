@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Photostream</title>
+  <meta name="description" content="Will Chambers's photo stream.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#111114">
+
+  <!-- Home screen. The status bar is see-through, so the page runs under it
+       (css/app.css keeps content clear with safe-area insets). -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Photostream">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <!-- splash:start (written by npm run icons) -->
+  <link rel="apple-touch-startup-image" href="splash/splash-750x1334.jpg" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"> <!-- iPhone SE (2nd and 3rd gen) -->
+  <link rel="apple-touch-startup-image" href="splash/splash-1125x2436.jpg" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"> <!-- iPhone 12 mini, 13 mini -->
+  <link rel="apple-touch-startup-image" href="splash/splash-1170x2532.jpg" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"> <!-- iPhone 12, 13, 14, 16e -->
+  <link rel="apple-touch-startup-image" href="splash/splash-1179x2556.jpg" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"> <!-- iPhone 14 Pro, 15, 15 Pro, 16 -->
+  <link rel="apple-touch-startup-image" href="splash/splash-1206x2622.jpg" media="(device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"> <!-- iPhone 16 Pro, 17, 17 Pro -->
+  <link rel="apple-touch-startup-image" href="splash/splash-828x1792.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"> <!-- iPhone 11 -->
+  <link rel="apple-touch-startup-image" href="splash/splash-1242x2688.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"> <!-- iPhone 11 Pro Max -->
+  <link rel="apple-touch-startup-image" href="splash/splash-1260x2736.jpg" media="(device-width: 420px) and (device-height: 912px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"> <!-- iPhone Air -->
+  <link rel="apple-touch-startup-image" href="splash/splash-1284x2778.jpg" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"> <!-- iPhone 13 Pro Max, 14 Plus -->
+  <link rel="apple-touch-startup-image" href="splash/splash-1290x2796.jpg" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"> <!-- iPhone 15 Plus, 15 Pro Max, 16 Plus -->
+  <link rel="apple-touch-startup-image" href="splash/splash-1320x2868.jpg" media="(device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"> <!-- iPhone 16 Pro Max, 17 Pro Max -->
+  <!-- splash:end -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap">
+
+  <link rel="stylesheet" href="jewel/css/jewel.css">
+  <link rel="stylesheet" href="jewel-candidates/css/jewel-candidates.css">
+  <link rel="stylesheet" href="css/app.css">
+
+  <script src="jewel/js/jewel.js" defer></script>
+  <script src="jewel/js/components/form.js" defer></script>
+  <script src="jewel/js/components/sheet.js" defer></script>
+  <script src="jewel/js/components/filter.js" defer></script>
+  <script src="jewel/js/components/lightbox.js" defer></script>
+  <script src="jewel-candidates/js/components/carousel.js" defer></script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <div class="jewel-bg" aria-hidden="true"></div>
+  <div class="jewel-cap" aria-hidden="true"></div>
+  <div class="page">
+    <header class="site-header">
+      <div class="panel site-header__inner">
+        <!-- Tapping the name scrolls to the top and checks for new posts. -->
+        <a class="wordmark link-quiet" href="./" data-refresh>Photostream</a>
+        <div class="cluster" style="--cluster-gap: var(--space-2)">
+          <a class="btn btn--ghost btn--icon" href="https://willchambers.github.io/photos/" aria-label="Open the photos page on willchambers.github.io">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8M17 14v5H5V7h5"/></svg>
+          </a>
+          <button class="btn btn--ghost btn--icon" type="button" data-sheet-open="settings" aria-label="Settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 8h9M17 8h3M4 16h3M11 16h9"/><circle cx="15" cy="8" r="2"/><circle cx="9" cy="16" r="2"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" class="panel-stack">
+      <section class="panel panel--pad stream">
+        <h1 class="visually-hidden">Photostream</h1>
+        <p class="label" data-stream-count>Photostream</p>
+        <div class="stream__notices" data-stream-notices></div>
+        <div data-stream-filter></div>
+      </section>
+
+      <div id="feed" class="panel-stack feed" data-component="lightbox" aria-label="Posts"></div>
+    </main>
+  </div>
+
+  <!-- Settings: connect GitHub (js/settings-sheet.js). -->
+  <dialog class="sheet sheet--bottom" id="settings" data-component="sheet" aria-labelledby="settings-title">
+    <div class="sheet__panel panel panel--content">
+      <header class="sheet__head">
+        <h2 class="sheet__title label" id="settings-title">Settings</h2>
+        <button class="btn btn--ghost btn--icon" type="button" data-sheet-close aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </header>
+      <div class="sheet__body settings">
+        <section class="settings__section" aria-labelledby="github-title">
+          <h3 class="h4" id="github-title">GitHub</h3>
+          <p class="caption" data-connection></p>
+          <form class="form" id="token-form" data-component="form" novalidate data-success="Connected." aria-labelledby="github-title">
+            <div class="field">
+              <label class="field__label" for="token">Token<span class="field__req" aria-hidden="true">*</span></label>
+              <input class="input" id="token" name="token" type="password" required autocomplete="off" autocapitalize="off" spellcheck="false" data-msg-required="Paste your GitHub token." aria-describedby="token-hint">
+              <p class="field__hint" id="token-hint">A fine-grained token with access to <strong>photostream</strong> and <strong>willchambers.github.io</strong>, and Contents and Pull requests set to Read and write. <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Make one on GitHub</a>. It stays on this phone and is only ever sent to GitHub.</p>
+            </div>
+            <p class="form__error" role="alert" hidden></p>
+            <p class="form__status" role="status" hidden></p>
+            <div class="form__actions">
+              <button class="btn btn--text" type="button" data-forget hidden>Remove token</button>
+              <button class="btn" type="submit" data-busy-label="Checking…">Save token</button>
+            </div>
+          </form>
+        </section>
+        <section class="settings__section" aria-labelledby="about-title">
+          <h3 class="h4" id="about-title">About</h3>
+          <p class="caption" data-version></p>
+        </section>
+      </div>
+    </div>
+  </dialog>
+</body>
+</html>

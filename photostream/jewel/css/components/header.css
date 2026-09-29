@@ -1,0 +1,38 @@
+/* Site header — sticky glass bar with wordmark, nav and actions.
+   <header class="site-header">     <div class="panel site-header__inner">
+       <a class="wordmark" href="/">Name</a>
+       <nav class="nav">…</nav>
+     </div>
+   </header> */
+
+.site-header {
+  position: sticky;
+  top: var(--sticky-offset);
+  z-index: 10;
+  margin-top: var(--sticky-offset);
+}
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 4.125rem;
+  padding: var(--space-3) var(--space-5);
+}
+
+.wordmark {
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-heading);
+  text-decoration: none;
+}
+
+.nav { display: flex; gap: var(--space-5); align-items: center; }
+.nav__links { display: flex; gap: var(--space-5); }
+.nav__links a {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  text-decoration-color: transparent;
+}
+.nav__links a:hover,
+.nav__links a[aria-current="page"] { color: var(--text-default); text-decoration-color: currentColor; }
+@media (max-width: 40rem) { .nav__links { display: none; } }

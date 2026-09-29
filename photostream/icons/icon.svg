@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><defs>
+    <radialGradient id="g0" gradientUnits="objectBoundingBox" cx="0" cy="0" r="1"
+      gradientTransform="translate(0.5 1.1) scale(1.2 0.9)">
+      <stop offset="0" stop-color="#EA580C" stop-opacity="0.55"/>
+      <stop offset="0.6" stop-color="#EA580C" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g1" gradientUnits="objectBoundingBox" cx="0" cy="0" r="1"
+      gradientTransform="translate(0.08 0.78) scale(0.38 0.64)">
+      <stop offset="0" stop-color="#DC2626" stop-opacity="1"/>
+      <stop offset="0.74" stop-color="#DC2626" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" gradientUnits="objectBoundingBox" cx="0" cy="0" r="1"
+      gradientTransform="translate(0.7 0.88) scale(0.7 0.48)">
+      <stop offset="0" stop-color="#0F9488" stop-opacity="1"/>
+      <stop offset="0.7" stop-color="#0F9488" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g3" gradientUnits="objectBoundingBox" cx="0" cy="0" r="1"
+      gradientTransform="translate(0.82 0.12) scale(0.44 0.56)">
+      <stop offset="0" stop-color="#C026D3" stop-opacity="1"/>
+      <stop offset="0.72" stop-color="#C026D3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g4" gradientUnits="objectBoundingBox" cx="0" cy="0" r="1"
+      gradientTransform="translate(0.18 0.22) scale(0.58 0.72)">
+      <stop offset="0" stop-color="#6D28D9" stop-opacity="1"/>
+      <stop offset="0.68" stop-color="#6D28D9" stop-opacity="0"/>
+    </radialGradient><mask id="k" maskUnits="userSpaceOnUse"><rect x="0" y="0" width="100%" height="100%" fill="#fff"/><polygon points="370.7977327263595,96.36 359.5094800714975,96.36 415.64,152.49051992850258 415.64,141.20226727364053" fill="#000"/><polygon points="348.22122741663543,96.36 336.9329747617734,96.36 415.64,175.06702523822662 415.64,163.77877258336463" fill="#000"/></mask></defs><rect width="512" height="512" fill="#7A2E9E"/><rect width="512" height="512" fill="url(#g0)"/><rect width="512" height="512" fill="url(#g1)"/><rect width="512" height="512" fill="url(#g2)"/><rect width="512" height="512" fill="url(#g3)"/><rect width="512" height="512" fill="url(#g4)"/><g mask="url(#k)"><path d="M102.5 102.5 H405.202 Q409.5 102.5 409.5 106.798 V394.15 Q409.5 409.5 394.15 409.5 H117.85 Q102.5 409.5 102.5 394.15 Z" fill="#111114"/><g transform="translate(129.10666666666665 129.10666666666665) scale(10.574444444444445)" fill="none" stroke="#F4F4F5" stroke-width="1.35" stroke-linecap="square" stroke-linejoin="miter">
+      <path d="m3 16 5-5 4 4 3-3 6 6"/><circle cx="17" cy="7.5" r="1.6"/></g></g></svg>

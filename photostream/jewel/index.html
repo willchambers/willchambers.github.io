@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Jewel Design System</title>
+  <meta name="description" content="A minimal, editorial design system for a personal portfolio.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap">
+
+  <link rel="stylesheet" href="css/jewel.css">
+
+  <script src="js/jewel.js" defer></script>
+  <script src="js/components/video.js" defer></script>
+  <script src="js/components/lightbox.js" defer></script>
+  <script src="js/components/filter.js" defer></script>
+  <script src="js/components/form.js" defer></script>  <!-- load before other form components -->
+  <script src="js/components/tag-input.js" defer></script>
+  <script src="js/components/dropzone.js" defer></script>
+  <script src="js/components/post-form.js" defer></script>
+  <script src="js/components/sheet.js" defer></script>
+
+  <style>
+    /* Specimen-page only — not part of the system. */
+    .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr)); gap: var(--space-4); }
+    .swatch { display: grid; gap: var(--space-2); font-size: var(--text-xs); }
+    .swatch__chip { aspect-ratio: 1; border-radius: var(--radius-2); border: var(--hairline) solid var(--panel-border); }
+
+    /* CSS "artwork" standing in for real images. */
+    .art { position: absolute; inset: 0; }
+    .art--a { background:
+      radial-gradient(ellipse 60% 80% at 30% 40%, #6D28D9, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 80% 70%, #0F9488, transparent 70%), #18181B; }
+    .art--b { background:
+      linear-gradient(160deg, #F4F4F5 0 55%, #E4E4E7 55% 100%); }
+    .art--b::after { content: ""; position: absolute; left: 22%; top: 18%; width: 38%; aspect-ratio: 1;
+      border-radius: 50%; background: #DC2626; }
+    .art--c { background:
+      radial-gradient(circle at 70% 30%, #EA580C, transparent 45%),
+      radial-gradient(circle at 20% 80%, #C026D3, transparent 50%), #111114; }
+    .post-log { margin: 0; padding: var(--space-4); max-height: 18rem; overflow: auto; font-size: var(--text-sm); line-height: 1.5; color: var(--text-muted); border: var(--hairline) solid var(--panel-border); white-space: pre-wrap; }
+    .video__placeholder { position: absolute; inset: 0; display: grid; place-items: center; }
+  </style>
+</head>
+<body class="has-fab">
+  <div class="jewel-bg" aria-hidden="true"></div>
+  <div class="jewel-cap" aria-hidden="true"></div>
+  <div class="page">
+    <!-- Header -->
+    <header class="site-header">
+      <div class="panel site-header__inner">
+        <a class="wordmark link-quiet" href="#">Jewel</a>
+        <nav class="nav" aria-label="Primary">
+          <span class="nav__links">
+            <a href="#type" aria-current="page">Type</a>
+            <a href="#color">Colour</a>
+            <a href="#components">Components</a>
+            <a href="#media">Media</a>
+            <a href="#forms">Forms</a>
+          </span>
+        </nav>
+      </div>
+    </header>
+
+    <main class="panel-stack">
+      <!-- Hero -->
+      <section class="panel panel--pad grid">
+        <p class="label span-12">Design system · v1.0 · 2026</p>
+        <h1 class="display span-12">Quiet type,<br>one loud sky.</h1>
+        <p class="lede span-6">A small, token-driven system for an editorial portfolio. Restraint in the components; the gradient behind them does the talking.</p>
+        <div class="span-6 cluster" style="align-self:end; justify-content:flex-end">
+          <a class="btn" href="#components">View components</a>
+          <a class="btn btn--text" href="#color">Colour tokens</a>
+        </div>
+      </section>
+
+      <!-- Type -->
+      <section id="type" class="panel panel--pad grid">
+        <header class="section-head"><p class="label">01 — Typography</p></header>
+        <div class="span-9 start-4 stack" style="--stack-gap: var(--space-6)">
+          <div class="stack" style="--stack-gap: var(--space-2)">
+            <p class="label">Display · 700 · −0.045em</p>
+            <p class="display" style="font-size: var(--text-3xl)">Aa Inter</p>
+          </div>
+          <hr>
+          <div class="stack" style="--stack-gap: var(--space-2)">
+            <p class="label">H2 · 600 · −0.025em</p>
+            <h2>Hierarchy from size, weight and space</h2>
+          </div>
+          <div class="stack" style="--stack-gap: var(--space-2)">
+            <p class="label">H3</p>
+            <h3>One family, many voices</h3>
+          </div>
+          <div class="stack" style="--stack-gap: var(--space-2)">
+            <p class="label">Body · 400 · 1.6</p>
+            <p>Body copy is set at 16px with a 1.6 line height and a measure capped at 64 characters. Links carry a <a href="#">hairline underline that tightens</a> on hover, and nothing else moves. Captions and metadata step down in size and colour, not in family.</p>
+          </div>
+          <blockquote class="quote">
+            <p>Whitespace is the most expensive material on the page, so spend it deliberately.</p>
+            <footer class="label">Studio note</footer>
+          </blockquote>
+        </div>
+      </section>
+
+      <!-- Colour -->
+      <section id="color" class="panel panel--pad grid">
+        <header class="section-head"><p class="label">02 — Colour</p></header>
+        <div class="span-9 start-4 stack" style="--stack-gap: var(--space-6)">
+          <div class="swatches">
+            <div class="swatch"><div class="swatch__chip" style="background:#6D28D9"></div><span>Purple<br><span data-text="muted">#6D28D9</span></span></div>
+            <div class="swatch"><div class="swatch__chip" style="background:#C026D3"></div><span>Magenta<br><span data-text="muted">#C026D3</span></span></div>
+            <div class="swatch"><div class="swatch__chip" style="background:#0F9488"></div><span>Teal<br><span data-text="muted">#0F9488</span></span></div>
+            <div class="swatch"><div class="swatch__chip" style="background:#DC2626"></div><span>Red<br><span data-text="muted">#DC2626</span></span></div>
+            <div class="swatch"><div class="swatch__chip" style="background:#EA580C"></div><span>Orange<br><span data-text="muted">#EA580C</span></span></div>
+          </div>
+
+          <p class="label">Text variants · data-text</p>
+          <div class="grid" style="row-gap: var(--grid-gutter)">
+            <!-- The same text variants on a glass card and on an opaque one. -->
+            <div class="span-6 panel panel--pad stack">
+              <p class="label">Glass panel (default)</p>
+              <p data-text="default">Default — the reading colour.</p>
+              <p data-text="muted">Muted — captions and metadata.</p>
+              <p data-text="accent">Accent — links and emphasis.</p>
+              <p><span class="tag tag--solid">Inverse</span> on a default fill</p>
+            </div>
+            <div class="span-6 panel panel--pad stack" data-panel="solid">
+              <p class="label">data-panel="solid"</p>
+              <p data-text="default">Default — the reading colour.</p>
+              <p data-text="muted">Muted — captions and metadata.</p>
+              <p data-text="accent">Accent — links and emphasis.</p>
+              <p><span class="tag tag--solid">Inverse</span> on a default fill</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Components -->
+      <section id="components" class="panel panel--pad grid">
+        <header class="section-head"><p class="label">03 — Components</p></header>
+        <div class="span-9 start-4 stack" style="--stack-gap: var(--space-7)">
+          <div class="stack">
+            <p class="label">Buttons</p>
+            <div class="cluster">
+              <button class="btn" type="button">Primary</button>
+              <button class="btn btn--ghost" type="button">Ghost</button>
+              <button class="btn btn--text" type="button">Text link</button>
+            </div>
+          </div>
+
+          <div class="stack">
+            <p class="label">Tags</p>
+            <div class="cluster" style="--cluster-gap: var(--space-2)">
+              <span class="tag">Identity</span><span class="tag">Editorial</span><span class="tag">Motion</span><span class="tag tag--solid">Featured</span>
+            </div>
+            <div class="cluster" style="--cluster-gap: var(--space-2)">
+              <!-- Linked tags: no underline; hover brightens. These #tag= links drive the filter below. -->
+              <a class="tag" href="#tag=editorial">Editorial</a><a class="tag" href="#tag=type">Type</a><a class="tag" href="#components" aria-current="page">Current page</a>
+            </div>
+            <div class="cluster" style="--cluster-gap: var(--space-3) var(--space-2)">
+              <!-- Touch size: 32px pill, 44px tap area. Linked and button tags get this
+                   automatically on touch screens; .tag--touch forces it anywhere. -->
+              <a class="tag tag--touch" href="#tag=editorial">Touch size</a><button class="tag tag--button tag--touch" type="button" aria-pressed="true">All</button><button class="tag tag--button tag--touch" type="button" aria-pressed="false">Night</button>
+            </div>
+          </div>
+
+          <div class="stack">
+            <p class="label">Project index · filter</p>
+            <div class="filter cluster" data-component="filter" data-filter-target="#index-demo" data-filter-noun="projects" role="group" aria-label="Filter by tag">
+              <button class="tag tag--button" type="button" data-filter="*" aria-pressed="true">All</button>
+              <button class="tag tag--button" type="button" data-filter="editorial" aria-pressed="false">Editorial</button>
+              <button class="tag tag--button" type="button" data-filter="type" aria-pressed="false">Type</button>
+              <span class="filter__status visually-hidden" aria-live="polite"></span>
+            </div>
+            <ol class="index" id="index-demo">
+              <li data-tags="editorial"><a class="index__row" href="#"><span class="label">01</span><span class="index__title">Northlight Quarterly</span><span class="label">Editorial · 2026</span></a></li>
+              <li data-tags="brand"><a class="index__row" href="#"><span class="label">02</span><span class="index__title">Field Notes Identity</span><span class="label">Brand · 2025</span></a></li>
+              <li data-tags="type editorial"><a class="index__row" href="#"><span class="label">03</span><span class="index__title">Tidal, a type specimen</span><span class="label">Type · 2025</span></a></li>
+            </ol>
+          </div>
+
+          <div class="stack">
+            <p class="label">Meta list</p>
+            <dl class="meta">
+              <dt class="label">Role</dt><dd>Art direction, design</dd>
+              <dt class="label">Client</dt><dd>Northlight Press</dd>
+              <dt class="label">Year</dt><dd>2026</dd>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <!-- Media -->
+      <section id="media" class="panel panel--pad grid">
+        <header class="section-head"><p class="label">04 — Media</p></header>
+        <div class="span-12">
+          <figure class="figure figure--wide bleed">
+            <div class="figure__media">
+              <div class="art art--a"></div>
+              <span class="badge" data-place="top-left">Private</span>
+            </div>
+            <figcaption class="figure__caption"><span><strong>Northlight Quarterly</strong> — cover system, issue 12.</span><span class="label">Fig. 1</span></figcaption>
+          </figure>
+        </div>
+
+        <figure class="figure figure--tall span-5">
+          <div class="figure__media">
+            <div class="art art--b"></div>
+            <!-- Two badges: a status that can change (role="status"), and a count that repeats the carousel's label (aria-hidden). -->
+            <span class="badges" data-place="top-left" role="status"><span class="badge badge--accent badge--busy"><span class="badge__dot"></span>Publishing…</span></span>
+            <span class="badge" data-place="top-right" aria-hidden="true">1 / 3</span>
+          </div>
+          <figcaption class="figure__caption"><span><strong>Field Notes</strong> — mark study.</span><span class="label">Fig. 2</span></figcaption>
+        </figure>
+
+        <figure class="figure video span-7" data-component="video" style="align-self:end">
+          <div class="figure__media" style="--ratio: 16 / 10">
+            <div class="art art--c"></div>
+            <!-- Replace with your own clip. It plays muted while in view and never autoplays with reduced motion. -->
+            <video loop muted playsinline preload="metadata">
+              <source src="media/reel.mp4" type="video/mp4">
+            </video>
+            <button class="btn btn--icon video__control" type="button" data-video-toggle aria-label="Play video">
+              <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3v14H7zM14 5h3v14h-3z"/></svg>
+            </button>
+          </div>
+          <figcaption class="figure__caption"><span><strong>Tidal</strong> — motion reel, 0:42.</span><span class="label">Fig. 3</span></figcaption>
+        </figure>
+
+        <!-- Lightbox: any container of [data-lightbox-item] links. Tap a thumbnail; arrows, swipe and Esc work. -->
+        <div class="span-12 stack">
+          <p class="label">Lightbox · badges</p>
+          <div data-component="lightbox" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-3); align-items: start">
+            <a class="figure__media" href="media/art-a.svg" data-lightbox-item data-caption="Northlight Quarterly — cover" data-description="An optional second line from data-description."><img src="media/art-a.svg" alt="Violet and teal gradient artwork" loading="lazy"><span class="badge badge--solid" data-place="top-left">New</span></a>
+            <a class="figure__media" href="media/art-b.svg" data-lightbox-item data-caption="Field Notes — mark study" style="--ratio: 4 / 5"><img src="media/art-b.svg" alt="A red circle on a pale ground" loading="lazy"><span class="badge" data-place="bottom-right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="7" width="14" height="14"/><path d="M7 3h14v14"/></svg>3<span class="visually-hidden"> photos</span></span></a>
+            <a class="figure__media" href="media/art-c.svg" data-lightbox-item data-caption="Tidal — still"><img src="media/art-c.svg" alt="Orange and magenta gradient artwork" loading="lazy"><span class="badge badge--error" data-place="top-left"><span class="badge__dot"></span>Failed</span></a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Forms -->
+      <section id="forms" class="panel panel--pad grid">
+        <header class="section-head"><p class="label">05 — Forms</p></header>
+        <div class="span-9 start-4 stack" style="--stack-gap: var(--space-7)">
+
+          <form class="form" data-component="form" novalidate data-success="Saved. (Demo only, nothing was sent.)" aria-label="Form component demo">
+            <fieldset class="form__group">
+              <legend class="form__legend label">Text</legend>
+              <div class="form__row form__row--2">
+                <div class="field">
+                  <label class="field__label" for="demo-name">Name<span class="field__req" aria-hidden="true">*</span></label>
+                  <input class="input" id="demo-name" name="name" type="text" required autocomplete="name" placeholder="Your name">
+                </div>
+                <div class="field">
+                  <label class="field__label" for="demo-email">Email<span class="field__req" aria-hidden="true">*</span></label>
+                  <input class="input" id="demo-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+                </div>
+              </div>
+              <div class="field">
+                <label class="field__label" for="demo-subject">Subject</label>
+                <input class="input" id="demo-subject" name="subject" type="text" maxlength="60" data-counter aria-describedby="demo-subject-hint demo-subject-count">
+                <div class="field__meta">
+                  <p class="field__hint" id="demo-subject-hint">A few words.</p>
+                  <p class="field__counter" id="demo-subject-count"></p>
+                </div>
+              </div>
+              <div class="field">
+                <label class="field__label" for="demo-message">Message <span class="field__optional">(optional)</span></label>
+                <textarea class="input" id="demo-message" name="message" rows="3" placeholder="It grows as you type"></textarea>
+              </div>
+              <div class="field">
+                <label class="field__label" for="demo-topic">Topic</label>
+                <div class="select">
+                  <select class="input" id="demo-topic" name="topic">
+                    <option>Commission</option><option>Collaboration</option><option>Just saying hello</option>
+                  </select>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="form__group">
+              <legend class="form__legend label">States</legend>
+              <!-- form="specimen-states" detaches these examples so submitting doesn't re-validate them. -->
+              <div class="form__row form__row--2">
+                <div class="field">
+                  <label class="field__label" for="demo-filled">Filled</label>
+                  <input class="input" id="demo-filled" form="specimen-states" type="text" value="Harbour, first light">
+                </div>
+                <div class="field">
+                  <label class="field__label" for="demo-error">Error</label>
+                  <input class="input" id="demo-error" form="specimen-states" type="text" aria-invalid="true" aria-describedby="demo-error-msg" placeholder="Name the photo">
+                  <p class="field__error" id="demo-error-msg">Add a title before posting.</p>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="demo-disabled">Disabled</label>
+                  <input class="input" id="demo-disabled" form="specimen-states" type="text" value="Locked while uploading" disabled>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="demo-suggested">Suggested <span class="field__badge">Suggested</span></label>
+                  <input class="input" id="demo-suggested" form="specimen-states" type="text" value="Graffiti mural on a brick wall at dusk" data-suggested>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="form__group">
+              <legend class="form__legend label">Choices</legend>
+              <div class="field__options field__options--inline" role="group" aria-label="Checkboxes">
+                <label class="choice"><input type="checkbox" name="updates" checked> Send me updates</label>
+                <label class="choice"><input type="checkbox" name="copy"> Email me a copy</label>
+                <label class="choice"><input type="checkbox" disabled> Disabled</label>
+              </div>
+              <div class="field__options field__options--inline" role="radiogroup" aria-label="Budget">
+                <label class="choice"><input type="radio" name="budget" value="small" checked> Small</label>
+                <label class="choice"><input type="radio" name="budget" value="medium"> Medium</label>
+                <label class="choice"><input type="radio" name="budget" value="large"> Large</label>
+              </div>
+              <label class="choice"><input type="checkbox" role="switch" name="public" checked> Publish to site</label>
+            </fieldset>
+
+            <fieldset class="form__group">
+              <legend class="form__legend label">Tags and photo</legend>
+              <div class="field">
+                <label class="field__label" for="demo-tags">Tags</label>
+                <div class="tag-input" data-component="tag-input" data-max="5" data-suggestions='["Dayton","Street","Graffiti","Night"]'>
+                  <ul class="tag-input__list" aria-label="Tags"></ul>
+                  <input class="tag-input__text" id="demo-tags" type="text" placeholder="Type and press Enter" aria-describedby="demo-tags-hint">
+                  <input type="hidden" name="tags">
+                </div>
+                <p class="field__hint" id="demo-tags-hint">Up to 5. Enter or comma adds; Backspace removes.</p>
+              </div>
+              <div class="field">
+                <label class="field__label" for="demo-photo">Photo</label>
+                <div class="dropzone knockout" data-component="dropzone" data-max-size="20">
+                  <input class="dropzone__input" id="demo-photo" name="photo" type="file" accept="image/*">
+                  <label class="dropzone__empty" for="demo-photo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><rect x="3" y="5" width="18" height="14"/><path d="m3 16 5-5 4 4 3-3 6 6"/><circle cx="16" cy="9" r="1.5"/></svg>
+                    <span class="dropzone__title">Drop a photo, or <u>browse</u></span>
+                    <span class="dropzone__hint">JPG, PNG, HEIC or WebP · up to 20 MB</span>
+                  </label>
+                  <figure class="dropzone__preview" hidden><img alt=""><figcaption class="dropzone__meta"></figcaption></figure>
+                  <div class="dropzone__actions" hidden>
+                    <button class="btn btn--ghost" type="button" data-dropzone-replace>Replace</button>
+                    <button class="btn btn--text" type="button" data-dropzone-remove>Remove</button>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <p class="form__error" role="alert" hidden></p>
+            <p class="form__status" role="status" hidden></p>
+            <div class="form__actions">
+              <button class="btn btn--text" type="reset">Clear</button>
+              <button class="btn btn--ghost" type="button" aria-busy="true" disabled>Loading</button>
+              <button class="btn" type="submit" data-busy-label="Sending…">Send</button>
+            </div>
+          </form>
+
+          <div class="stack" style="--stack-gap: var(--space-4)">
+            <p class="label">Posting a photo</p>
+            <p>The <span data-text="accent">+</span> button in the bottom-right corner opens the post form in a bottom sheet (a tearsheet). The same form also comes as a centred modal. Try closing with unsaved changes, or set the demo upload to fail to see the busy and error states.</p>
+            <div class="cluster">
+              <button class="btn btn--ghost" type="button" data-open-variant="bottom">Open as tearsheet</button>
+              <button class="btn btn--ghost" type="button" data-open-variant="center">Open as modal</button>
+              <label class="choice"><input type="checkbox" role="switch" id="demo-fail"> Make the demo upload fail</label>
+            </div>
+            <div class="field">
+              <p class="field__label" id="post-log-label">Event log · jewel:post</p>
+              <pre class="post-log" id="post-log" aria-labelledby="post-log-label" tabindex="0">Nothing posted yet.</pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="panel panel--pad site-footer">
+        <span class="caption">© 2026 — Built with the Jewel design system.</span>
+        <a class="caption" href="#">Back to top</a>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Floating action button: opens the post sheet -->
+  <button class="fab" type="button" aria-label="New post" data-sheet-open="post-sheet">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+  </button>
+
+  <!-- Post sheet: .sheet--bottom (tearsheet) or .sheet--center (modal) -->
+  <dialog class="sheet sheet--bottom" id="post-sheet" data-component="sheet" aria-labelledby="post-sheet-title">
+    <div class="sheet__panel panel panel--content">
+      <header class="sheet__head">
+        <h2 class="sheet__title label" id="post-sheet-title">New post</h2>
+        <button class="btn btn--ghost btn--icon" type="button" data-sheet-close aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </header>
+      <div class="sheet__body">
+        <form class="form" id="post-form" data-component="form post-form" novalidate data-success="Posted." aria-labelledby="post-sheet-title">
+          <div class="field">
+            <label class="field__label" for="post-photo">Photo<span class="field__req" aria-hidden="true">*</span></label>
+            <div class="dropzone knockout" data-component="dropzone" data-max-size="20">
+              <input class="dropzone__input" id="post-photo" name="photo" type="file" accept="image/*" required>
+              <label class="dropzone__empty" for="post-photo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><rect x="3" y="5" width="18" height="14"/><path d="m3 16 5-5 4 4 3-3 6 6"/><circle cx="16" cy="9" r="1.5"/></svg>
+                <span class="dropzone__title">Drop a photo, or <u>browse</u></span>
+                <span class="dropzone__hint">One photo · up to 20 MB</span>
+              </label>
+              <figure class="dropzone__preview" hidden><img alt=""><figcaption class="dropzone__meta"></figcaption></figure>
+              <div class="dropzone__actions" hidden>
+                <button class="btn btn--ghost" type="button" data-dropzone-replace>Replace</button>
+                <button class="btn btn--text" type="button" data-dropzone-remove>Remove</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="post-title">Title<span class="field__req" aria-hidden="true">*</span></label>
+            <input class="input" id="post-title" name="title" type="text" required maxlength="80" data-counter aria-describedby="post-title-count" placeholder="Name the photo">
+            <div class="field__meta"><p class="field__counter" id="post-title-count"></p></div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="post-description">Description <span class="field__optional">(optional)</span></label>
+            <textarea class="input" id="post-description" name="description" rows="3" maxlength="500" data-counter aria-describedby="post-description-count" placeholder="Where, when, what it means"></textarea>
+            <div class="field__meta"><p class="field__counter" id="post-description-count"></p></div>
+          </div>
+
+          <div class="form__row form__row--2">
+            <div class="field">
+              <label class="field__label" for="post-location">Location <span class="field__optional">(optional)</span></label>
+              <input class="input" id="post-location" name="location" type="text" autocomplete="off" placeholder="Dayton, Ohio">
+            </div>
+            <div class="field">
+              <label class="field__label" for="post-tags">Tags <span class="field__optional">(up to 10)</span></label>
+              <div class="tag-input" data-component="tag-input" data-max="10" data-suggestions='["Dayton","Graffiti","Pond","Towers"]'>
+                <ul class="tag-input__list" aria-label="Tags"></ul>
+                <input class="tag-input__text" id="post-tags" type="text" placeholder="Add a tag">
+                <input type="hidden" name="tags">
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="post-alt">Alt text <span class="field__optional">(optional)</span> <span class="field__badge" hidden>Suggested</span></label>
+            <textarea class="input" id="post-alt" name="alt" rows="2" aria-describedby="post-alt-hint" placeholder="Describe the photo for people who can't see it"></textarea>
+            <p class="field__hint" id="post-alt-hint">Never blocks posting. A suggestion may appear here after you pick a photo; edit or clear it.</p>
+          </div>
+
+          <label class="choice"><input type="checkbox" role="switch" name="publish" checked> Publish to site</label>
+
+          <p class="form__error" role="alert" hidden></p>
+          <p class="form__status" role="status" hidden></p>
+          <div class="form__actions">
+            <button class="btn btn--text" type="button" data-sheet-close>Cancel</button>
+            <button class="btn" type="submit" data-busy-label="Posting…">Post</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Specimen-only wiring: variant buttons, a fake upload, a fake alt-text
+       suggestion, and the event log. An app would do this part itself. -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const sheet = document.getElementById('post-sheet');
+      const form = document.getElementById('post-form');
+      const log = document.getElementById('post-log');
+
+      document.querySelectorAll('[data-open-variant]').forEach((b) => b.addEventListener('click', () => {
+        sheet.classList.toggle('sheet--bottom', b.dataset.openVariant === 'bottom');
+        sheet.classList.toggle('sheet--center', b.dataset.openVariant === 'center');
+        sheet.jewelSheet.open(b);
+      }));
+      // The FAB always opens the tearsheet.
+      document.querySelector('.fab').addEventListener('click', () => {
+        sheet.classList.add('sheet--bottom'); sheet.classList.remove('sheet--center');
+      }, { capture: true });
+
+      // Pretend an assistant drafts alt text shortly after a photo is picked.
+      form.addEventListener('jewel:filechange', (e) => {
+        if (e.detail.source !== 'user' || !e.detail.file) return;
+        setTimeout(() => Jewel.field.suggest(form.elements.alt, `Photo: ${e.detail.file.name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ')}`), 900);
+      });
+
+      // Pretend to upload: busy for 1.5s, then succeed or fail.
+      form.addEventListener('jewel:post', (e) => {
+        const { file, formData, form: _f, waitUntil, ...rest } = e.detail;
+        log.textContent = JSON.stringify({ ...rest, file: file ? { name: file.name, type: file.type, size: file.size } : null }, null, 2);
+        waitUntil(new Promise((resolve, reject) => setTimeout(() =>
+          document.getElementById('demo-fail').checked ? reject(new Error('Upload failed (demo). Your draft is still here.')) : resolve(), 1500)));
+      });
+    });
+  </script>
+</body>
+</html>

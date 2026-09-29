@@ -1,0 +1,10 @@
+/* ==========================================================================
+   Jewel candidates — components Photostream needed that the system doesn't
+   have yet. Each file follows css/components/_template.css, so it can move
+   into jewel-design-system/css/components/ unchanged (see GAPS.md).
+
+   Link this after jewel.css. The imports land in the same `components`
+   layer that jewel.css declared, so the cascade order stays the system's.
+   ========================================================================== */
+
+@import url("components/carousel.css") layer(components);
