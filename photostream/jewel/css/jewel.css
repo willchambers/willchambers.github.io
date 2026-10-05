@@ -31,6 +31,7 @@
 @import url("components/knockout.css") layer(components);
 @import url("components/lightbox.css") layer(components);
 @import url("components/meta-list.css") layer(components);
+@import url("components/notice.css") layer(components);
 @import url("components/panel.css") layer(components);
 @import url("components/quote.css") layer(components);
 @import url("components/section-head.css") layer(components);

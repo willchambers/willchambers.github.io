@@ -4,6 +4,8 @@
 
 export const config = {
   apiBase: 'https://api.github.com',
+  // Alt text drafts (js/alt-text.js). dev/server.mjs points this at its mock.
+  anthropicBase: 'https://api.anthropic.com',
 
   // The private library: every post, published or not. It lives on its own
   // branch so the app's photo commits never mix with code history.

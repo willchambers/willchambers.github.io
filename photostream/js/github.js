@@ -50,6 +50,153 @@ export async function getUser(token) {
   return res.json();
 }
 
+// ---- Writing ------------------------------------------------------------------
+// Posts are written with the Git Data API (blobs → tree → commit → ref), so a
+// photo and everything that goes with it land in one commit.
+
+const repoUrl = ({ owner, repo }) => `${config.apiBase}/repos/${owner}/${repo}`;
+const JSON_HEADERS = { Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
+
+async function api(repo, path, token, { method = 'GET', body } = {}) {
+  const res = await request(`${repoUrl(repo)}${path}`, token, {
+    method,
+    headers: JSON_HEADERS,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  return res.status === 204 ? null : res.json();
+}
+
+const toBase64 = (blob) => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => resolve(String(reader.result).split(',')[1]);
+  reader.onerror = () => reject(reader.error);
+  reader.readAsDataURL(blob);
+});
+
+/** Upload a binary file once; returns its blob sha for commitFiles(). */
+export async function createBlob(repo, token, blob) {
+  const { sha } = await api(repo, '/git/blobs', token, {
+    method: 'POST',
+    body: { content: await toBase64(blob), encoding: 'base64' },
+  });
+  return sha;
+}
+
+/** Names in a folder on a branch (empty if the folder doesn't exist). */
+export async function listNames(repo, token, folder) {
+  try {
+    const entries = await api(repo, `/contents/${folder}?ref=${encodeURIComponent(repo.branch)}`, token);
+    return Array.isArray(entries) ? entries.map((entry) => entry.name) : [];
+  } catch (err) {
+    if (err.status === 404) return [];
+    throw err;
+  }
+}
+
+// files: [{ path, sha }] for uploaded blobs, or [{ path, content }] for text.
+const treeEntry = ({ path, sha, content }) =>
+  (sha ? { path, mode: '100644', type: 'blob', sha } : { path, mode: '100644', type: 'blob', content });
+
+async function commitOnTop(repo, token, base, message, files) {
+  const { tree } = await api(repo, `/git/commits/${base}`, token);
+  const next = await api(repo, '/git/trees', token, {
+    method: 'POST',
+    body: { base_tree: tree.sha, tree: files.map(treeEntry) },
+  });
+  const commit = await api(repo, '/git/commits', token, {
+    method: 'POST',
+    body: { message, tree: next.sha, parents: [base] },
+  });
+  return commit.sha;
+}
+
+const tipOf = async (repo, token, branch) =>
+  (await api(repo, `/git/ref/heads/${branch}`, token)).object.sha;
+
+/**
+ * Commit files to a branch as one commit. `build(tip)` returns
+ * { message, files } for the branch's current tip, so a file like
+ * index.json is rebuilt on top of the latest version. If the branch moved
+ * meanwhile (someone else committed), it builds again on the new tip.
+ */
+export async function commitFiles(repo, token, build, { attempts = 3 } = {}) {
+  for (let attempt = 1; ; attempt += 1) {
+    const base = await tipOf(repo, token, repo.branch);
+    const { message, files } = await build(base);
+    const sha = await commitOnTop(repo, token, base, message, files);
+    try {
+      await api(repo, `/git/refs/heads/${repo.branch}`, token, { method: 'PATCH', body: { sha, force: false } });
+      return sha;
+    } catch (err) {
+      if (err.status === 422 && attempt < attempts) continue; // not a fast-forward: retry on the new tip
+      throw err;
+    }
+  }
+}
+
+/** Commit files to a new branch made from repo.branch. */
+export async function commitToNewBranch(repo, token, { branch, message, files }) {
+  const base = await tipOf(repo, token, repo.branch);
+  const sha = await commitOnTop(repo, token, base, message, files);
+  await api(repo, '/git/refs', token, { method: 'POST', body: { ref: `refs/heads/${branch}`, sha } });
+  return sha;
+}
+
+export const deleteBranch = (repo, token, branch) =>
+  api(repo, `/git/refs/heads/${branch}`, token, { method: 'DELETE' });
+
+export const createPull = (repo, token, { title, head, body }) =>
+  api(repo, '/pulls', token, { method: 'POST', body: { title, head, base: repo.branch, body } });
+
+/** Pull requests (open or closed) from a branch of the same repo. */
+export const findPulls = (repo, token, head) =>
+  api(repo, `/pulls?state=all&head=${encodeURIComponent(`${repo.owner}:${head}`)}`, token);
+
+/**
+ * Squash-merge a pull request. GitHub works out whether a new PR can merge
+ * a moment after it's opened, so a "not mergeable yet" answer is retried.
+ */
+export async function mergePull(repo, token, number, { title }) {
+  for (let attempt = 1; ; attempt += 1) {
+    try {
+      return await api(repo, `/pulls/${number}/merge`, token, {
+        method: 'PUT',
+        body: { merge_method: 'squash', commit_title: title },
+      });
+    } catch (err) {
+      if (err.status === 405 && attempt < 5) {
+        await new Promise((resolve) => setTimeout(resolve, 1500 * attempt));
+        continue;
+      }
+      throw err;
+    }
+  }
+}
+
+/** Plain-English explanation of a failed write, for the UI. */
+export function explainWrite(err, repo) {
+  const name = `${repo.owner}/${repo.repo}`;
+  switch (err?.status) {
+    case 0:
+      return "No connection to GitHub. Your draft is still here; try again when you have signal.";
+    case 401:
+      return "GitHub didn't accept your token. It may have expired. Add a new one in Settings, then try again.";
+    case 403:
+      return `Your token can't write to ${name}. Give it Contents: Read and write and Pull requests: Read and write, or you've hit GitHub's hourly limit.`;
+    case 404:
+      return `Your token can't see ${name}. Add that repository to the token's access.`;
+    case 405:
+      return `GitHub wouldn't merge the pull request into ${name} (${err.message}).`;
+    case 409:
+    case 422:
+      return `GitHub turned the change down (${err.message}). Try again in a moment.`;
+    default:
+      return err?.status >= 500
+        ? 'GitHub is having trouble right now. Try again in a minute.'
+        : `Something went wrong talking to GitHub${err?.status ? ` (error ${err.status})` : ''}.`;
+  }
+}
+
 /** Plain-English explanation of a failed GitHub call, for the UI. */
 export function explain(err, what = 'your library') {
   switch (err?.status) {

@@ -46,6 +46,18 @@ export async function libraryImageUrl(path, token) {
   return URL.createObjectURL(await res.blob());
 }
 
+/** Keep a photo that's already on the phone (a new post's 960px copy). */
+export async function cacheLibraryImage(path, blob) {
+  const cache = await openCache();
+  await cache?.put(cacheKey(path), new Response(blob, { headers: { 'Content-Type': 'image/webp' } }));
+}
+
+/** Add a just-saved post to the saved index, so it shows before a refresh. */
+export async function addToSavedIndex(post) {
+  const posts = (await savedLibraryIndex()) || [];
+  await saveJSON(SAVED_INDEX, [post, ...posts.filter((p) => p.id !== post.id)]);
+}
+
 /** Remove everything private from the phone (used when the token is removed). */
 export async function forgetLibrary() {
   await forgetJSON(SAVED_INDEX);

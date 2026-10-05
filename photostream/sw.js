@@ -13,7 +13,7 @@
 // Locally VERSION is "dev": the app's files then come from the network
 // first, so edits show up, and from the cache only when offline.
 
-const VERSION = '5f17f99'; // stamped by the release script
+const VERSION = '313395f'; // stamped by the release script
 const DEV = VERSION === 'dev';
 
 const SHELL = `photostream-shell-${VERSION}`;

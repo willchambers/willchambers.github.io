@@ -1,6 +1,8 @@
-// The Settings sheet: connect GitHub with a token, or remove it.
+// The Settings sheet: connect GitHub with a token, add an Anthropic key for
+// alt text drafts, or remove either.
 // Markup: #settings in index.html (a Jewel sheet holding a Jewel form).
 
+import { checkAnthropicKey } from './alt-text.js';
 import { config } from './config.js';
 import { explain, getUser, readRaw } from './github.js';
 import { forgetLibrary } from './library.js';
@@ -36,6 +38,9 @@ export function initSettings({ onChange }) {
   const form = sheet.querySelector('#token-form');
   const connection = sheet.querySelector('[data-connection]');
   const forget = sheet.querySelector('[data-forget]');
+  const keyForm = sheet.querySelector('#anthropic-form');
+  const keyStatus = sheet.querySelector('[data-anthropic-connection]');
+  const forgetKey = sheet.querySelector('[data-forget-anthropic]');
 
   const show = () => {
     const connected = Boolean(settings.token);
@@ -43,6 +48,11 @@ export function initSettings({ onChange }) {
       ? `Connected as ${settings.login || 'your GitHub account'}. Your private library shows in the feed.`
       : 'Not connected. The feed shows published photos only.';
     forget.hidden = !connected;
+    const hasKey = Boolean(settings.anthropicKey);
+    keyStatus.textContent = hasKey
+      ? 'On. Claude drafts alt text for each new photo.'
+      : 'Off. Alt text starts from the title instead; you can always write your own.';
+    forgetKey.hidden = !hasKey;
   };
 
   form.addEventListener('jewel:submit', (e) => {
@@ -55,6 +65,20 @@ export function initSettings({ onChange }) {
       // Let "Connected." register, then show the feed.
       setTimeout(() => sheet.jewelSheet?.close({ force: true }), 900);
     }));
+  });
+
+  keyForm.addEventListener('jewel:submit', (e) => {
+    const key = String(e.detail.formData.get('key') || '').trim();
+    e.detail.waitUntil(checkAnthropicKey(key).then(() => {
+      settings.anthropicKey = key;
+      show();
+    }));
+  });
+
+  forgetKey.addEventListener('click', () => {
+    settings.anthropicKey = null;
+    show();
+    keyForm.jewelForm?.setStatus('Key removed from this phone.');
   });
 
   forget.addEventListener('click', async () => {

@@ -189,6 +189,37 @@
               <dt class="label">Year</dt><dd>2026</dd>
             </dl>
           </div>
+
+          <div class="stack">
+            <p class="label">Notices</p>
+            <div class="notices" id="notice-demo" tabindex="-1" aria-label="Notices">
+              <!-- Info, no action -->
+              <div class="notice">
+                <p class="notice__text">You're offline. Showing what's saved on this phone.</p>
+              </div>
+              <!-- Info with an action -->
+              <div class="notice">
+                <p class="notice__text">Showing published photos only. Connect GitHub to see your private library too.</p>
+                <div class="notice__actions"><button class="btn btn--ghost" type="button">Connect GitHub</button></div>
+              </div>
+              <!-- Accent: an update or good news -->
+              <div class="notice notice--accent" role="status">
+                <p class="notice__text">Photostream has been updated.</p>
+                <div class="notice__actions"><button class="btn btn--ghost" type="button">Reload</button></div>
+              </div>
+              <!-- Error with a title and actions -->
+              <div class="notice notice--error" role="alert">
+                <div class="notice__body">
+                  <p class="notice__title">Couldn't load your photos</p>
+                  <p class="notice__text">willchambers.github.io didn't answer. Check your connection and try again.</p>
+                </div>
+                <div class="notice__actions">
+                  <button class="btn btn--text" type="button" data-notice-demo="dismiss">Dismiss</button>
+                  <button class="btn btn--ghost" type="button">Retry</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -232,11 +263,26 @@
 
         <!-- Lightbox: any container of [data-lightbox-item] links. Tap a thumbnail; arrows, swipe and Esc work. -->
         <div class="span-12 stack">
-          <p class="label">Lightbox · badges</p>
-          <div data-component="lightbox" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-3); align-items: start">
-            <a class="figure__media" href="media/art-a.svg" data-lightbox-item data-caption="Northlight Quarterly — cover" data-description="An optional second line from data-description."><img src="media/art-a.svg" alt="Violet and teal gradient artwork" loading="lazy"><span class="badge badge--solid" data-place="top-left">New</span></a>
-            <a class="figure__media" href="media/art-b.svg" data-lightbox-item data-caption="Field Notes — mark study" style="--ratio: 4 / 5"><img src="media/art-b.svg" alt="A red circle on a pale ground" loading="lazy"><span class="badge" data-place="bottom-right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="7" width="14" height="14"/><path d="M7 3h14v14"/></svg>3<span class="visually-hidden"> photos</span></span></a>
-            <a class="figure__media" href="media/art-c.svg" data-lightbox-item data-caption="Tidal — still"><img src="media/art-c.svg" alt="Orange and magenta gradient artwork" loading="lazy"><span class="badge badge--error" data-place="top-left"><span class="badge__dot"></span>Failed</span></a>
+          <p class="label">Lightbox · badges · scrolling filter</p>
+          <!-- .filter--scroll: one row that scrolls sideways, out to the panel's edges. -->
+          <div class="filter filter--scroll cluster" data-component="filter" data-filter-target="#lightbox-demo" data-filter-noun="photos" role="group" aria-label="Filter photos by tag">
+            <button class="tag tag--button" type="button" data-filter="*" aria-pressed="true">All</button>
+            <button class="tag tag--button" type="button" data-filter="violet" aria-pressed="false">Violet</button>
+            <button class="tag tag--button" type="button" data-filter="teal" aria-pressed="false">Teal</button>
+            <button class="tag tag--button" type="button" data-filter="magenta" aria-pressed="false">Magenta</button>
+            <button class="tag tag--button" type="button" data-filter="orange" aria-pressed="false">Orange</button>
+            <button class="tag tag--button" type="button" data-filter="red" aria-pressed="false">Red</button>
+            <button class="tag tag--button" type="button" data-filter="gradient" aria-pressed="false">Gradient</button>
+            <button class="tag tag--button" type="button" data-filter="circle" aria-pressed="false">Circle</button>
+            <button class="tag tag--button" type="button" data-filter="cover" aria-pressed="false">Cover</button>
+            <button class="tag tag--button" type="button" data-filter="study" aria-pressed="false">Study</button>
+            <button class="tag tag--button" type="button" data-filter="still" aria-pressed="false">Still</button>
+            <span class="filter__status visually-hidden" aria-live="polite"></span>
+          </div>
+          <div id="lightbox-demo" data-component="lightbox" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-3); align-items: start">
+            <a class="figure__media" href="media/art-a.svg" data-tags="violet teal gradient cover" data-lightbox-item data-caption="Northlight Quarterly — cover" data-description="An optional second line from data-description."><img src="media/art-a.svg" alt="Violet and teal gradient artwork" loading="lazy"><span class="badge badge--solid" data-place="top-left">New</span></a>
+            <a class="figure__media" href="media/art-b.svg" data-tags="red circle study" data-lightbox-item data-caption="Field Notes — mark study" style="--ratio: 4 / 5"><img src="media/art-b.svg" alt="A red circle on a pale ground" loading="lazy"><span class="badge" data-place="bottom-right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="7" width="14" height="14"/><path d="M7 3h14v14"/></svg>3<span class="visually-hidden"> photos</span></span></a>
+            <a class="figure__media" href="media/art-c.svg" data-tags="orange magenta gradient still" data-lightbox-item data-caption="Tidal — still"><img src="media/art-c.svg" alt="Orange and magenta gradient artwork" loading="lazy"><span class="badge badge--error" data-place="top-left"><span class="badge__dot"></span>Failed</span></a>
           </div>
         </div>
       </section>
@@ -467,6 +513,12 @@
       const sheet = document.getElementById('post-sheet');
       const form = document.getElementById('post-form');
       const log = document.getElementById('post-log');
+
+      // Notices: dismiss by hiding, then move focus to the group so it isn't lost.
+      document.querySelectorAll('[data-notice-demo="dismiss"]').forEach((b) => b.addEventListener('click', () => {
+        b.closest('.notice').hidden = true;
+        document.getElementById('notice-demo').focus();
+      }));
 
       document.querySelectorAll('[data-open-variant]').forEach((b) => b.addEventListener('click', () => {
         sheet.classList.toggle('sheet--bottom', b.dataset.openVariant === 'bottom');
