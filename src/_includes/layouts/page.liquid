@@ -5,7 +5,12 @@ layout: layouts/base.liquid
   <p class="label span-12">{{ label | default: title }}</p>
   <h1 class="span-9">{{ heading | default: title }}</h1>
   {%- if intro %}
-  <p class="lede span-9">{{ intro }}</p>
+  <p class="lede {% if image %}span-7{% else %}span-9{% endif %}">{{ intro }}</p>
+  {%- endif %}
+  {%- if image %}
+  <figure class="figure span-5">
+    <div class="figure__media"><img src="{{ image }}" alt="{{ image_alt | escape }}" sizes="(min-width: 48rem) 30rem, 100vw" loading="eager"></div>
+  </figure>
   {%- endif %}
 </section>
 

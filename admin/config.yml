@@ -143,4 +143,6 @@ collections:
           - { label: Show links, name: show_links, widget: hidden, default: true }
           - { label: Title, name: title, widget: string }
           - { label: Intro, name: intro, widget: text, required: false }
+          - { label: Photo, name: image, widget: image, required: false, hint: "Shown beside the text, above your links." }
+          - { label: Photo alt text, name: image_alt, widget: string, required: false }
           - { label: Body, name: body, widget: markdown }
