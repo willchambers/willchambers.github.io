@@ -1,20 +1,29 @@
-// Photostream: start-up and the feed.
+// Photostream: start-up, the feed, and posting.
 //
 // The feed draws straight away from what's saved on the phone, then checks
 // the network and updates in place: unchanged posts are kept as they are
 // (their photos don't reload), and the post you're looking at stays put.
+// A new post appears at once; while it's publishing the feed checks the
+// site every few seconds until it's live.
 
+import { initComposer } from './composer.js';
 import { explain } from './github.js';
 import { esc } from './format.js';
-import { fetchLibraryIndex, libraryImageUrl, savedLibraryIndex } from './library.js';
+import {
+  addToSavedIndex, cacheLibraryImage, fetchLibraryIndex, libraryImageUrl, savedLibraryIndex,
+} from './library.js';
 import { fetchSitePosts, mergePosts, savedSitePosts, tagsByRecency } from './posts.js';
 import { observeLibraryImages, renderFilter, renderPost } from './feed.js';
+import { libraryPhoto, publishToSite } from './publish.js';
+import { publishing } from './publishing.js';
 import { settings } from './settings.js';
 import { initSettings } from './settings-sheet.js';
 import { registerServiceWorker } from './sw-register.js';
 
 const $ = (selector) => document.querySelector(selector);
-const REFRESH_AFTER = 60_000; // on returning to the app
+const REFRESH_AFTER = 60_000;   // on returning to the app
+const WATCH_EVERY = 8_000;      // while a post is publishing
+const WATCH_FOR = 15 * 60_000;  // …for at most this long per post
 
 // ---- Rendering ------------------------------------------------------------
 
@@ -44,18 +53,29 @@ function keepPlace(update) {
   if (after && window.scrollY > 0) window.scrollBy(0, after.getBoundingClientRect().top - before);
 }
 
-const noticeHTML = ({ text, action }) => `
-  <div class="stream__notice">
-    <p class="caption">${esc(text)}</p>
-    ${action ? `<button class="btn btn--ghost" type="button" data-sheet-open="${esc(action.sheet)}">${esc(action.label)}</button>` : ''}
+// Jewel notices: info by default, 'accent' for updates, 'error' for
+// failures. News that arrives in the background is announced (status).
+const actionHTML = (action) => (action.href
+  ? `<a class="btn btn--ghost" href="${esc(action.href)}">${esc(action.label)}</a>`
+  : `<button class="btn btn--ghost" type="button"${action.sheet ? ` data-sheet-open="${esc(action.sheet)}"` : ''}>${esc(action.label)}</button>`);
+
+const noticeHTML = ({ text, tone, role, action }) => `
+  <div class="notice${tone ? ` notice--${tone}` : ''}"${role ? ` role="${role}"` : ''}>
+    <p class="notice__text">${esc(text)}</p>
+    ${action ? `<div class="notice__actions">${actionHTML(action)}</div>` : ''}
   </div>`;
 
+// Good news ("… is live") stays up for a couple of minutes, across refreshes.
+let news = [];
 function renderNotices(notices) {
-  $('[data-stream-notices]').innerHTML = notices.map(noticeHTML).join('');
+  news = news.filter((item) => item.until > Date.now());
+  $('[data-stream-notices]').innerHTML = [...news, ...notices].map(noticeHTML).join('');
 }
 
 let filterPrint = '';
+let currentPosts = [];
 function renderFeed(posts) {
+  currentPosts = posts;
   const count = posts.length;
   $('[data-stream-count]').textContent = `Photostream · ${count} ${count === 1 ? 'post' : 'posts'}`;
 
@@ -94,7 +114,7 @@ const offline = (err) => err?.status === 0 || err instanceof TypeError || !navig
 async function showSaved() {
   const token = settings.token;
   const [site, library] = await Promise.all([savedSitePosts(), token ? savedLibraryIndex() : null]);
-  if (site || library) renderFeed(mergePosts(site || [], library || []));
+  if (site || library) renderFeed(mergePosts(site || [], library || [], publishing.all()));
 }
 
 let lastRefresh = 0;
@@ -116,12 +136,19 @@ function refresh() {
     const notices = [];
     const wentOffline = [site, library].some((r) => r.status === 'rejected' && offline(r.reason));
     if (wentOffline && (savedSite || savedLibrary)) {
-      notices.push({ text: "You're offline. Showing what's saved on this phone." });
+      notices.push({ text: "You're offline. Showing what's saved on this phone.", role: 'status' });
     } else {
       if (site.status === 'rejected') {
-        notices.push({ text: "Couldn't load your published photos from willchambers.github.io. Check your connection." });
+        notices.push({ text: "Couldn't load your published photos from willchambers.github.io. Check your connection.", tone: 'error', role: 'status' });
       }
-      if (library.status === 'rejected') notices.push({ text: explain(library.reason) });
+      if (library.status === 'rejected') {
+        // Token problems (expired, no access) are fixed in Settings.
+        const tokenProblem = [401, 403, 404].includes(library.reason?.status);
+        notices.push({
+          text: explain(library.reason), tone: 'error', role: 'status',
+          action: tokenProblem ? { label: 'Open Settings', sheet: 'settings' } : null,
+        });
+      }
     }
     if (!token) {
       notices.push({
@@ -130,14 +157,68 @@ function refresh() {
       });
     }
 
+    const sitePosts = site.status === 'fulfilled' ? site.value : savedSite || [];
+    if (site.status === 'fulfilled') noteLive(sitePosts);
     renderNotices(notices);
     renderFeed(mergePosts(
-      site.status === 'fulfilled' ? site.value : savedSite || [],
+      sitePosts,
       library.status === 'fulfilled' ? library.value : savedLibrary || [],
+      publishing.all(),
     ));
+    watchPublishing();
   })().finally(() => { refreshing = null; });
   return refreshing;
 }
+
+// ---- Publishing -------------------------------------------------------------------
+
+// A publishing post that has turned up in the site's feed is live.
+function noteLive(sitePosts) {
+  const onSite = new Set(sitePosts.map((post) => post.id));
+  for (const [id, record] of Object.entries(publishing.all())) {
+    if (!onSite.has(id)) continue;
+    publishing.clear(id);
+    news.push({
+      text: `“${record.title || 'Your post'}” is live on willchambers.github.io.`,
+      tone: 'accent',
+      role: 'status',
+      action: { label: 'See it on the site', href: 'https://willchambers.github.io/photos/' },
+      until: Date.now() + 2 * 60_000,
+    });
+  }
+}
+
+// While anything is publishing, check the site every few seconds.
+let watchTimer = 0;
+function watchPublishing() {
+  clearTimeout(watchTimer);
+  const watching = Object.values(publishing.all())
+    .filter((record) => record.state === 'publishing' && Date.now() - record.since < WATCH_FOR);
+  if (watching.length) watchTimer = setTimeout(refresh, WATCH_EVERY);
+}
+
+// "Try again" on a failed post, or "Publish to site" on a private one.
+async function publishLater(id, button) {
+  const token = settings.token;
+  const post = ((await savedLibraryIndex()) || []).find((p) => p.id === id);
+  if (!token || !post) return;
+  button.disabled = true;
+  button.textContent = 'Publishing…';
+  publishing.set(id, { state: 'publishing', title: post.title, error: null });
+  await showSaved();
+  try {
+    await publishToSite({ post, full: await libraryPhoto(post, token), token });
+  } catch (err) {
+    // publishToSite records its own failures; this catches the photo download.
+    if (publishing.get(id)?.state !== 'failed') publishing.set(id, { state: 'failed', error: err.message });
+  }
+  refresh();
+}
+
+$('#feed').addEventListener('click', (e) => {
+  const button = e.target.closest('[data-publish]');
+  if (button) publishLater(button.dataset.publish, button);
+});
 
 // ---- Start ----------------------------------------------------------------
 
@@ -154,21 +235,43 @@ document.addEventListener('visibilitychange', () => {
 });
 window.addEventListener('online', () => refresh());
 
+// The "+" button only makes sense once GitHub is connected.
+const showFab = () => { $('.fab').hidden = !settings.token; };
+
 initSettings({
   onChange: () => {
     lastRefresh = 0;
+    showFab();
     showSaved().then(refresh);
   },
 });
+
+initComposer({
+  // Recent tags and places, most recent first, for the composer's suggestions.
+  suggestions: () => ({
+    tags: tagsByRecency(currentPosts),
+    places: [...new Set(currentPosts.map((post) => post.location).filter(Boolean))],
+  }),
+  // The post is safe in the library: show it at once, from the photo that's
+  // already on the phone, and let the network catch up.
+  onPosted: async (post, ready) => {
+    await Promise.all([cacheLibraryImage(post.photos[0].thumb, ready.thumb), addToSavedIndex(post)]);
+    await showSaved();
+    window.scrollTo({ top: 0, behavior: Jewel.reducedMotion.matches ? 'auto' : 'smooth' });
+    watchPublishing();
+  },
+  onPublished: () => refresh(),
+});
+showFab();
 
 // A new release took over. Reload quietly if nobody's looking; otherwise ask.
 registerServiceWorker({
   onUpdate: () => {
     if (document.visibilityState === 'hidden') return location.reload();
-    const notice = fromHTML(noticeHTML({ text: 'Photostream has been updated.' }));
-    const reload = fromHTML('<button class="btn btn--ghost" type="button">Reload</button>');
-    reload.addEventListener('click', () => location.reload());
-    notice.append(reload);
+    const notice = fromHTML(noticeHTML({
+      text: 'Photostream has been updated.', tone: 'accent', role: 'status', action: { label: 'Reload' },
+    }));
+    notice.querySelector('button').addEventListener('click', () => location.reload());
     $('[data-stream-notices]').prepend(notice);
   },
 });

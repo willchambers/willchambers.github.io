@@ -1,9 +1,11 @@
 // What Photostream keeps on the phone. On iOS a home-screen app has its own
 // storage, separate from Safari, so the token is entered once in the app.
-// Nothing here is ever sent anywhere except the token, to GitHub.
+// Nothing here is ever sent anywhere except the GitHub token, to GitHub, and
+// the Anthropic key, to Anthropic.
 
 const TOKEN_KEY = 'photostream.githubToken';
 const LOGIN_KEY = 'photostream.githubLogin';
+const ANTHROPIC_KEY = 'photostream.anthropicKey';
 
 const read = (key) => { try { return localStorage.getItem(key); } catch { return null; } };
 const write = (key, value) => {
@@ -20,4 +22,8 @@ export const settings = {
   // Only for showing "Connected as …".
   get login() { return read(LOGIN_KEY); },
   set login(value) { write(LOGIN_KEY, value || null); },
+
+  // Optional: alt text drafts from Claude.
+  get anthropicKey() { return read(ANTHROPIC_KEY); },
+  set anthropicKey(value) { write(ANTHROPIC_KEY, value?.trim() || null); },
 };

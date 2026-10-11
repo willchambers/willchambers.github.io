@@ -13,7 +13,22 @@ const ratioOf = (photo) => Math.max(photo.width / photo.height || 1, MIN_RATIO).
 const STATUS = {
   private: '<span class="badge" data-place="top-left" title="Only in your library">Private</span>',
   publishing: '<span class="badge badge--accent badge--busy" data-place="top-left" title="On its way to the site"><span class="badge__dot"></span>Publishing…</span>',
+  failed: '<span class="badge badge--error" data-place="top-left">Not published</span>',
 };
+
+// Under a post: why publishing failed, or the option to publish a private one.
+function postActions(post) {
+  if (post.status === 'failed') {
+    return `<div class="notice notice--error post__actions" role="status">
+      <p class="notice__text">${esc(post.error || "Couldn't publish this post to the site.")}</p>
+      <div class="notice__actions"><button class="btn btn--ghost" type="button" data-publish="${esc(post.id)}">Try again</button></div>
+    </div>`;
+  }
+  if (post.status === 'private') {
+    return `<div class="post__actions"><button class="btn btn--text" type="button" data-publish="${esc(post.id)}">Publish to site</button></div>`;
+  }
+  return '';
+}
 
 function photoLink(post, photo, { className, ratio, eager }) {
   const caption = [post.title, post.location].filter(Boolean).join(' — ');
@@ -60,6 +75,7 @@ export function renderPost(post, index) {
     ${status || ''}
   </figure>
   ${tags.length ? `<div class="cluster post__tags">${tags.map((t) => `<a class="tag tag--button" href="#tag=${esc(t.slug)}">${esc(t.name)}</a>`).join('')}</div>` : ''}
+  ${postActions(post)}
 </article>`;
 }
 
@@ -67,7 +83,7 @@ export function renderFilter(tags) {
   const unique = [...new Map(tags.map((name) => [slugify(name), name])).entries()];
   if (!unique.length) return '';
   return `
-<div class="filter cluster stream__filter" data-component="filter" data-filter-target="#feed" data-filter-noun="posts" role="group" aria-label="Filter by tag">
+<div class="filter filter--scroll cluster" data-component="filter" data-filter-target="#feed" data-filter-noun="posts" role="group" aria-label="Filter by tag">
   <button class="tag tag--button" type="button" data-filter="*" aria-pressed="true">All</button>
   ${unique.map(([slug, name]) => `<button class="tag tag--button" type="button" data-filter="${esc(slug)}" aria-pressed="false">${esc(name)}</button>`).join('')}
   <span class="filter__status visually-hidden" aria-live="polite"></span>

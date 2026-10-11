@@ -12,6 +12,22 @@ Jewel.register('filter', (group) => {
   const noun = group.dataset.filterNoun || 'items';
   const buttons = () => [...group.querySelectorAll('[data-filter]')];
 
+  // Scrolling row (.filter--scroll): bring the pressed tag into view, e.g.
+  // after a #tag= link picked one that was scrolled off. Only the row
+  // scrolls sideways; the page doesn't move.
+  const revealPressed = () => {
+    if (!group.classList.contains('filter--scroll')) return;
+    const b = group.querySelector('[aria-pressed="true"]');
+    if (!b) return;
+    const edge = parseFloat(getComputedStyle(group).scrollPaddingInlineStart) || 0;
+    const row = group.getBoundingClientRect();
+    const r = b.getBoundingClientRect();
+    let dx = 0;
+    if (r.left < row.left + edge) dx = r.left - row.left - edge;
+    else if (r.right > row.right - edge) dx = r.right - row.right + edge;
+    if (dx) group.scrollBy({ left: dx, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  };
+
   const apply = (tag) => {
     if (!buttons().some((b) => b.dataset.filter === tag)) tag = '*';
     const items = target.querySelectorAll('[data-tags]');
@@ -22,6 +38,7 @@ Jewel.register('filter', (group) => {
       if (match) shown += 1;
     });
     buttons().forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === tag)));
+    revealPressed();
     // "Showing 1 of 3 projects" reads right for any count.
     if (status) status.textContent = `Showing ${shown} of ${items.length} ${noun}`;
   };

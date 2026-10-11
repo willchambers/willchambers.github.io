@@ -40,14 +40,17 @@
   <link rel="stylesheet" href="css/app.css">
 
   <script src="jewel/js/jewel.js" defer></script>
-  <script src="jewel/js/components/form.js" defer></script>
+  <script src="jewel/js/components/form.js" defer></script>  <!-- before the other form components -->
+  <script src="jewel/js/components/tag-input.js" defer></script>
+  <script src="jewel/js/components/dropzone.js" defer></script>
+  <script src="jewel/js/components/post-form.js" defer></script>
   <script src="jewel/js/components/sheet.js" defer></script>
   <script src="jewel/js/components/filter.js" defer></script>
   <script src="jewel/js/components/lightbox.js" defer></script>
   <script src="jewel-candidates/js/components/carousel.js" defer></script>
   <script type="module" src="js/app.js"></script>
 </head>
-<body>
+<body class="has-fab">
   <div class="jewel-bg" aria-hidden="true"></div>
   <div class="jewel-cap" aria-hidden="true"></div>
   <div class="page">
@@ -70,13 +73,92 @@
       <section class="panel panel--pad stream">
         <h1 class="visually-hidden">Photostream</h1>
         <p class="label" data-stream-count>Photostream</p>
-        <div class="stream__notices" data-stream-notices></div>
+        <div class="notices" data-stream-notices></div>
         <div data-stream-filter></div>
       </section>
 
       <div id="feed" class="panel-stack feed" data-component="lightbox" aria-label="Posts"></div>
     </main>
   </div>
+
+  <!-- New post (js/composer.js). Hidden until GitHub is connected. -->
+  <button class="fab" type="button" aria-label="New post" data-sheet-open="post-sheet" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+  </button>
+
+  <dialog class="sheet sheet--bottom" id="post-sheet" data-component="sheet" aria-labelledby="post-sheet-title">
+    <div class="sheet__panel panel panel--content">
+      <header class="sheet__head">
+        <h2 class="sheet__title label" id="post-sheet-title">New post</h2>
+        <button class="btn btn--ghost btn--icon" type="button" data-sheet-close aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </header>
+      <div class="sheet__body">
+        <form class="form" id="post-form" data-component="form post-form" novalidate data-success="Posted." aria-labelledby="post-sheet-title">
+          <div class="field">
+            <label class="field__label" for="post-photo">Photo<span class="field__req" aria-hidden="true">*</span></label>
+            <div class="dropzone knockout" data-component="dropzone" data-max-size="40">
+              <input class="dropzone__input" id="post-photo" name="photo" type="file" accept="image/*" required data-msg-required="Add a photo.">
+              <label class="dropzone__empty" for="post-photo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><rect x="3" y="5" width="18" height="14"/><path d="m3 16 5-5 4 4 3-3 6 6"/><circle cx="16" cy="9" r="1.5"/></svg>
+                <span class="dropzone__title">Choose a photo, or take one</span>
+                <span class="dropzone__hint">It's resized on this phone before it's sent</span>
+              </label>
+              <figure class="dropzone__preview" hidden><img alt=""><figcaption class="dropzone__meta"></figcaption></figure>
+              <div class="dropzone__actions" hidden>
+                <button class="btn btn--ghost" type="button" data-dropzone-replace>Replace</button>
+                <button class="btn btn--text" type="button" data-dropzone-remove>Remove</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="post-title">Title<span class="field__req" aria-hidden="true">*</span></label>
+            <input class="input" id="post-title" name="title" type="text" required maxlength="100" data-counter aria-describedby="post-title-count" autocomplete="off" enterkeyhint="next" placeholder="Name the photo">
+            <div class="field__meta"><p class="field__counter" id="post-title-count"></p></div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="post-description">Description<span class="field__req" aria-hidden="true">*</span></label>
+            <textarea class="input" id="post-description" name="description" rows="3" required maxlength="1000" data-counter aria-describedby="post-description-count" placeholder="Where, when, what it means"></textarea>
+            <div class="field__meta"><p class="field__counter" id="post-description-count"></p></div>
+          </div>
+
+          <div class="form__row form__row--2">
+            <div class="field">
+              <label class="field__label" for="post-location">Place <span class="field__optional">(optional)</span></label>
+              <input class="input" id="post-location" name="location" type="text" list="recent-places" autocomplete="off" placeholder="Dayton, Ohio">
+              <datalist id="recent-places"></datalist>
+            </div>
+            <div class="field">
+              <label class="field__label" for="post-tags">Tags <span class="field__optional">(for a day or event)</span></label>
+              <div class="tag-input" data-component="tag-input" data-max="10">
+                <ul class="tag-input__list" aria-label="Tags"></ul>
+                <input class="tag-input__text" id="post-tags" type="text" placeholder="Add a tag" autocomplete="off">
+                <input type="hidden" name="tags">
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="post-alt">Alt text <span class="field__optional">(optional)</span> <span class="field__badge" hidden>Suggested</span></label>
+            <textarea class="input" id="post-alt" name="alt" rows="2" aria-describedby="post-alt-hint" placeholder="Describe the photo for people who can't see it"></textarea>
+            <p class="field__hint" id="post-alt-hint">A suggestion appears here once the photo is ready. Edit it or clear it; it never holds up posting.</p>
+          </div>
+
+          <label class="choice"><input type="checkbox" role="switch" name="publish" checked> Publish to willchambers.github.io</label>
+
+          <p class="form__error" role="alert" hidden></p>
+          <p class="form__status" role="status" hidden></p>
+          <div class="form__actions">
+            <button class="btn btn--text" type="button" data-sheet-close>Cancel</button>
+            <button class="btn" type="submit" data-busy-label="Posting…">Post</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </dialog>
 
   <!-- Settings: connect GitHub (js/settings-sheet.js). -->
   <dialog class="sheet sheet--bottom" id="settings" data-component="sheet" aria-labelledby="settings-title">
@@ -102,6 +184,23 @@
             <div class="form__actions">
               <button class="btn btn--text" type="button" data-forget hidden>Remove token</button>
               <button class="btn" type="submit" data-busy-label="Checking…">Save token</button>
+            </div>
+          </form>
+        </section>
+        <section class="settings__section" aria-labelledby="claude-title">
+          <h3 class="h4" id="claude-title">Alt text drafts</h3>
+          <p class="caption" data-anthropic-connection></p>
+          <form class="form" id="anthropic-form" data-component="form" novalidate data-success="Saved." aria-labelledby="claude-title">
+            <div class="field">
+              <label class="field__label" for="anthropic-key">Anthropic API key <span class="field__optional">(optional)</span></label>
+              <input class="input" id="anthropic-key" name="key" type="password" required autocomplete="off" autocapitalize="off" spellcheck="false" data-msg-required="Paste your API key." aria-describedby="anthropic-hint">
+              <p class="field__hint" id="anthropic-hint">With a key, Claude drafts alt text from each photo while you write the post. The resized photo is sent to Anthropic for that, private posts included, and each draft costs a little. <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">Make a key in the Anthropic Console</a>. It stays on this phone and is only ever sent to Anthropic.</p>
+            </div>
+            <p class="form__error" role="alert" hidden></p>
+            <p class="form__status" role="status" hidden></p>
+            <div class="form__actions">
+              <button class="btn btn--text" type="button" data-forget-anthropic hidden>Remove key</button>
+              <button class="btn" type="submit" data-busy-label="Checking…">Save key</button>
             </div>
           </form>
         </section>

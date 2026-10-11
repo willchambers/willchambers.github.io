@@ -111,16 +111,8 @@
 .input[data-suggested] { color: var(--text-muted); font-style: italic; }
 .input[data-suggested]:focus { color: var(--text-default); font-style: normal; }
 
-/* Form-level messages: one error region and one status region per form. */
-.form__error,
-.form__status {
-  margin: 0;
-  padding: var(--space-3) var(--space-4);
-  font-size: var(--text-sm);
-  border: var(--hairline) solid;
-}
-.form__error { color: var(--field-error); border-color: var(--field-error); }
-.form__status { color: var(--text-default); border-color: var(--field-focus); }
+/* Form-level messages: one error region and one status region per form.
+   They look like notices (notice.css styles them: error and accent tones). */
 .form__error:empty,
 .form__status:empty { display: none; }
 

@@ -4,8 +4,9 @@
 // - the private library: everything posted from Photostream
 //
 // A post in both is live. It shows the site's copy, so edits made in /admin
-// appear here too. A post only in the library is private, or publishing
-// if it's on its way to the site.
+// appear here too. A post only in the library is private, publishing if
+// it's on its way to the site, or failed if publishing it didn't work
+// (js/publishing.js remembers which).
 
 import { config } from './config.js';
 import { parseDate } from './format.js';
@@ -15,7 +16,10 @@ const SAVED_SITE = 'site-posts.json';
 
 /** Published posts from the site; also saved on the phone for next time. */
 export async function fetchSitePosts() {
-  const res = await fetch(config.site.feed, { cache: 'no-cache' });
+  // GitHub Pages' CDN keeps files for up to 10 minutes; a fresh query string
+  // asks for the current build, so a new post shows up a minute after it's
+  // merged rather than ten.
+  const res = await fetch(`${config.site.feed}?t=${Date.now()}`, { cache: 'no-store' });
   if (!res.ok) throw new Error(`photos.json: ${res.status}`);
   const data = await res.json();
   const posts = Array.isArray(data.posts) ? data.posts : [];
@@ -44,14 +48,20 @@ const fromSite = (post) => ({
   })),
 });
 
-const fromLibrary = (post) => ({
+function libraryStatus(post, record) {
+  if (record?.state === 'failed') return 'failed';
+  return record || post.publish ? 'publishing' : 'private';
+}
+
+const fromLibrary = (post, record) => ({
   id: post.id,
   title: post.title,
   description: post.description || '',
   date: parseDate(post.date),
   location: post.location || '',
   topics: post.topics || [],
-  status: post.publish ? 'publishing' : 'private',
+  status: libraryStatus(post, record),
+  error: record?.state === 'failed' ? record.error : '',
   photos: (post.photos || []).map((photo) => ({
     source: 'library',
     file: photo.file,
@@ -63,9 +73,9 @@ const fromLibrary = (post) => ({
 });
 
 /** Newest first. Posts with no usable photo are left out. */
-export function mergePosts(sitePosts = [], libraryPosts = []) {
+export function mergePosts(sitePosts = [], libraryPosts = [], records = {}) {
   const byId = new Map();
-  for (const post of libraryPosts) byId.set(post.id, fromLibrary(post));
+  for (const post of libraryPosts) byId.set(post.id, fromLibrary(post, records[post.id]));
   for (const post of sitePosts) byId.set(post.id, fromSite(post));
   return [...byId.values()]
     .filter((post) => post.photos.length && !Number.isNaN(post.date.getTime()))

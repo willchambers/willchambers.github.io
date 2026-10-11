@@ -15,23 +15,9 @@
 html { -webkit-tap-highlight-color: transparent; }
 
 /* ---- Top panel: count, notices, tag filter ------------------------------- */
-/* minmax(0, 1fr): the tag row scrolls instead of widening the page. */
-.stream { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
-.stream__notices:empty { display: none; }
-
-/* The tag filter is one row that scrolls sideways, edge to edge, so a long
-   list of tags never pushes the feed down. */
-.stream__filter {
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  scrollbar-width: none;
-  margin: -0.375rem calc(-1 * var(--panel-padding));
-  /* On touch screens Jewel draws tags 32px tall with a 44px tap area. The
-     block padding gives that room; a scrolling row would clip it otherwise. */
-  padding: 0.375rem var(--panel-padding);
-}
-.stream__filter::-webkit-scrollbar { display: none; }
-.stream__filter .tag { flex: none; }
+/* The tag filter is Jewel's .filter--scroll: one row that scrolls sideways,
+   edge to edge, so a long list of tags never pushes the feed down. */
+.stream { display: grid; gap: var(--space-4); }
 
 /* ---- Feed ----------------------------------------------------------------- */
 /* The feed is a nested panel-stack, so each post gets the content-panel
@@ -71,7 +57,3 @@ html { -webkit-tap-highlight-color: transparent; }
 .settings { display: grid; gap: var(--space-7); align-content: start; }
 .settings__section { display: grid; gap: var(--space-3); }
 .settings__section .form { margin-top: var(--space-2); }
-
-/* Notices in the top panel: a caption, sometimes with a button under it. */
-.stream__notices { display: grid; gap: var(--space-4); }
-.stream__notice { display: grid; gap: var(--space-3); justify-items: start; }
