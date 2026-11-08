@@ -23,7 +23,6 @@ import { registerServiceWorker } from './sw-register.js';
 const $ = (selector) => document.querySelector(selector);
 const REFRESH_AFTER = 60_000;   // on returning to the app
 const WATCH_EVERY = 8_000;      // while a post is publishing
-const WATCH_FOR = 15 * 60_000;  // …for at most this long per post
 
 // ---- Rendering ------------------------------------------------------------
 
@@ -164,6 +163,7 @@ function refresh() {
       sitePosts,
       library.status === 'fulfilled' ? library.value : savedLibrary || [],
       publishing.all(),
+      { siteIsFresh: site.status === 'fulfilled' },
     ));
     watchPublishing();
   })().finally(() => { refreshing = null; });
@@ -192,9 +192,8 @@ function noteLive(sitePosts) {
 let watchTimer = 0;
 function watchPublishing() {
   clearTimeout(watchTimer);
-  const watching = Object.values(publishing.all())
-    .filter((record) => record.state === 'publishing' && Date.now() - record.since < WATCH_FOR);
-  if (watching.length) watchTimer = setTimeout(refresh, WATCH_EVERY);
+  const watching = Object.entries(publishing.all()).some(([id, record]) => publishing.onItsWay(id, record));
+  if (watching) watchTimer = setTimeout(refresh, WATCH_EVERY);
 }
 
 // "Try again" on a failed post, or "Publish to site" on a private one.
@@ -204,14 +203,11 @@ async function publishLater(id, button) {
   if (!token || !post) return;
   button.disabled = true;
   button.textContent = 'Publishing…';
-  publishing.set(id, { state: 'publishing', title: post.title, error: null });
+  // publishToSite marks the post straight away, before its first network
+  // call, so the feed below already shows Publishing….
+  const done = publishToSite({ post, full: () => libraryPhoto(post, token), token });
   await showSaved();
-  try {
-    await publishToSite({ post, full: await libraryPhoto(post, token), token });
-  } catch (err) {
-    // publishToSite records its own failures; this catches the photo download.
-    if (publishing.get(id)?.state !== 'failed') publishing.set(id, { state: 'failed', error: err.message });
-  }
+  await done.catch(() => {}); // a failure is recorded and shown on the post
   refresh();
 }
 

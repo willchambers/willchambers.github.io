@@ -10,6 +10,7 @@
 
 import { config } from './config.js';
 import { parseDate } from './format.js';
+import { GIVE_UP_AFTER, publishing } from './publishing.js';
 import { loadJSON, saveJSON } from './saved.js';
 
 const SAVED_SITE = 'site-posts.json';
@@ -48,20 +49,33 @@ const fromSite = (post) => ({
   })),
 });
 
-function libraryStatus(post, record) {
-  if (record?.state === 'failed') return 'failed';
-  return record || post.publish ? 'publishing' : 'private';
+const STOPPED = "Publishing stopped before it finished, probably because the app closed.";
+const SLOW = "This post was sent to the site but hasn't appeared there yet.";
+
+// { status, error } for a post that's only in the library.
+function libraryState(post, record, siteIsFresh) {
+  if (record?.state === 'failed') return { status: 'failed', error: record.error };
+  if (record) {
+    if (publishing.onItsWay(post.id, record)) return { status: 'publishing' };
+    return { status: 'failed', error: record.merged ? SLOW : STOPPED };
+  }
+  if (!post.publish) return { status: 'private' };
+  // Meant for the site, but this phone has no record of it being published.
+  // Only call that stopped against an up-to-date site feed. (new Date reads
+  // the wall-clock time as local here, which is what an age needs.)
+  const stale = siteIsFresh && Date.now() - new Date(post.date).getTime() > GIVE_UP_AFTER;
+  return stale ? { status: 'failed', error: STOPPED } : { status: 'publishing' };
 }
 
-const fromLibrary = (post, record) => ({
+const fromLibrary = (post, record, siteIsFresh) => ({
   id: post.id,
   title: post.title,
   description: post.description || '',
   date: parseDate(post.date),
   location: post.location || '',
   topics: post.topics || [],
-  status: libraryStatus(post, record),
-  error: record?.state === 'failed' ? record.error : '',
+  error: '',
+  ...libraryState(post, record, siteIsFresh),
   photos: (post.photos || []).map((photo) => ({
     source: 'library',
     file: photo.file,
@@ -73,9 +87,9 @@ const fromLibrary = (post, record) => ({
 });
 
 /** Newest first. Posts with no usable photo are left out. */
-export function mergePosts(sitePosts = [], libraryPosts = [], records = {}) {
+export function mergePosts(sitePosts = [], libraryPosts = [], records = {}, { siteIsFresh = false } = {}) {
   const byId = new Map();
-  for (const post of libraryPosts) byId.set(post.id, fromLibrary(post, records[post.id]));
+  for (const post of libraryPosts) byId.set(post.id, fromLibrary(post, records[post.id], siteIsFresh));
   for (const post of sitePosts) byId.set(post.id, fromSite(post));
   return [...byId.values()]
     .filter((post) => post.photos.length && !Number.isNaN(post.date.getTime()))

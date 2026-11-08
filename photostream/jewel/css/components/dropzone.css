@@ -1,5 +1,5 @@
 /* Drop zone — one image, by drag-and-drop or the native picker, with a
-   preview you can replace or remove. Behaviour: js/components/dropzone.js.
+   preview you can replace or remove. Behavior: js/components/dropzone.js.
    The corner carries the knockout lines instead of a heavy dashed border.
 
    <div class="dropzone knockout" data-component="dropzone" data-max-size="20">
@@ -62,7 +62,7 @@
   text-align: center;
   cursor: pointer;
 }
-.dropzone__empty svg { width: 1.75rem; height: 1.75rem; color: var(--text-muted); margin-bottom: var(--space-2); }
+.dropzone__empty svg { width: var(--icon-lg); height: var(--icon-lg); color: var(--text-muted); margin-bottom: var(--space-2); }
 .dropzone__title { font-size: var(--text-base); color: var(--text-default); }
 .dropzone__title u {
   text-decoration-thickness: var(--hairline);
@@ -89,3 +89,15 @@
   align-items: center;
   padding: 0 var(--space-3) var(--space-3);
 }
+
+/* Pressed and disabled. Disable the input: <input … disabled>. */
+.dropzone__empty:active { background: var(--state-pressed-fill); }
+.dropzone:has(.dropzone__input:disabled) {
+  --dropzone-border: var(--field-border);
+  border-style: dashed;
+  background: transparent;
+  opacity: var(--state-disabled-opacity);
+}
+.dropzone:has(.dropzone__input:disabled) .dropzone__empty { cursor: not-allowed; }
+.dropzone:has(.dropzone__input:disabled) .dropzone__empty:active { background: none; }
+.dropzone:has(.dropzone__input:disabled) .dropzone__title u { color: inherit; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }

@@ -14,7 +14,7 @@
 
   display: block;
   width: 100%;
-  min-height: 2.75rem;                /* 44px touch target */
+  min-height: var(--control-h-touch);   /* 44px touch target */
   margin: 0;
   padding: var(--input-pad-y) var(--input-pad-x);
   font: inherit;

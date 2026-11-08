@@ -1,0 +1,33 @@
+/* Inter, bundled — an optional alternative to Google Fonts.
+   Link it before jewel.css when a page can't load fonts from Google
+   (an intranet, a strict content security policy, or offline use):
+
+     <link rel="stylesheet" href="css/fonts.css">
+     <link rel="stylesheet" href="css/jewel.css">
+
+   Then leave out the three fonts.googleapis.com / fonts.gstatic.com
+   lines. The files are Inter 4 as a variable font (weights 100–900 and
+   optical sizes 14–32, like the Google Fonts link), cut to Latin and
+   Latin Extended: about 190KB, and a page downloads only the part it uses.
+   Inter is © The Inter Project Authors, under the SIL Open Font License
+   (fonts/OFL.txt). Files from Fontsource (@fontsource-variable/inter 5.2.5). */
+
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(../fonts/inter-latin-opsz-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(../fonts/inter-latin-ext-opsz-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}

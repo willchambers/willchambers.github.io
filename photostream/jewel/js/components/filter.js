@@ -47,7 +47,7 @@ Jewel.register('filter', (group) => {
 
   group.addEventListener('click', (e) => {
     const button = e.target.closest('[data-filter]');
-    if (!button) return;
+    if (!button || button.disabled || group.getAttribute('aria-disabled') === 'true') return;
     apply(button.dataset.filter);
     const hash = button.dataset.filter === '*' ? '' : `#tag=${button.dataset.filter}`;
     history.replaceState(null, '', location.pathname + location.search + hash);

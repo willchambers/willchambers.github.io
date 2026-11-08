@@ -29,8 +29,9 @@
   transition: transform var(--duration-base) var(--ease-standard);
 }
 .index__row:hover .index__title { transform: translateX(var(--space-2)); }
+.index__row:active .index__title { color: var(--text-accent); }
 
-@media (max-width: 40rem) {
+@media (max-width: 40rem) {   /* below --bp-sm */
   .index__row { grid-template-columns: 2rem 1fr; }
   .index__row .label:last-child { grid-column: 2; }
 }
