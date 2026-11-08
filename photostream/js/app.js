@@ -56,7 +56,7 @@ function keepPlace(update) {
 // failures. News that arrives in the background is announced (status).
 const actionHTML = (action) => (action.href
   ? `<a class="btn btn--ghost" href="${esc(action.href)}">${esc(action.label)}</a>`
-  : `<button class="btn btn--ghost" type="button"${action.sheet ? ` data-sheet-open="${esc(action.sheet)}"` : ''}>${esc(action.label)}</button>`);
+  : `<button class="btn btn--ghost" type="button"${action.sheet ? ` data-sheet-open="${esc(action.sheet)}"` : ''}${action.posting ? ' data-show-posting' : ''}>${esc(action.label)}</button>`);
 
 const noticeHTML = ({ text, tone, role, action }) => `
   <div class="notice${tone ? ` notice--${tone}` : ''}"${role ? ` role="${role}"` : ''}>
@@ -69,14 +69,32 @@ let news = [];
 function renderNotices(notices) {
   news = news.filter((item) => item.until > Date.now());
   $('[data-stream-notices]').innerHTML = [...news, ...notices].map(noticeHTML).join('');
+  updateTopCard();
+}
+
+// The feed starts straight away. The card above it only appears when there's
+// a notice to show, or while a tag filter is on (with All to clear it).
+function updateTopCard() {
+  const filtering = location.hash.startsWith('#tag=');
+  $('[data-stream-filter]').hidden = !filtering;
+  $('.stream').hidden = !filtering && !$('[data-stream-notices]').children.length;
+}
+window.addEventListener('hashchange', updateTopCard);
+$('[data-stream-filter]').addEventListener('click', () => setTimeout(updateTopCard));
+
+// A link to one post (from the RSS feed) lands on that post.
+let landed = !location.hash.startsWith('#post-');
+function landOnPost() {
+  const post = !landed && document.getElementById(location.hash.slice(1));
+  if (!post) return;
+  landed = true;
+  post.scrollIntoView({ block: 'start' });
 }
 
 let filterPrint = '';
 let currentPosts = [];
 function renderFeed(posts) {
   currentPosts = posts;
-  const count = posts.length;
-  $('[data-stream-count]').textContent = `Photostream · ${count} ${count === 1 ? 'post' : 'posts'}`;
 
   const tags = tagsByRecency(posts);
   if (fingerprint(tags) !== filterPrint) {
@@ -101,6 +119,7 @@ function renderFeed(posts) {
   Jewel.mount($('#main'));
   // A filter chosen before the update (#tag=…) still applies.
   if (location.hash.startsWith('#tag=')) window.dispatchEvent(new HashChangeEvent('hashchange'));
+  landOnPost();
 
   const token = settings.token;
   if (token) observeLibraryImages(feed, (path) => libraryImageUrl(path, token));
@@ -145,15 +164,9 @@ function refresh() {
         const tokenProblem = [401, 403, 404].includes(library.reason?.status);
         notices.push({
           text: explain(library.reason), tone: 'error', role: 'status',
-          action: tokenProblem ? { label: 'Open Settings', sheet: 'settings' } : null,
+          action: tokenProblem ? { label: 'Open Settings', sheet: 'settings', posting: true } : null,
         });
       }
-    }
-    if (!token) {
-      notices.push({
-        text: 'Showing published photos only. Connect GitHub to see your private library too.',
-        action: { label: 'Connect GitHub', sheet: 'settings' },
-      });
     }
 
     const sitePosts = site.status === 'fulfilled' ? site.value : savedSite || [];
@@ -269,6 +282,7 @@ registerServiceWorker({
     }));
     notice.querySelector('button').addEventListener('click', () => location.reload());
     $('[data-stream-notices]').prepend(notice);
+    updateTopCard();
   },
 });
 

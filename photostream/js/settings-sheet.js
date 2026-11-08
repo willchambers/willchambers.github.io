@@ -53,7 +53,18 @@ export function initSettings({ onChange }) {
       ? 'On. Claude drafts alt text for each new photo.'
       : 'Off. Alt text starts from the title instead; you can always write your own.';
     forgetKey.hidden = !hasKey;
+    document.querySelectorAll('[data-owner-only]').forEach((el) => { el.hidden = !connected; });
   };
+
+  // The GitHub form is only for the person who posts, so it stays out of the
+  // way until "Posting access" (or a token problem in the feed) asks for it.
+  const posting = sheet.querySelector('[data-posting-section]');
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('[data-show-posting]')) return;
+    posting.hidden = false;
+    posting.scrollIntoView({ block: 'start' });
+  });
+  sheet.addEventListener('jewel:sheetclose', () => { posting.hidden = true; });
 
   form.addEventListener('jewel:submit', (e) => {
     const token = String(e.detail.formData.get('token') || '').trim();

@@ -58,6 +58,7 @@
   "jewel/css/jewel.css",
   "jewel/css/tokens.css",
   "jewel/css/utilities.css",
+  "jewel/js/components/code.js",
   "jewel/js/components/dropzone.js",
   "jewel/js/components/filter.js",
   "jewel/js/components/form.js",
