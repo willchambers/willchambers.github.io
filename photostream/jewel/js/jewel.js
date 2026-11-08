@@ -2,6 +2,8 @@
    - Jewel.theme: get/set the page theme; persisted, defaults to the OS.
    - Jewel.register(name, init): component registry. Every element with
      data-component="<name>" is passed to init(el) once the DOM is ready.
+   - Jewel.float(layer, anchor, options): shows a menu, calendar or list
+     next to its anchor in the top layer, so no panel can clip it.
 
    Load order (all with `defer`, which runs them in document order before
    DOMContentLoaded):
@@ -65,9 +67,56 @@
 
   document.addEventListener('DOMContentLoaded', () => { ready = true; mount(); });
 
+  /* ---- Floating layers ---------------------------------------------------
+     Menus, calendars and suggestion lists open in the top layer (popover),
+     so a content panel's knockout mask or overflow can't clip them, and are
+     placed next to their anchor with position: fixed. They flip above the
+     anchor when there's no room below. Without popover support they fall
+     back to their CSS position (absolute, under the anchor).
+     options: align 'start' | 'end' | 'center', width 'min' (at least the anchor's) |
+     'match' (exactly the anchor's) | null.
+     Returns close(), which hides the layer and stops tracking. */
+  function float(layer, anchor, { align = 'start', width = null } = {}) {
+    const top = typeof layer.showPopover === 'function';
+    layer.hidden = false;
+    if (!top) return () => { layer.hidden = true; };
+    if (!layer.hasAttribute('popover')) layer.setAttribute('popover', 'manual');
+    layer.classList.add('is-floating');
+    if (!layer.matches(':popover-open')) layer.showPopover();
+    const gap = parseFloat(getComputedStyle(root).getPropertyValue('--space-1')) * parseFloat(getComputedStyle(root).fontSize) || 4;
+    const edge = gap * 2;
+    const place = () => {
+      const a = anchor.getBoundingClientRect();
+      if (width === 'min') layer.style.minWidth = `${a.width}px`;
+      if (width === 'match') layer.style.width = `${a.width}px`;
+      const r = layer.getBoundingClientRect();
+      const below = a.bottom + gap + r.height <= innerHeight || innerHeight - a.bottom >= a.top;
+      let y = below ? a.bottom + gap : a.top - gap - r.height;
+      // Taller than the space on either side (a calendar on a phone): keep it on screen.
+      y = Math.max(edge, Math.min(y, innerHeight - r.height - edge));
+      let x = align === 'end' ? a.right - r.width
+        : align === 'center' ? a.left + (a.width - r.width) / 2
+        : a.left;
+      x = Math.max(edge, Math.min(x, innerWidth - r.width - edge));
+      layer.style.top = `${Math.round(y)}px`;
+      layer.style.left = `${Math.round(x)}px`;
+      layer.dataset.side = below ? 'bottom' : 'top';
+    };
+    place();
+    addEventListener('scroll', place, true);
+    addEventListener('resize', place);
+    return () => {
+      removeEventListener('scroll', place, true);
+      removeEventListener('resize', place);
+      if (layer.matches(':popover-open')) layer.hidePopover();
+      layer.hidden = true;
+    };
+  }
+
   window.Jewel = {
     theme,
     register,
+    float,
     /** Call after inserting new markup (e.g. fetched content) to wire it up. */
     mount,
     reducedMotion: matchMedia('(prefers-reduced-motion: reduce)'),

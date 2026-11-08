@@ -8,17 +8,17 @@
        <span class="name__part">…</span>
      </div>
 
-   Behaviour (optional)
+   Behavior (optional)
      If it needs JS, add data-component="<name>" to the root element and
      register it in js/components/<name>.js (see js/components/_template.js).
 
    Rules that keep it working in every theme and scope:
-   - Colours: only --panel-*, --text-*, --media-bg. Never hex values or
+   - Colors: only --panel-*, --text-*, --media-bg. Never hex values or
      --color-* primitives; those don't respond to glass/solid.
    - Sizes: --space-*, --text-*, --radius-*, --hairline. Nothing magic.
    - Motion: --duration-* and --ease-*. Reduced motion is handled globally.
    - Naming: BEM-ish. Block .name, part .name__part, variant .name--variant.
-   - Customisation: expose a local custom property (--name-*) with a token
+   - Customization: expose a local custom property (--name-*) with a token
      default, so a page can tweak one instance without new selectors.
    ========================================================================== */
 

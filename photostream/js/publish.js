@@ -124,21 +124,26 @@ export async function libraryPhoto(post, token) {
 
 /**
  * Publish a library post to the site: a branch, a pull request, a squash
- * merge, and the branch tidied away. Safe to call again after a failure:
- * it picks up the pull request it already opened.
+ * merge, and the branch tidied away. Safe to call again after a failure or
+ * an interruption: it picks up the pull request it already opened. `full` is
+ * the photo, or a function that fetches it if it turns out to be needed.
  */
 export async function publishToSite({ post, full, token }) {
   const site = config.site;
   const branch = `photostream/${post.id}`;
-  publishing.set(post.id, { state: 'publishing', title: post.title, error: null });
+  publishing.begin(post.id);
+  // A fresh attempt: the clock and any earlier outcome start over.
+  publishing.set(post.id, { state: 'publishing', title: post.title, error: null, merged: false, since: Date.now() });
   try {
-    const [existing] = await findPulls(site, token, branch);
+    // A pull request someone closed without merging doesn't count.
+    const pulls = await findPulls(site, token, branch);
+    const existing = pulls.find((pull) => pull.state === 'open' || pull.merged_at);
     let number = existing?.number;
     if (!existing?.merged_at) {
       if (!existing) {
         // A branch left by an earlier attempt that didn't get as far as a PR.
         await deleteBranch(site, token, branch).catch(() => {});
-        const photoSha = await createBlob(site, token, full);
+        const photoSha = await createBlob(site, token, typeof full === 'function' ? await full() : full);
         await commitToNewBranch(site, token, {
           branch,
           message: `Add Photo set “${post.id}” from Photostream`,
@@ -163,5 +168,7 @@ export async function publishToSite({ post, full, token }) {
     const error = err.status === undefined ? err.message : explainWrite(err, site);
     publishing.set(post.id, { state: 'failed', error });
     throw new Error(error);
+  } finally {
+    publishing.end(post.id);
   }
 }

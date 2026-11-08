@@ -1,6 +1,6 @@
 /* ==========================================================================
-   Animated Jewel background
-   One fixed element, layered asymmetric radial gradients. Colours and
+   Lava lamp animation (the animated Jewel background)
+   One fixed element, layered asymmetric radial gradients. Colors and
    origins are @property-registered (see tokens.css) so they interpolate.
    Tune with --bg-speed and --bg-intensity.
 
@@ -14,7 +14,7 @@
 .jewel-bg {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: var(--z-below);
 }
 
 /* Every surface that paints the gradient. .jewel-cap is a viewport-sized
@@ -30,13 +30,13 @@
   background-repeat: no-repeat;
   filter: blur(var(--bg-blur));
 
-  /* Each colour is mixed toward transparent by intensity so the base shows
+  /* Each color is mixed toward transparent by intensity so the base shows
      through as intensity drops. Ellipse sizes and origins are deliberately
      uneven. */
   --i: calc(var(--bg-intensity) * 100%);
   background-image:
-    /* Dim: a flat scrim over the colour layers, set per theme (--bg-dim). */
-    linear-gradient(rgb(11 11 14 / var(--bg-dim)), rgb(11 11 14 / var(--bg-dim))),
+    /* Dim: a flat scrim over the color layers, set per theme (--bg-dim). */
+    linear-gradient(color-mix(in srgb, var(--color-scrim) calc(var(--bg-dim) * 100%), transparent) 0 0),
     radial-gradient(ellipse 58% 72% at var(--bg-x1) var(--bg-y1),
       color-mix(in oklab, var(--bg-c1) var(--i), transparent) 0%, transparent 68%),
     radial-gradient(ellipse 44% 56% at var(--bg-x2) var(--bg-y2),
@@ -46,7 +46,7 @@
     radial-gradient(ellipse 38% 64% at var(--bg-x4) var(--bg-y4),
       color-mix(in oklab, var(--bg-c4) var(--i), transparent) 0%, transparent 74%),
     radial-gradient(ellipse 120% 90% at 50% 110%,
-      color-mix(in oklab, var(--jewel-orange) calc(var(--i) * 0.55), transparent) 0%, transparent 60%);
+      color-mix(in oklab, var(--bg-5) calc(var(--i) * 0.55), transparent) 0%, transparent 60%);
 
   animation:
     jewel-hue-1 var(--bg-speed) linear infinite,
@@ -66,38 +66,39 @@
   position: fixed;
   inset: 0 0 auto 0;
   height: var(--sticky-offset);
-  z-index: 9; /* above content, below the header (10) */
+  z-index: var(--z-cap); /* above content, below the header */
   background-position: top left;
 }
 
-/* Colour cycles: each slot walks the five Jewel colours, offset by one step. */
+/* Color cycles: each slot walks the palette's five colors (--bg-1…5 in
+   tokens.css), offset by one step. */
 @keyframes jewel-hue-1 {
-  0%, 100% { --bg-c1: #6D28D9; }
-  20% { --bg-c1: #C026D3; }
-  40% { --bg-c1: #0F9488; }
-  60% { --bg-c1: #DC2626; }
-  80% { --bg-c1: #EA580C; }
+  0%, 100% { --bg-c1: var(--bg-1); }
+  20% { --bg-c1: var(--bg-2); }
+  40% { --bg-c1: var(--bg-3); }
+  60% { --bg-c1: var(--bg-4); }
+  80% { --bg-c1: var(--bg-5); }
 }
 @keyframes jewel-hue-2 {
-  0%, 100% { --bg-c2: #C026D3; }
-  20% { --bg-c2: #0F9488; }
-  40% { --bg-c2: #DC2626; }
-  60% { --bg-c2: #EA580C; }
-  80% { --bg-c2: #6D28D9; }
+  0%, 100% { --bg-c2: var(--bg-2); }
+  20% { --bg-c2: var(--bg-3); }
+  40% { --bg-c2: var(--bg-4); }
+  60% { --bg-c2: var(--bg-5); }
+  80% { --bg-c2: var(--bg-1); }
 }
 @keyframes jewel-hue-3 {
-  0%, 100% { --bg-c3: #0F9488; }
-  20% { --bg-c3: #DC2626; }
-  40% { --bg-c3: #EA580C; }
-  60% { --bg-c3: #6D28D9; }
-  80% { --bg-c3: #C026D3; }
+  0%, 100% { --bg-c3: var(--bg-3); }
+  20% { --bg-c3: var(--bg-4); }
+  40% { --bg-c3: var(--bg-5); }
+  60% { --bg-c3: var(--bg-1); }
+  80% { --bg-c3: var(--bg-2); }
 }
 @keyframes jewel-hue-4 {
-  0%, 100% { --bg-c4: #DC2626; }
-  20% { --bg-c4: #EA580C; }
-  40% { --bg-c4: #6D28D9; }
-  60% { --bg-c4: #C026D3; }
-  80% { --bg-c4: #0F9488; }
+  0%, 100% { --bg-c4: var(--bg-4); }
+  20% { --bg-c4: var(--bg-5); }
+  40% { --bg-c4: var(--bg-1); }
+  60% { --bg-c4: var(--bg-2); }
+  80% { --bg-c4: var(--bg-3); }
 }
 
 /* Drift: two groups on different periods so the loop never looks mirrored. */
@@ -118,5 +119,9 @@
 /* Reduced motion: no animation; the registered initial values give a
    composed, static gradient. */
 @media (prefers-reduced-motion: reduce) {
-  .jewel-bg, .jewel-cap { animation: none; }
+  .jewel-bg, .jewel-cap {
+    animation: none;
+    /* The registered initial values are Jewel's own colors; follow the palette. */
+    --bg-c1: var(--bg-1); --bg-c2: var(--bg-2); --bg-c3: var(--bg-3); --bg-c4: var(--bg-4);
+  }
 }

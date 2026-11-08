@@ -63,7 +63,7 @@
   margin-inline: auto;
 }
 /* Optional second line from data-description. The first line (the caption)
-   steps up to the default colour so the two read as title and text. */
+   steps up to the default color so the two read as title and text. */
 .lightbox__caption:has(.lightbox__description) { color: var(--text-default); }
 .lightbox__description {
   display: block;

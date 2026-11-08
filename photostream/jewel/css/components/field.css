@@ -1,5 +1,5 @@
 /* Field — label, control, hint, error and counter, plus form layout.
-   Behaviour (validation, counters, auto-grow): js/components/form.js.
+   Behavior (validation, counters, auto-grow): js/components/form.js.
 
    <form class="form" data-component="form" novalidate>
      <div class="field">
@@ -20,12 +20,12 @@
 
 /* ---- Form layout ------------------------------------------------------- */
 .form {
-  --form-gap: var(--space-5);
+  --form-gap: var(--density-gap);
   display: grid;
   gap: var(--form-gap);
 }
 
-/* A labelled group, separated from the one above by a hairline. */
+/* A labeled group, separated from the one above by a hairline. */
 .form__group {
   display: grid;
   gap: var(--form-gap);
@@ -45,7 +45,7 @@
 
 /* Two columns on wide screens. */
 .form__row { display: grid; gap: var(--form-gap); }
-@media (min-width: 48rem) {
+@media (min-width: 48rem) {   /* --bp-md */
   .form__row--2 { grid-template-columns: 1fr 1fr; }
 }
 
@@ -69,7 +69,7 @@
 .field__label {
   font-size: var(--text-xs);
   font-weight: var(--weight-medium);
-  line-height: 1.4;
+  line-height: var(--leading-label);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   color: var(--text-muted);
@@ -102,7 +102,7 @@
 .field__badge {
   margin-left: var(--space-2);
   padding: 0.1em 0.5em;
-  font-size: 0.625rem;
+  font-size: var(--text-2xs);
   letter-spacing: var(--tracking-label);
   color: var(--text-accent);
   border: var(--hairline) solid currentColor;

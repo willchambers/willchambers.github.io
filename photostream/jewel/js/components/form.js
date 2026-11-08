@@ -8,7 +8,7 @@
      <p class="form__status" role="status"></p>
    </form>
 
-   Behaviour
+   Behavior
    - Validates each control on blur (after the first edit) and every control
      on submit, then focuses the first error.
    - Counters: add data-counter to an input/textarea with maxlength and a

@@ -90,7 +90,7 @@ Jewel.register('dropzone', (root) => {
   input.addEventListener('change', () => {
     const f = input.files?.[0];
     if (f) take(f, 'user');
-    else if (file) assign(file);          // picker cancelled: keep the current photo
+    else if (file) assign(file);          // picker canceled: keep the current photo
   });
 
   // Drag and drop. A counter handles dragenter/leave firing on children.

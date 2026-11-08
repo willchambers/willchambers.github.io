@@ -1,5 +1,5 @@
 /* Video — a figure whose media is a muted, looping clip with a
-   play/pause control. Behaviour: js/components/video.js.
+   play/pause control. Behavior: js/components/video.js.
    <figure class="figure video" data-component="video">
      <div class="figure__media">
        <video loop muted playsinline preload="metadata"><source src="…"></video>

@@ -21,6 +21,7 @@
    <main class="panel-stack"><section class="panel panel--pad">…</section>…</main> */
 .panel-stack {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);   /* wide content (code, tables) scrolls inside its panel, never widens the page */
   gap: var(--panel-stack-gap, var(--space-4));
   margin-block: var(--space-4) var(--space-8);
 }

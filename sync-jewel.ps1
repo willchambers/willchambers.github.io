@@ -9,7 +9,7 @@
 # instructions say.
 
 param(
-  [string]$Source = (Join-Path $env:USERPROFILE 'OneDrive\Documents\Claude files\jewel-design-system'),
+  [string]$Source = (Join-Path $env:USERPROFILE 'code\jewel-design-system'),
   [string]$Ref = 'HEAD'
 )
 
