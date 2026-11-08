@@ -11,6 +11,7 @@
   <!-- Home screen. The status bar is see-through, so the page runs under it
        (css/app.css keeps content clear with safe-area insets). -->
   <link rel="manifest" href="manifest.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="Will Chambers's photos" href="https://willchambers.github.io/photos.xml">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -45,6 +46,7 @@
   <script src="jewel/js/components/dropzone.js" defer></script>
   <script src="jewel/js/components/post-form.js" defer></script>
   <script src="jewel/js/components/sheet.js" defer></script>
+  <script src="jewel/js/components/code.js" defer></script>
   <script src="jewel/js/components/filter.js" defer></script>
   <script src="jewel/js/components/lightbox.js" defer></script>
   <script src="jewel-candidates/js/components/carousel.js" defer></script>
@@ -62,7 +64,11 @@
           <a class="btn btn--ghost btn--icon" href="https://willchambers.github.io/photos/" aria-label="Open the photos page on willchambers.github.io">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8M17 14v5H5V7h5"/></svg>
           </a>
-          <button class="btn btn--ghost btn--icon" type="button" data-sheet-open="settings" aria-label="Settings">
+          <button class="btn btn--ghost btn--icon" type="button" data-sheet-open="settings" aria-label="Follow with RSS">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 11a8 8 0 0 1 8 8M5 5a14 14 0 0 1 14 14"/><circle cx="6" cy="18" r="1"/></svg>
+          </button>
+          <!-- Owner only: js/settings-sheet.js shows it once GitHub is connected. -->
+          <button class="btn btn--ghost btn--icon" type="button" data-sheet-open="settings" data-owner-only aria-label="Settings" hidden>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 8h9M17 8h3M4 16h3M11 16h9"/><circle cx="15" cy="8" r="2"/><circle cx="9" cy="16" r="2"/></svg>
           </button>
         </div>
@@ -70,11 +76,11 @@
     </header>
 
     <main id="main" class="panel-stack">
-      <section class="panel panel--pad stream">
-        <h1 class="visually-hidden">Photostream</h1>
-        <p class="label" data-stream-count>Photostream</p>
+      <h1 class="visually-hidden">Photostream</h1>
+      <!-- Only shows when there's something to say, or while a tag filter is on. -->
+      <section class="panel panel--pad stream" hidden>
         <div class="notices" data-stream-notices></div>
-        <div data-stream-filter></div>
+        <div data-stream-filter hidden></div>
       </section>
 
       <div id="feed" class="panel-stack feed" data-component="lightbox" aria-label="Posts"></div>
@@ -170,7 +176,19 @@
         </button>
       </header>
       <div class="sheet__body settings">
-        <section class="settings__section" aria-labelledby="github-title">
+        <section class="settings__section" aria-labelledby="follow-title">
+          <h3 class="h4" id="follow-title">Follow</h3>
+          <p class="caption">Paste this link into any RSS reader to get new photos as they're posted.</p>
+          <figure class="code code--wrap" data-component="code">
+            <figcaption class="code__head">
+              <span class="code__lang">RSS feed</span>
+              <button class="code__copy" type="button">Copy</button>
+            </figcaption>
+            <pre class="code__body" tabindex="0"><code>https://willchambers.github.io/photos.xml</code></pre>
+          </figure>
+        </section>
+        <!-- Only for the person who posts. Opened by "Posting access" below. -->
+        <section class="settings__section" aria-labelledby="github-title" data-posting-section hidden>
           <h3 class="h4" id="github-title">GitHub</h3>
           <p class="caption" data-connection></p>
           <form class="form" id="token-form" data-component="form" novalidate data-success="Connected." aria-labelledby="github-title">
@@ -187,7 +205,7 @@
             </div>
           </form>
         </section>
-        <section class="settings__section" aria-labelledby="claude-title">
+        <section class="settings__section" aria-labelledby="claude-title" data-owner-only hidden>
           <h3 class="h4" id="claude-title">Alt text drafts</h3>
           <p class="caption" data-anthropic-connection></p>
           <form class="form" id="anthropic-form" data-component="form" novalidate data-success="Saved." aria-labelledby="claude-title">
@@ -207,6 +225,7 @@
         <section class="settings__section" aria-labelledby="about-title">
           <h3 class="h4" id="about-title">About</h3>
           <p class="caption" data-version></p>
+          <button class="btn btn--text" type="button" data-show-posting>Posting access</button>
         </section>
       </div>
     </div>

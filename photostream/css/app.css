@@ -17,7 +17,7 @@ html { -webkit-tap-highlight-color: transparent; }
 /* ---- Top panel: count, notices, tag filter ------------------------------- */
 /* The tag filter is Jewel's .filter--scroll: one row that scrolls sideways,
    edge to edge, so a long list of tags never pushes the feed down. */
-.stream { display: grid; gap: var(--space-4); }
+.stream:not([hidden]) { display: grid; gap: var(--space-4); }
 
 /* ---- Feed ----------------------------------------------------------------- */
 /* The feed is a nested panel-stack, so each post gets the content-panel
@@ -55,5 +55,6 @@ html { -webkit-tap-highlight-color: transparent; }
 
 /* ---- Settings sheet ------------------------------------------------------- */
 .settings { display: grid; gap: var(--space-7); align-content: start; }
-.settings__section { display: grid; gap: var(--space-3); }
+.settings__section:not([hidden]) { display: grid; gap: var(--space-3); }
 .settings__section .form { margin-top: var(--space-2); }
+.settings__section .btn--text { justify-self: start; }

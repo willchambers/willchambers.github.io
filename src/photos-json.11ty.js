@@ -5,22 +5,11 @@
 // for <img> tags (see eleventy.config.js), so the app can use srcset and never
 // has to download the full-size upload on a phone.
 
-import Image from "@11ty/eleventy-img";
 import path from "node:path";
-
-// Keep in step with eleventyImageTransformPlugin in eleventy.config.js, so
-// both write (and share) the same files.
-const imageOptions = {
-  widths: [480, 960, 1600, 2400],
-  formats: ["webp"],
-  outputDir: "_site/img/",
-  urlPath: "/img/",
-};
+import { photoSizes } from "./_includes/photo-sizes.js";
 
 async function sizesFor(src) {
-  // "/assets/uploads/My photo.webp" → "src/assets/uploads/My photo.webp"
-  const file = `src${decodeURI(src)}`;
-  const { webp } = await Image(file, imageOptions);
+  const webp = await photoSizes(src);
   const largest = webp[webp.length - 1];
   return {
     src: largest.url,
