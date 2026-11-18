@@ -55,6 +55,7 @@ These live in `jewel-candidates/` and follow Jewel's component template: resolve
 | **Filling a form from a saved draft** | There's no way to put values back into a Jewel form (counters, tags, suggested alt text, a processed photo) other than setting each control and firing `input`. Photostream does that to restore a draft. A `form.jewelForm.fill(data)` would make it one call. |
 | **Fab over content** | The fixed `.fab` can sit on top of a right-aligned action near the bottom of the screen (a post's **Try again**) until you scroll a little. Hiding it while scrolling down, as many apps do, would be a reasonable option. |
 | **Long lists of panels** | `content-visibility: auto` with `contain-intrinsic-block-size` keeps a long feed of content panels fast. Only the block size can be estimated: `contain-intrinsic-size` with one value also fixes the width and breaks the layout. Worth a line in the README's performance notes. |
+| **`toast`** (candidate in Photostream) | "Photostream has been updated · Reload" sat in the feed like a post. A toast floats it over the page instead: Jewel's `.notice` with a solid surface and `--shadow-float`, fixed at the bottom above the fab, on the `--z-toast` level that Jewel already reserves but doesn't use. Dismiss button included; no timeout while it has an action. |
 
 ## Tooling
 
