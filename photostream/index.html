@@ -78,6 +78,9 @@
     </main>
   </div>
 
+  <!-- Floating news, such as "Photostream has been updated" (js/app.js). -->
+  <div class="toasts" data-toasts data-panel="solid"></div>
+
   <!-- New post (js/composer.js). Hidden until GitHub is connected. -->
   <button class="fab" type="button" aria-label="New post" data-sheet-open="post-sheet" hidden>
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
@@ -141,7 +144,7 @@
           <div class="field">
             <label class="field__label" for="post-alt">Alt text <span class="field__optional">(optional)</span> <span class="field__badge" hidden>Suggested</span></label>
             <textarea class="input" id="post-alt" name="alt" rows="2" aria-describedby="post-alt-hint" placeholder="Describe the photo for people who can't see it"></textarea>
-            <p class="field__hint" id="post-alt-hint">A suggestion appears here once the photo is ready. Edit it or clear it; it never holds up posting.</p>
+            <p class="field__hint" id="post-alt-hint">It starts from the title. Edit it or clear it; it never holds up posting.</p>
           </div>
 
           <p class="form__error" role="alert" hidden></p>
@@ -191,23 +194,6 @@
             <div class="form__actions">
               <button class="btn btn--text" type="button" data-forget hidden>Remove token</button>
               <button class="btn" type="submit" data-busy-label="Checking…">Save token</button>
-            </div>
-          </form>
-        </section>
-        <section class="settings__section" aria-labelledby="claude-title" data-owner-only hidden>
-          <h3 class="h4" id="claude-title">Alt text drafts</h3>
-          <p class="caption" data-anthropic-connection></p>
-          <form class="form" id="anthropic-form" data-component="form" novalidate data-success="Saved." aria-labelledby="claude-title">
-            <div class="field">
-              <label class="field__label" for="anthropic-key">Anthropic API key <span class="field__optional">(optional)</span></label>
-              <input class="input" id="anthropic-key" name="key" type="password" required autocomplete="off" autocapitalize="off" spellcheck="false" data-msg-required="Paste your API key." aria-describedby="anthropic-hint">
-              <p class="field__hint" id="anthropic-hint">With a key, Claude drafts alt text from each photo while you write the post. The resized photo is sent to Anthropic for that, private posts included, and each draft costs a little. <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">Make a key in the Anthropic Console</a>. It stays on this phone and is only ever sent to Anthropic.</p>
-            </div>
-            <p class="form__error" role="alert" hidden></p>
-            <p class="form__status" role="status" hidden></p>
-            <div class="form__actions">
-              <button class="btn btn--text" type="button" data-forget-anthropic hidden>Remove key</button>
-              <button class="btn" type="submit" data-busy-label="Checking…">Save key</button>
             </div>
           </form>
         </section>

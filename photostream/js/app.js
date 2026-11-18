@@ -273,16 +273,26 @@ initComposer({
 });
 showFab();
 
-// A new release took over. Reload quietly if nobody's looking; otherwise ask.
+// A new release took over. Reload quietly if nobody's looking; otherwise ask,
+// in a toast over the feed (jewel-candidates/css/components/toast.css).
 registerServiceWorker({
   onUpdate: () => {
     if (document.visibilityState === 'hidden') return location.reload();
-    const notice = fromHTML(noticeHTML({
-      text: 'Photostream has been updated.', tone: 'accent', role: 'status', action: { label: 'Reload' },
-    }));
-    notice.querySelector('button').addEventListener('click', () => location.reload());
-    $('[data-stream-notices]').prepend(notice);
-    updateTopCard();
+    const toasts = $('[data-toasts]');
+    if (toasts.querySelector('[data-update-toast]')) return;
+    const toast = fromHTML(`
+      <div class="notice notice--accent toast" role="status" data-update-toast>
+        <p class="notice__text">Photostream has been updated.</p>
+        <div class="notice__actions">
+          <button class="btn btn--ghost" type="button" data-reload>Reload</button>
+          <button class="btn btn--ghost btn--icon" type="button" aria-label="Dismiss" data-toast-close>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+          </button>
+        </div>
+      </div>`);
+    toast.querySelector('[data-reload]').addEventListener('click', () => location.reload());
+    toast.querySelector('[data-toast-close]').addEventListener('click', () => toast.remove());
+    toasts.append(toast);
   },
 });
 
