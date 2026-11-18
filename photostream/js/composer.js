@@ -6,8 +6,9 @@
 // - Tags and places are suggested from recent posts.
 // - The draft (fields and the ready photo) is kept on the phone until it's
 //   posted, so closing the app doesn't lose it.
-// - Post saves to the library, closes the sheet, and publishing (if it's
-//   on) carries on in the background with its own status on the post.
+// - Post saves to the library, closes the sheet, and publishing to the site
+//   (every post goes there) carries on in the background with its own status
+//   on the post.
 
 import { draftAltText, plainAltText } from './alt-text.js';
 import { preparePhoto } from './image.js';
@@ -55,7 +56,7 @@ export function initComposer({ suggestions, onPosted, onPublished }) {
   const dropzone = form.querySelector('[data-component~="dropzone"]');
   const tagInput = form.querySelector('[data-component~="tag-input"]');
   const places = document.getElementById('recent-places');
-  const { title, description, location, alt, publish } = form.elements;
+  const { title, description, location, alt } = form.elements;
   const altHint = form.querySelector('#post-alt-hint');
   const plainHint = altHint.textContent;
 
@@ -132,7 +133,6 @@ export function initComposer({ suggestions, onPosted, onPublished }) {
     location: location.value,
     alt: alt.value,
     tags: tagInput.jewelTags?.get() || [],
-    publish: publish.checked,
     size,
   });
   let saveTimer = 0;
@@ -161,7 +161,6 @@ export function initComposer({ suggestions, onPosted, onPublished }) {
     }
     if (saved.alt) Jewel.field.suggest(alt, saved.alt);
     if (saved.tags?.length) tagInput.jewelTags?.set(saved.tags);
-    publish.checked = saved.publish !== false;
     const ready = await draft.photo(saved.size);
     if (ready) usePhoto(ready);
     form.jewelForm.setStatus('Your unfinished post is back.');
@@ -195,7 +194,7 @@ export function initComposer({ suggestions, onPosted, onPublished }) {
       description: detail.description,
       location: detail.location,
       tags: detail.tags,
-      publish: detail.publish,
+      publish: true, // every post goes to the site and its RSS feed
       // Alt text never blocks posting; with none, the title stands in.
       alt: detail.alt || plainAltText({ title: detail.title, location: detail.location }),
     };
