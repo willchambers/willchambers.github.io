@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The photo feed moved to the photos site on 2026-11-18. GitHub Pages can't
+     send a real redirect for a feed, so readers get one item saying where it went. -->
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Will Chambers · Photos (moved)</title>
+    <link>https://willchambers.github.io/photos/</link>
+    <description>This feed has moved to https://willchambers.github.io/photos/photos.xml</description>
+    <language>en</language>
+    <atom:link href="https://willchambers.github.io/photos.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>This feed has moved</title>
+      <link>https://willchambers.github.io/photos/photos.xml</link>
+      <guid isPermaLink="false">https://willchambers.github.io/photos.xml#moved-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 14:00:00 GMT</pubDate>
+      <description><![CDATA[<p>New photos now post to a new feed. Subscribe to <a href="https://willchambers.github.io/photos/photos.xml">https://willchambers.github.io/photos/photos.xml</a> to keep getting them.</p>]]></description>
+    </item>
+  </channel>
+</rss>

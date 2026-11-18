@@ -1,15 +1,13 @@
 # willchambers.github.io
 
-Portfolio, photos and journal, built on the [Jewel design system](https://github.com/willchambers/jewel-design-system). It's a static site made with [Eleventy](https://www.11ty.dev/), hosted on GitHub Pages, and edited through a browser-based CMS at `/admin`.
+Design portfolio, built on the [Jewel design system](https://github.com/willchambers/jewel-design-system). It's a static site made with [Eleventy](https://www.11ty.dev/), hosted on GitHub Pages, and edited through a browser-based CMS at `/admin`.
 
 ## How it fits together
 
 ```
 src/                    content and templates (Eleventy input)
-  posts/                journal posts (Markdown)
   projects/             case studies (Markdown)
-  photos/               photo sets (front matter only)
-  photos-json.11ty.js   /photos.json, the feed Photostream reads
+  about.md              the About page
   _data/site.yml        title, URL, nav (edit by hand)
   _data/profile.yml     home page copy and links (edit in /admin)
   _includes/            layouts and partials (Liquid)
@@ -23,22 +21,13 @@ GAPS.md                 what the design system still needs
 
 Every push to `main` (including CMS saves) runs the workflow. It builds the site, resizes images, and publishes. That takes about a minute.
 
-## Adding photos and posts
+## Editing content
 
 1. Go to **https://willchambers.github.io/admin/**
 2. Choose **Sign In with Token** and paste a GitHub token (see below).
-3. **Photos › New Photo set**: add a title, a description, date, topics and one or more photos, each with alt text. Then **Save**.
-4. After about a minute, the photos are on `/photos` and the newest ones are on the home page.
+3. Edit **Projects**, or the home and About pages under **Site**. Then **Save**.
 
-Uploads are converted to WebP at 2400px or smaller in your browser before they're committed. HEIC photos from an iPhone work too.
-
-The description shows in the photo viewer on `/photos`. It's optional here so older sets still save, but Photostream always asks for one.
-
-### From Photostream
-
-[Photostream](https://github.com/willchambers/photostream) (private) is the iPhone app for posting photos. It keeps every post in its own private library. When a post is published, it opens a pull request here that adds the photo set to `src/photos/` and the photo to `src/assets/uploads/`, then merges it. The result is exactly what `/admin` would have made, so you can edit those sets here too.
-
-The app reads **`/photos.json`**, built by `src/photos-json.11ty.js`. It lists every photo set, newest first, with the same resized WebP copies the pages use.
+Uploads are converted to WebP at 2400px or smaller in your browser before they're committed.
 
 ### The token
 
@@ -68,4 +57,4 @@ npm run sync-jewel
 
 That copies Jewel's last **commit** into `jewel/` (uncommitted work in the Jewel folder is left out, and it warns if the commit isn't pushed yet). `npm run sync-jewel -- -Ref <commit>` copies a particular one. The parked light theme is left out. Then commit.
 
-When a component in `jewel-candidates/` is ready, move it into Jewel (see GAPS.md), sync, and delete the candidate.
+When a component in `jewel-candidates/` is ready, move it into Jewel (see GAPS.md), sync, and delete the candidate. The photos and journal sites keep copies of the candidates they use, so update those too.

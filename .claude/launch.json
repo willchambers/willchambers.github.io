@@ -12,6 +12,18 @@
       "runtimeExecutable": "node",
       "runtimeArgs": ["../photostream/dev/server.mjs"],
       "port": 8790
+    },
+    {
+      "name": "photos",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "../photos", "start"],
+      "port": 8081
+    },
+    {
+      "name": "journal",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "../journal", "start"],
+      "port": 8082
     }
   ]
 }
