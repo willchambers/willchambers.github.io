@@ -1,4 +1,0 @@
-{
-  "layout": "layouts/post.liquid",
-  "permalink": "/journal/{{ page.fileSlug }}/"
-}
