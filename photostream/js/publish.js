@@ -155,7 +155,7 @@ export async function publishToSite({ post, full, token }) {
         const pr = await createPull(site, token, {
           title: `Add photo: ${post.title}`,
           head: branch,
-          body: `Posted from Photostream.\n\n> ${post.description}`,
+          body: `Posted from Photostream.${post.description ? `\n\n> ${post.description}` : ''}`,
         });
         number = pr.number;
         publishing.set(post.id, { pr: number });
