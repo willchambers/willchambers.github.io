@@ -12,6 +12,10 @@ export default function (eleventyConfig) {
     "admin": "admin",
     "jewel": "jewel",
     "jewel-candidates": "jewel-candidates",
+    // Old addresses from before photos moved to willchambers.github.io/photos/
+    // (2026-11-18): a redirect page for the app, and a "moved" photo feed.
+    "redirects/photostream": "photostream",
+    "redirects/photos.xml": "photos.xml",
   });
 
   // Every <img> in the built pages gets resized copies and a srcset. One format
