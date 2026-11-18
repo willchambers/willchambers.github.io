@@ -7,6 +7,7 @@
   "icons/icon-maskable-512.png",
   "icons/icon.svg",
   "jewel-candidates/css/components/carousel.css",
+  "jewel-candidates/css/components/toast.css",
   "jewel-candidates/css/jewel-candidates.css",
   "jewel-candidates/js/components/carousel.js",
   "jewel/VERSION",

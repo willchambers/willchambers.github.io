@@ -8,3 +8,4 @@
    ========================================================================== */
 
 @import url("components/carousel.css") layer(components);
+@import url("components/toast.css") layer(components);

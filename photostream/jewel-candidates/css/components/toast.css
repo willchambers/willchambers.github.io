@@ -1,0 +1,72 @@
+/* ==========================================================================
+   Component: Toast (candidate, found by Photostream)
+   A notice that floats over the page instead of sitting in it, for news
+   that isn't about any one thing on screen: "Photostream has been updated ·
+   Reload". It reuses Jewel's .notice for the box, the tone edge and the
+   actions; .toast only gives it a glass surface and a place.
+
+   Markup (one .toasts per page, outside <main>)
+     <div class="toasts" data-toasts data-panel="solid">
+       <div class="notice notice--accent toast" role="status">
+         <p class="notice__text">Photostream has been updated.</p>
+         <div class="notice__actions">
+           <button class="btn btn--ghost" type="button">Reload</button>
+           <button class="btn btn--ghost btn--icon" type="button" aria-label="Dismiss" data-toast-close>
+             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+           </button>
+         </div>
+       </div>
+     </div>
+
+   Surface: --panel-bg. Glass is too faint over photos, so give the stack
+   data-panel="solid" (as Photostream does) unless it floats over plain
+   background.
+
+   Placement: fixed at the bottom, centred, clear of the iPhone home
+   indicator. On a page with a floating action button (body.has-fab, the
+   .fab not hidden) the stack sits above the button instead of covering it.
+
+   Behavior: none of its own. The page adds a toast, and removes it on its
+   action or on Dismiss. A toast with an action stays until it's used or
+   dismissed; don't time those out. role="status" announces it without
+   moving focus.
+   ========================================================================== */
+
+.toasts {
+  --toast-offset: var(--space-5);
+  --toast-width: 28rem;
+
+  position: fixed;
+  left: calc(var(--toast-offset) + env(safe-area-inset-left, 0px));
+  right: calc(var(--toast-offset) + env(safe-area-inset-right, 0px));
+  bottom: calc(var(--toast-offset) + env(safe-area-inset-bottom, 0px));
+  z-index: var(--z-toast);
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  pointer-events: none;           /* the gaps between toasts don't block the page */
+}
+.toasts:empty { display: none; }
+
+/* Above the fab while it shows: its offset, its height, and a step of space. */
+.has-fab:has(.fab:not([hidden])) .toasts {
+  bottom: calc(var(--space-5) + var(--control-h-lg) + var(--space-3) + env(safe-area-inset-bottom, 0px));
+}
+
+.toast {
+  width: min(100%, var(--toast-width));
+  pointer-events: auto;
+  background: var(--panel-bg);
+  -webkit-backdrop-filter: var(--panel-backdrop);
+  backdrop-filter: var(--panel-backdrop);
+  box-shadow: inset 2px 0 0 var(--notice-tone), var(--shadow-float);   /* .notice's tone edge, lifted like a dropdown */
+  animation: toast-in var(--duration-base) var(--ease-out);
+}
+.toast .notice__actions { flex-wrap: nowrap; }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(var(--space-3)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast { animation: none; }
+}
